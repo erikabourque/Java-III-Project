@@ -1,3 +1,6 @@
+/**
+ * Defines a ClinicFileLoader type.
+ */
 package group1.clinic.data;
 
 import group1.clinic.business.ClinicPatient;
