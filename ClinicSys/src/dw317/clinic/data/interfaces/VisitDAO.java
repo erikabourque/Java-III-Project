@@ -7,6 +7,12 @@ import dw317.clinic.data.NonExistingVisitException;
 import java.util.Optional;
 import java.io.IOException;
 
+/**
+ * Interface for Visit Data Access Object.
+ * 
+ * @author	Katherine Richer
+ * @version	22/10/2015
+ */
 public interface VisitDAO {
 	/**
 	 * Adds a visit to the database. The visit is added based on the priority

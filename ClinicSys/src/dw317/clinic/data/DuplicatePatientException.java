@@ -1,19 +1,21 @@
 package dw317.clinic.data;
+
 /**
+ * Signals that the provided RAMQ exists already.
  * 
- * @author Katherine Richer
- *
+ * @author	Katherine Richer
+ * @version	22/10/2015
  */
-//signals that the provide RAMQ exists already
-public class DuplicatePatientException  extends Exception{
+
+public class DuplicatePatientException extends Exception {
 	private static final long serialVersionUID = 42031768871L;
-	public DuplicatePatientException(){
+
+	public DuplicatePatientException() {
 		super("The provided RAMQ already exists.");
 	}
-	
-	public DuplicatePatientException(String message){
+
+	public DuplicatePatientException(String message) {
 		super(message);
 	}
-	
-	
+
 }

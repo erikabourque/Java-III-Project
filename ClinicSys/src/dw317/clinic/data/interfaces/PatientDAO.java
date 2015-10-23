@@ -8,6 +8,13 @@ import group1.clinic.business.Ramq;
 import java.io.IOException;
 import java.util.List;
 
+
+/**
+ * Interface for Patient Data Access Object.
+ * 
+ * @author Katherine Richer
+ * @version 22/10/2015
+ */
 public interface PatientDAO {
 	/**
 	 * Adds a patient to the database. The patient is added in ramq order as to
