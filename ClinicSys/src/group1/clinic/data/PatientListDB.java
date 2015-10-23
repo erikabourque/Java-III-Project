@@ -6,6 +6,7 @@ package group1.clinic.data;
 import java.io.IOException;
 import java.util.List;
 
+import dw317.clinic.DefaultPatientVisitFactory;
 import dw317.clinic.business.interfaces.Patient;
 import dw317.clinic.business.interfaces.PatientVisitFactory;
 import dw317.clinic.data.DuplicatePatientException;
@@ -27,11 +28,25 @@ public class PatientListDB implements PatientDAO {
 	private final ListPersistenceObject listPersistenceObject;
 	private final PatientVisitFactory factory;
 	
+	/**
+	 * One param constructor.  Assigns factory to default.
+	 * 
+	 * @param listPersistenceObject
+	 * 						The ListPersistenceObject to be assigned.
+	 */
 	public PatientListDB (ListPersistenceObject listPersistenceObject){
 		this.listPersistenceObject = listPersistenceObject;
-		// factory = new PatientVisitFactory; ?
+		factory = DefaultPatientVisitFactory.DEFAULT;
 	}
 	
+	/**
+	 * Two param constructor.
+	 * 
+	 * @param listPersistenceObject
+	 * 						The ListPersistenceObject to be assigned.
+	 * @param factory
+	 * 						The PatientVisitFactory to be assigned.
+	 */
 	public PatientListDB (ListPersistenceObject listPersistenceObject,
 	PatientVisitFactory factory){
 		this.listPersistenceObject = listPersistenceObject;
