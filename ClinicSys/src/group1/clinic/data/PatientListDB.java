@@ -4,11 +4,8 @@
 package group1.clinic.data;
 
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 
-import dw317.clinic.DefaultPatientVisitFactory;
 import dw317.clinic.business.interfaces.Patient;
 import dw317.clinic.business.interfaces.PatientVisitFactory;
 import dw317.clinic.data.DuplicatePatientException;
@@ -30,25 +27,11 @@ public class PatientListDB implements PatientDAO {
 	private final ListPersistenceObject listPersistenceObject;
 	private final PatientVisitFactory factory;
 	
-	/**
-	 * One param constructor.  Assigns factory to default.
-	 * 
-	 * @param listPersistenceObject
-	 * 						The ListPersistenceObject to be assigned.
-	 */
 	public PatientListDB (ListPersistenceObject listPersistenceObject){
 		this.listPersistenceObject = listPersistenceObject;
-		factory = DefaultPatientVisitFactory.DEFAULT;
+		// factory = new PatientVisitFactory; ?
 	}
 	
-	/**
-	 * Two param constructor.
-	 * 
-	 * @param listPersistenceObject
-	 * 						The ListPersistenceObject to be assigned.
-	 * @param factory
-	 * 						The PatientVisitFactory to be assigned.
-	 */
 	public PatientListDB (ListPersistenceObject listPersistenceObject,
 	PatientVisitFactory factory){
 		this.listPersistenceObject = listPersistenceObject;
@@ -107,28 +90,6 @@ public class PatientListDB implements PatientDAO {
 	public void update(Patient modifiedPatient) throws NonExistingPatientException {
 		// TODO Auto-generated method stub
 
-	}
-	/**
-	 * Overrides toString.  Returns number of patients in database,
-	 * then lists each patient.
-	 * 
-	 * @return string	The number of patients and each patient.
-	 */
-	@Override
-	public String toString()
-	{
-		StringBuilder sb = new StringBuilder();
-		
-		sb.append("Number of patients in database: " + database.size() + "\n");
-		
-		// Iterate through list, append each element to string builder.
-		for (Iterator<Patient> iterator = database.iterator(); iterator.hasNext(); )
-		{
-			sb.append(iterator.next() + "\n");
-		}
-		
-		String string = sb.toString();
-		return string;
 	}
 
 }
