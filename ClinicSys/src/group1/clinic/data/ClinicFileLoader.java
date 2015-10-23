@@ -25,6 +25,7 @@ import dw317.lib.medication.NDCMedication;
 /**
  * This class represents a File Loader.
  * It provides methods to load files containing Patients and Visits.
+
  * 
  * @author Katherine Richer
  * @author Erika Bourque
