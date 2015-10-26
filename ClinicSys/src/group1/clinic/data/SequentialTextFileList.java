@@ -1,3 +1,4 @@
+<<<<<<< Upstream, based on branch 'master' of https://github.com/erikabourque/Java-III-Project.git
 /**
  * Defines a SequentialTextFileList type.
  */
@@ -20,6 +21,21 @@ import java.util.LinkedList;
  * @author	Uen Yi Hung (Cindy)
  * @version 25/10/2015
  */
+=======
+package group1.clinic.data;
+
+import dw317.clinic.business.interfaces.Patient;
+import dw317.clinic.business.interfaces.Visit;
+import group1.clinic.business.Priority;
+import group1.util.ListUtilities;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Queue;
+import java.util.LinkedList;
+
+>>>>>>> 26631f6 ListPersistenceObject Interface
 public class SequentialTextFileList implements ListPersistenceObject {
 	private final String patientFilename;
 	private final String visitFilename;
