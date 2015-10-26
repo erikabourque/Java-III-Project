@@ -1,6 +1,3 @@
-/**
- * Defines a SequentialTextFileList type.
- */
 package group1.clinic.data;
 
 import dw317.clinic.business.interfaces.Patient;
@@ -14,23 +11,10 @@ import java.util.List;
 import java.util.Queue;
 import java.util.LinkedList;
 
-/**
- * Provides a Sequential Text File List
- * 
- * @author	Uen Yi Hung (Cindy)
- * @version 28/10/2015
- */
 public class SequentialTextFileList implements ListPersistenceObject {
-	//variables
 	private final String patientFilename;
 	private final String visitFilename;
 
-	/**
-	 * A 2 parameters constructor.
-	 * 
-	 * @param patientFilename
-	 * @param visitFilename
-	 */
 	public SequentialTextFileList(String patientFilename, String visitFilename) {
 		this.patientFilename = patientFilename;
 		this.visitFilename = visitFilename;
@@ -39,8 +23,6 @@ public class SequentialTextFileList implements ListPersistenceObject {
 	/**
 	 * Returns a reference to an array containing the loaded patients. If an
 	 * IOException occurs an ArrayList of size zero will be returned.
-	 * 
-	 * @return a list (collection) of patients.
 	 */
 	@Override
 	public List<Patient> getPatientDatabase() {
@@ -61,8 +43,6 @@ public class SequentialTextFileList implements ListPersistenceObject {
 	 * Returns a reference to an array containing the loaded visits with the
 	 * given priority. If an exception occurs, an array of size zero will be
 	 * returned.
-	 * 
-	 * @return a list (collection) of visits.
 	 */
 	@Override
 	public List<Queue<Visit>> getVisitDatabase() {
@@ -105,17 +85,13 @@ public class SequentialTextFileList implements ListPersistenceObject {
 		List<Visit> all = new ArrayList<Visit>();
 		for (int i = 0; i < numQueues; i++) {
 			// iterate through the queues, converting to array
-			Visit[] visitArray = visits.get(i).toArray(new Visit[visits.get(i).size()]);
-			Collections.addAll(all, visitArray);
+			Visit[] visitArray = Collections.addAll(all, visitArray);
 		}
 		return all.toArray(new Visit[all.size()]);
 	}
 
 	/**
 	 * Saves the list of patients to the text file
-	 * 
-	 * @param patients a list (collection) of patients.
-	 * @throws IOException
 	 */
 	@Override
 	public void savePatientDatabase(List<Patient> patients) throws IOException {
@@ -126,9 +102,6 @@ public class SequentialTextFileList implements ListPersistenceObject {
 
 	/**
 	 * Saves the queues of visits to the text file.
-	 * 
-	 * @param visits a list (collection) of visits.
-	 * @throws IOException
 	 */
 	@Override
 	public void saveVisitDatabase(List<Queue<Visit>> visits) throws IOException {
