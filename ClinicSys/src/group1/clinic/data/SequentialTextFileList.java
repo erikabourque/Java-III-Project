@@ -1,3 +1,6 @@
+/**
+ * Defines a SequentialTextFileList type.
+ */
 package group1.clinic.data;
 
 import dw317.clinic.business.interfaces.Patient;
@@ -11,6 +14,12 @@ import java.util.List;
 import java.util.Queue;
 import java.util.LinkedList;
 
+/**
+ * Provides a Sequential Text File List
+ * 
+ * @author	Uen Yi Hung (Cindy)
+ * @version 25/10/2015
+ */
 public class SequentialTextFileList implements ListPersistenceObject {
 	private final String patientFilename;
 	private final String visitFilename;
