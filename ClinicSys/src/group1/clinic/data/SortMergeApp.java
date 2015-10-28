@@ -13,7 +13,8 @@ import group1.clinic.business.VisitSorter;
 
 /**
  * An app that will load, sort, merge and save data text files.
- * 
+ *  
+ *  @author Uen Yi Hung
  */
 public class SortMergeApp {
 
