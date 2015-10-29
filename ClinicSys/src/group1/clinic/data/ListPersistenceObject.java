@@ -13,14 +13,37 @@ import java.util.Queue;
  * Provides a List Persistence Object interface.
  * 
  * @author	Uen Yi Hung (Cindy)
- * @version 25/10/2015
+ * @version 28/10/2015
  */
 public interface ListPersistenceObject {
+	/**
+	 * Gets the patient database.
+	 * 
+	 * @return a reference to an array containing the loaded patients.
+	 */
 	List<Patient> getPatientDatabase();
 
+	/**
+	 * Gets the visit database.
+	 * 
+	 * @return a reference to an array containing the loaded visits with the
+	 * given priority.
+	 */
 	List<Queue<Visit>> getVisitDatabase();
-
+	
+	/**
+	 * Saves the list of patients to the text file.
+	 * 
+	 * @param patients a list (collection) of patients.
+	 * @throws IOException
+	 */
 	void savePatientDatabase(List<Patient> patients) throws IOException;
 
+	/**
+	 * Saves the list of visit to the text file.
+	 * 
+	 * @param visits a list (collection) of visits.
+	 * @throws IOException
+	 */
 	void saveVisitDatabase(List<Queue<Visit>> visits) throws IOException;
 }
