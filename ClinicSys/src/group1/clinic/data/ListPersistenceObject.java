@@ -18,9 +18,9 @@ import java.util.Queue;
 public interface ListPersistenceObject {
 	List<Patient> getPatientDatabase();
 
-	Queue<Visit>[] getVisitDatabase();
+	List<Queue<Visit>> getVisitDatabase();
 
 	void savePatientDatabase(List<Patient> patients) throws IOException;
 
-	void saveVisitDatabase(Queue<Visit>[] visits) throws IOException;
+	void saveVisitDatabase(List<Queue<Visit>> visits) throws IOException;
 }
