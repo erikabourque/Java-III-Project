@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.util.Optional;
 import java.util.List;
 import java.util.Queue;
+
+import dw317.clinic.DefaultPatientVisitFactory;
 import dw317.clinic.business.interfaces.PatientVisitFactory;
 import dw317.clinic.business.interfaces.Visit;
 import dw317.clinic.data.NonExistingVisitException;
@@ -28,7 +30,7 @@ public class VisitQueueDB implements VisitDAO{
 	public VisitQueueDB(ListPersistenceObject listPersistenceObject){
 		
 		this.listPersistenceObject = listPersistenceObject;
-		//I do not understand how to get factory here. Plz help
+		this.factory = DefaultPatientVisitFactory.DEFAULT;
 		database = listPersistenceObject.getVisitDatabase();
 		
 	}
@@ -40,22 +42,33 @@ public class VisitQueueDB implements VisitDAO{
 		database = listPersistenceObject.getVisitDatabase();		
 	}
 	
-
+	/** Adds a referenced copy of a visit to the end of the list
+	 * 
+	 * @param aVisit reference of the object to add.
+	 */
 	@Override
 	public void add(Visit aVisit) {
-		Visit[] tempArray = {aVisit};		
-		Queue<Visit> temp=java.util.Arrays.asList(tempArray);
-		temp.add(aVisit);
-		database.add(temp);
+		
+		
+		database.get(aVisit.getPriority().getCode()).add(aVisit);
 		
 	}
-
+	/** Saves the text file and then disconnects from the database.
+	 * 
+	 */
 	@Override
 	public void disconnect() throws IOException {
-		// TODO Auto-generated method stub
+		listPersistenceObject.saveVisitDatabase(database);
+		
+		database = null;
 		
 	}
-
+	
+	/**Returns the first patient with the given priority. If there is no client with this priority returns null.
+	 * 
+	 * @param priority Used to find first patient with its value.
+	 * @return Optional<Visit> if there is a visit returns it's value else returns null.
+	 */
 	@Override
 	public Optional<Visit> getNextVisit(Priority priority) {
 		int size = database.size();
@@ -65,21 +78,33 @@ public class VisitQueueDB implements VisitDAO{
 				return Optional.ofNullable(database.get(i).element());
 		return null;
 	}
-
+	
+	/** Removes the first person with the priority from the list.
+	 * 
+	 * @param Priority looks for the first occurence of this priority.
+	 * 
+	 */
 	@Override
 	public void remove(Priority priority) {
 		int size = database.size();
 		
-		for(int i = 0 ; i < size ; i ++){
+		for(int i = 0 ; i < size ; i++){
 			
-			if(database.get(i).element().getPriority().equals(priority))
+			if(database.get(i).element().getPriority().equals(priority)){
 				database.remove(i);
+				break;
+			}
 			
 		}
 		
 		
 	}
-
+	
+	/** Returns the amount of patients with the given priority.
+	 * 
+	 * 	@param priority is the priority list which will be checked.
+	 *  @return count which represents the amount of people with this priority.
+	 */
 	@Override
 	public int size(Priority priority) {
 		
@@ -95,46 +120,53 @@ public class VisitQueueDB implements VisitDAO{
 		return count;
 		
 	}
-
+	/** Updates the first occurence of the priority with a new priority and then puts it at the end of the priority list.
+	 * 
+	 * @param oldPriority priority which is used to get the first patient with this priority.
+	 * @param newPriority place where to put the patient with the new priority.
+	 */
 	@Override
 	public void update(Priority oldPriority, Priority newPriority)
 			throws NonExistingVisitException {
 		
 		int size = database.size();
+		int pos = -1;
 		
 		for(int i = 0 ; i < size ; i++){
 			
 			if(database.get(i).element().getPriority().equals(oldPriority)){
 				
-				database.get(i).element().setPriority(newPriority);
+				pos = i ;
+				break;
 				
 			}
 				
 			
 		}
+		Queue<Visit> temp = database.get(pos);
+		database.remove(pos);
+		int newPos = database.lastIndexOf(newPriority);
+		database.add(newPos+1, temp);
 		
 		
 	}
-	
+	/** Overriden to string method. Returns a String which represents the priority with number of patients with this priority 
+	 *  and then returns the names of the people.
+	 * 
+	 */
 	@Override
 	public String toString(){
 		
-		int size = database.size();
 		String returnString = "";
-		int count = 0;
 		
-		for(int i = 0 ; i < 5; i++ ){
+		for(int i = 0 ; i < database.size(); i++ ){
+			returnString += "Number of priority "+database.get(i).element().getPriority().getCode()+" visits in databse: ";
 			
-			returnString = "Number of priority "+i+" visits in databse: ";
-			for(int j = 0 ; j < size ; j++){
-				if(database.get(i).element().getPriority().equals(i))
-					count++;		
-			}
-			returnString = returnString + count + "\n";
-			for(int j = 0 ; j < size ; j++){
-				if(database.get(i).element().getPriority().equals(i))
-					returnString = returnString +database.get(i).element().toString()+"\n";		
-			}
+			returnString += database.get(i).size() + "\n"; 
+			
+			Object[] obj = database.get(i).toArray();
+			for(int j = 0 ; j < obj.length ; j++)
+				returnString += obj[j] + "\n";
 			
 		}
 		
