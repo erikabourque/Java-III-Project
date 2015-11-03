@@ -48,7 +48,10 @@ public class VisitQueueDB implements VisitDAO{
 	 */
 	@Override
 	public void add(Visit aVisit) {
-		
+		if(aVisit == null)
+			throw new IllegalArgumentException("VisitQueueDB.add() - Parameter can not be null");
+		if(!(aVisit instanceof Visit))
+			throw new IllegalArgumentException("VisitQueueDB.add() - Parameter must be a visit");
 		
 		database.get(aVisit.getPriority().getCode()).add(aVisit);
 		
@@ -81,7 +84,7 @@ public class VisitQueueDB implements VisitDAO{
 	
 	/** Removes the first person with the priority from the list.
 	 * 
-	 * @param Priority looks for the first occurence of this priority.
+	 * @param Priority looks for the first occurrence of this priority.
 	 * 
 	 */
 	@Override
@@ -120,7 +123,7 @@ public class VisitQueueDB implements VisitDAO{
 		return count;
 		
 	}
-	/** Updates the first occurence of the priority with a new priority and then puts it at the end of the priority list.
+	/** Updates the first occurrence of the priority with a new priority and then puts it at the end of the priority list.
 	 * 
 	 * @param oldPriority priority which is used to get the first patient with this priority.
 	 * @param newPriority place where to put the patient with the new priority.
@@ -128,6 +131,11 @@ public class VisitQueueDB implements VisitDAO{
 	@Override
 	public void update(Priority oldPriority, Priority newPriority)
 			throws NonExistingVisitException {
+		
+		if(oldPriority == null || newPriority == null)
+			throw new IllegalArgumentException("VisitQueueDB.update() - One of the priorities is null.");
+		if(oldPriority instanceof Priority || newPriority instanceof Priority)
+			throw new IllegalArgumentException("VisitQueueDB.update() - One of the priorities is not Of Priority type.");
 		
 		int size = database.size();
 		int pos = -1;
@@ -143,11 +151,10 @@ public class VisitQueueDB implements VisitDAO{
 				
 			
 		}
-		Queue<Visit> temp = database.get(pos);
-		database.remove(pos);
-		int newPos = database.lastIndexOf(newPriority);
-		database.add(newPos+1, temp);
-		
+		int code = newPriority.getCode();
+		Visit temp = database.get(pos).poll();
+		temp.setPriority(newPriority);
+		database.get(code).add(temp);	
 		
 	}
 	/** Overriden to string method. Returns a String which represents the priority with number of patients with this priority 

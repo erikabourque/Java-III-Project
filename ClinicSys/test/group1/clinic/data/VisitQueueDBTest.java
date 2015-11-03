@@ -15,6 +15,7 @@ import group1.util.ListUtilities;
 
 /**
  * @author Danieil Skrinikov
+ * @version 11/03/2015
  *
  */
 public class VisitQueueDBTest {
@@ -26,8 +27,22 @@ public class VisitQueueDBTest {
 		// TODO Auto-generated method stub
 		//toStringTest();
 		//addTest();
-		removeTest();
+		//removeTest();
+		updateTest();
 
+	}
+	
+	public static void getNextVisitTest(){
+		
+		setup();
+		
+		ListPersistenceObject a = new SequentialTextFileList("testfiles/testPatients.txt", "testfiles/testVisits.txt");
+		VisitQueueDB db = new VisitQueueDB(a);
+		
+		db.getNextVisit(Priority.REANIMATION);
+		
+		teardown();
+		
 	}
 	
 	public static void updateTest(){
@@ -37,9 +52,13 @@ public class VisitQueueDBTest {
 		VisitQueueDB db = new VisitQueueDB(a);
 		try{
 		db.update(Priority.NOTASSIGNED, Priority.URGENT);
-		System.out.println();
+		System.out.println("Update Test - JEDJ must become priority 2\n\n"+db);
+		
 		}
-		catch(Exception e){}
+		catch(Exception e){
+			System.out.println(e);
+			
+		}
 		
 		teardown();
 		
@@ -52,7 +71,7 @@ public class VisitQueueDBTest {
 			ListPersistenceObject a = new SequentialTextFileList("testfiles/testPatients.txt", "testfiles/testVisits.txt");
 			VisitQueueDB db = new VisitQueueDB(a);
 			db.remove(Priority.LESSURGENT);
-			System.out.println("Remove Test - Priority 4 must be empty\n"+db);
+			System.out.println("Remove Test - Priority 4 must be empty\n\n"+db);
 		
 		teardown();
 
