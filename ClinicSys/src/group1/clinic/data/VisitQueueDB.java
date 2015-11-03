@@ -25,13 +25,13 @@ public class VisitQueueDB implements VisitDAO{
 	private final ListPersistenceObject listPersistenceObject;
 	private final PatientVisitFactory factory;
 	
-	/*public VisitQueueDB(ListPersistenceObject listPersistenceObject){
+	public VisitQueueDB(ListPersistenceObject listPersistenceObject){
 		
 		this.listPersistenceObject = listPersistenceObject;
 		//I do not understand how to get factory here. Plz help
 		database = listPersistenceObject.getVisitDatabase();
 		
-	}*/
+	}
 	
 	public VisitQueueDB(ListPersistenceObject listPersistenceObject, PatientVisitFactory factory){
 		
@@ -60,27 +60,51 @@ public class VisitQueueDB implements VisitDAO{
 
 	@Override
 	public void remove(Priority priority) {
-		// TODO Auto-generated method stub
+		int size = database.size();
+		
+		for(int i = 0 ; i < size ; i ++){
+			
+			if(database.get(i).element().getPriority().equals(priority))
+				database.remove(i);
+			
+		}
+		
 		
 	}
 
 	@Override
 	public int size(Priority priority) {
 		
-		Object[] temp = database.toArray();
+		int size = database.size();
 		int count = 0;
-		for(int i = 0 ; i < database.size() ; i++){
+		for(int i = 0 ; i < size ; i++){
 			
-			if(((String)temp[i]).lastIndexOf("*"))
+			if(database.get(i).element().getPriority().equals(priority))
+				count++;
 			
 		}
+		
+		return count;
 		
 	}
 
 	@Override
 	public void update(Priority oldPriority, Priority newPriority)
 			throws NonExistingVisitException {
-		// TODO Auto-generated method stub
+		
+		int size = database.size();
+		
+		for(int i = 0 ; i < size ; i++){
+			
+			if(database.get(i).element().getPriority().equals(oldPriority)){
+				
+				database.get(i).element().setPriority(newPriority);
+				
+			}
+				
+			
+		}
+		
 		
 	}
 	
