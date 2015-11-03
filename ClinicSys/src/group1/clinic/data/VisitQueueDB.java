@@ -40,9 +40,13 @@ public class VisitQueueDB implements VisitDAO{
 		database = listPersistenceObject.getVisitDatabase();		
 	}
 	
+
 	@Override
 	public void add(Visit aVisit) {
-		// TODO Auto-generated method stub
+		Visit[] tempArray = {aVisit};		
+		Queue<Visit> temp=java.util.Arrays.asList(tempArray);
+		temp.add(aVisit);
+		database.add(temp);
 		
 	}
 
@@ -54,7 +58,11 @@ public class VisitQueueDB implements VisitDAO{
 
 	@Override
 	public Optional<Visit> getNextVisit(Priority priority) {
-		// TODO Auto-generated method stub
+		int size = database.size();
+		
+		for(int i = 0 ; i < size ; i++)
+			if(database.get(i).element().getPriority().equals(priority))
+				return Optional.ofNullable(database.get(i).element());
 		return null;
 	}
 
@@ -112,18 +120,25 @@ public class VisitQueueDB implements VisitDAO{
 	public String toString(){
 		
 		int size = database.size();
-		String toReturnString;
-		Object[] databaseArray = database.toArray();
+		String returnString = "";
+		int count = 0;
 		
-		for(int i = 0 ; i < size ; i++){
+		for(int i = 0 ; i < 5; i++ ){
 			
-			System.out.println(databaseArray[i]);
+			returnString = "Number of priority "+i+" visits in databse: ";
+			for(int j = 0 ; j < size ; j++){
+				if(database.get(i).element().getPriority().equals(i))
+					count++;		
+			}
+			returnString = returnString + count + "\n";
+			for(int j = 0 ; j < size ; j++){
+				if(database.get(i).element().getPriority().equals(i))
+					returnString = returnString +database.get(i).element().toString()+"\n";		
+			}
 			
 		}
 		
-		
-		// TODO
-		return "TODO";
+		return returnString;
 	}
 
 	
