@@ -21,40 +21,74 @@ public class PatientListDBTest {
 
 	public static void testOneParamConstructor(){
 		out.println("\nTesting the One Param Constructor");
-		
-		try{
 		setup();
 		
-		SequentialTextFileList listObject = new SequentialTextFileList(
-				"testfiles/testPatients.txt", "testfiles/testVisits.txt");
+		testOneParamConstructor("Case 1 valid data", new SequentialTextFileList(
+				"testfiles/testPatients.txt", "testfiles/testVisits.txt"), true);
+		testOneParamConstructor("Case 2 null data", null, false);
+		
+		teardown();
+	}
+	
+	public static void testOneParamConstructor(String testcase, SequentialTextFileList listObject, 
+			boolean expectValid){		
+		try{
+		out.println(testcase);
 		PatientListDB patients = new PatientListDB (listObject);
 		out.println("\tConstructor success.");
 		
-		teardown();
+		if (!expectValid){
+			out.println("Expected invalid ==== FAILED TEST ====\n");
+		}
+		}
+		catch (IllegalArgumentException iae){
+			out.println("\t" + iae.getMessage());
+			if (expectValid){
+				out.println("Expected valid ==== FAILED TEST ====\n");
+			}
 		}
 		catch (Exception e){
-			out.print("\tUNEXPECTED EXCEPTION TYPE! " + e.getClass() + " "
-					+ e.getMessage() + " ==== FAILED TEST ====\n");
+			out.println("\tUNEXPECTED EXCEPTION TYPE! " + e.getClass() + " "
+					+ e.getMessage() + " ==== FAILED TEST ====");
 		}
 	}
 	
 	public static void testTwoParamConstructor(){
 		out.println("\nTesting the Two Param Constructor");
-		
-		try{
 		setup();
 		
-		SequentialTextFileList listObject = new SequentialTextFileList(
-				"testfiles/testPatients.txt", "testfiles/testVisits.txt");
-		DefaultPatientVisitFactory factory = DefaultPatientVisitFactory.DEFAULT;
-		PatientListDB patients = new PatientListDB (listObject, factory);
-		out.println("\tConstructor success.");
+		testTwoParamConstructor("Case 1 valid data", new SequentialTextFileList(
+				"testfiles/testPatients.txt", "testfiles/testVisits.txt"), DefaultPatientVisitFactory.DEFAULT, true);
+		testTwoParamConstructor("Case 2 null SequentialTextFileList", null, 
+				DefaultPatientVisitFactory.DEFAULT, false);
+		testTwoParamConstructor("Case 3 null DefaultPatientVisitFactory", new SequentialTextFileList(
+				"testfiles/testPatients.txt", "testfiles/testVisits.txt"), null, false);
+		testTwoParamConstructor("Case 4 all null data", null, null, false);
 		
 		teardown();
+	}
+	
+	public static void testTwoParamConstructor(String testcase, SequentialTextFileList listObject, 
+			DefaultPatientVisitFactory factory, boolean expectValid){
+		try{
+		out.println(testcase);
+		
+		PatientListDB patients = new PatientListDB (listObject, factory);
+		out.println("\tConstructor success.");
+
+		if (!expectValid){
+			out.println("Expected invalid ==== FAILED TEST ====\n");
+		}
+		}
+		catch (IllegalArgumentException iae){
+			out.println("\t" + iae.getMessage());
+			if (expectValid){
+				out.println("Expected valid ==== FAILED TEST ====\n");
+			}
 		}
 		catch (Exception e){
-			out.print("\tUNEXPECTED EXCEPTION TYPE! " + e.getClass() + " "
-					+ e.getMessage() + " ==== FAILED TEST ====\n");
+			out.println("\tUNEXPECTED EXCEPTION TYPE! " + e.getClass() + " "
+					+ e.getMessage() + " ==== FAILED TEST ====");
 		}
 	}
 	
@@ -75,8 +109,8 @@ public class PatientListDBTest {
 			teardown();
 		}
 		catch (Exception e){
-			out.print("\tUNEXPECTED EXCEPTION TYPE! " + e.getClass() + " "
-					+ e.getMessage() + " ==== FAILED TEST ====\n");
+			out.println("\tUNEXPECTED EXCEPTION TYPE! " + e.getClass() + " "
+					+ e.getMessage() + " ==== FAILED TEST ====");
 		}
 	}
 
@@ -134,8 +168,8 @@ public class PatientListDBTest {
 			teardown();
 		}
 		catch (Exception e){
-			out.print("\tUNEXPECTED EXCEPTION TYPE! " + e.getClass() + " "
-					+ e.getMessage() + " ==== FAILED TEST ====\n");
+			out.println("\tUNEXPECTED EXCEPTION TYPE! " + e.getClass() + " "
+					+ e.getMessage() + " ==== FAILED TEST ====");
 		}
 	}
 	

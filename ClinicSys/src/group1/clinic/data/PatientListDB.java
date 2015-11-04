@@ -38,6 +38,11 @@ public class PatientListDB implements PatientDAO {
 	 * 						The ListPersistenceObject to be assigned.
 	 */
 	public PatientListDB (ListPersistenceObject listPersistenceObject){
+		// Data validation
+		if(listPersistenceObject == null){
+			throw new IllegalArgumentException("PatientVisitDB error - ListPersistenceObject is null");
+		}
+		
 		this.listPersistenceObject = listPersistenceObject;
 		factory = DefaultPatientVisitFactory.DEFAULT;
 		database = listPersistenceObject.getPatientDatabase();
@@ -53,6 +58,15 @@ public class PatientListDB implements PatientDAO {
 	 */
 	public PatientListDB (ListPersistenceObject listPersistenceObject,
 	PatientVisitFactory factory){
+		// Data validation
+		if(listPersistenceObject == null){
+			throw new IllegalArgumentException("PatientVisitDB error - ListPersistenceObject is null");
+		}
+		
+		if(factory == null){
+			throw new IllegalArgumentException("PatientVisitDB error - PatientVisitFactory is null");
+		}
+		
 		this.listPersistenceObject = listPersistenceObject;
 		this.factory = factory;
 		database = listPersistenceObject.getPatientDatabase();
