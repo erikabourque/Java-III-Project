@@ -5,7 +5,9 @@ package group1.clinic.data;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Optional;
 
+import dw317.clinic.DefaultPatientVisitFactory;
 import dw317.clinic.business.interfaces.Patient;
 import dw317.clinic.business.interfaces.Visit;
 import group1.clinic.business.ClinicPatient;
@@ -24,12 +26,113 @@ public class VisitQueueDBTest {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		//toStringTest();
-		//addTest();
-		//removeTest();
+		toStringTest();
+		addTest();
+		removeTest();
 		updateTest();
-
+		getNextVisitTest();
+		sizeTest();
+		disconnectTest();
+		constructorsTest();
+	}
+	
+	@SuppressWarnings("unused")
+	public static void constructorsTest(){
+		
+		setup();
+		System.out.println("Testing the constructors\n");
+		
+		
+		try{
+		 VisitQueueDB db = new VisitQueueDB(null);
+		
+		}
+		catch(IllegalArgumentException e){
+			System.out.println(e);
+			
+		}
+		try{
+			 VisitQueueDB db = new VisitQueueDB(null,null);
+			
+			}
+			catch(IllegalArgumentException e){
+				System.out.println(e);
+				
+			}
+		try{
+			ListPersistenceObject a = new SequentialTextFileList("testfiles/testPatients.txt", "testfiles/testVisits.txt");
+			VisitQueueDB db = new VisitQueueDB(a,null);
+			
+			}
+			catch(IllegalArgumentException e){
+				System.out.println(e);
+				
+			}
+		try{
+			ListPersistenceObject a = new SequentialTextFileList("testfiles/testPatients.txt", "testfiles/testVisits.txt");
+			VisitQueueDB db = new VisitQueueDB(null,DefaultPatientVisitFactory.DEFAULT);
+			
+			}
+			catch(IllegalArgumentException e){
+				System.out.println(e);
+				
+			}
+		
+		ListPersistenceObject a = new SequentialTextFileList("testfiles/testPatients.txt", "testfiles/testVisits.txt");
+		VisitQueueDB db = new VisitQueueDB(a,DefaultPatientVisitFactory.DEFAULT);
+			
+		
+		teardown();
+		
+	}
+	
+	public static void disconnectTest(){
+		
+		setup();
+		
+		ListPersistenceObject a = new SequentialTextFileList("testfiles/testPatients.txt", "testfiles/testVisits.txt");
+		VisitQueueDB db = new VisitQueueDB(a);
+		
+		try{
+			db.disconnect();
+			System.out.println("Disconnect Test - Should not see this.\n"+db);
+		}
+		catch(IOException ioe){
+			System.out.println(ioe);
+			
+		}
+		catch(NullPointerException e){
+			
+			System.out.println("Disconnect test - passed");
+			
+		}
+		
+		teardown();
+		
+	}
+	
+	public static void sizeTest(){
+		
+		setup();
+		ListPersistenceObject a = new SequentialTextFileList("testfiles/testPatients.txt", "testfiles/testVisits.txt");
+		VisitQueueDB db = new VisitQueueDB(a);
+		
+		int size = db.size(Priority.NOTASSIGNED);
+		
+		System.out.println("Size Test - Must return 2\n" + size);
+		
+		db.remove(Priority.NOTURGENT);
+		size = db.size(Priority.NOTURGENT);
+		System.out.println("Size Test - Must return 0\n" + size);
+		db.remove(Priority.REANIMATION);
+		size = db.size(Priority.REANIMATION);
+		System.out.println("Size Test - Must return 0\n" + size);
+		size = db.size(Priority.URGENT);
+		System.out.println("Size Test - Must return 1\n" + size);
+		
+		
+		teardown();
+		
 	}
 	
 	public static void getNextVisitTest(){
@@ -39,7 +142,13 @@ public class VisitQueueDBTest {
 		ListPersistenceObject a = new SequentialTextFileList("testfiles/testPatients.txt", "testfiles/testVisits.txt");
 		VisitQueueDB db = new VisitQueueDB(a);
 		
-		db.getNextVisit(Priority.REANIMATION);
+		Optional<Visit> v = db.getNextVisit(Priority.REANIMATION);
+		
+		System.out.println("getNextVisitTest - Must return WAKN6\n"+v);
+		
+		db.remove(Priority.REANIMATION);
+		v = db.getNextVisit(Priority.REANIMATION);
+		System.out.println("getNextVisitTest - Must return null \n"+v);
 		
 		teardown();
 		

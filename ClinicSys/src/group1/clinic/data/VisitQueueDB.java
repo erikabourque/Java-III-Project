@@ -16,7 +16,9 @@ import dw317.clinic.business.interfaces.Visit;
 import dw317.clinic.data.NonExistingVisitException;
 import dw317.clinic.data.interfaces.VisitDAO;
 
-/**
+/** Class which implements various methods for a visit queue type of class. 
+ * 
+ * 
  * @author Danieil Skrinikov
  * @version 11/03/2015
  *
@@ -28,6 +30,11 @@ public class VisitQueueDB implements VisitDAO{
 	private final PatientVisitFactory factory;
 	
 	public VisitQueueDB(ListPersistenceObject listPersistenceObject){
+		if(listPersistenceObject == null)
+			throw new IllegalArgumentException("VisitQueueDB - ListPersistenceObject is null");
+		
+		if(!(listPersistenceObject instanceof ListPersistenceObject))
+			throw new IllegalArgumentException("VisitQueueDB - Wrong ListPersistenceObject parameter type");
 		
 		this.listPersistenceObject = listPersistenceObject;
 		this.factory = DefaultPatientVisitFactory.DEFAULT;
@@ -36,6 +43,18 @@ public class VisitQueueDB implements VisitDAO{
 	}
 	
 	public VisitQueueDB(ListPersistenceObject listPersistenceObject, PatientVisitFactory factory){
+		
+		if(listPersistenceObject == null)
+			throw new IllegalArgumentException("VisitQueueDB - ListPersistenceObject is null");
+		
+		if(!(listPersistenceObject instanceof ListPersistenceObject))
+			throw new IllegalArgumentException("VisitQueueDB - Wrong ListPersistenceObject parameter type");
+		
+		if(factory == null)
+			throw new IllegalArgumentException("VisitQueueDB - PatientVisitFactory is null");
+		
+		if(!(factory instanceof PatientVisitFactory))
+			throw new IllegalArgumentException("VisitQueueDB - Wrong PatientVisitFactory parameter type");
 		
 		this.listPersistenceObject = listPersistenceObject;
 		this.factory = factory;
@@ -74,6 +93,13 @@ public class VisitQueueDB implements VisitDAO{
 	 */
 	@Override
 	public Optional<Visit> getNextVisit(Priority priority) {
+		
+		if(priority == null)
+			throw new IllegalArgumentException("VisitQueueDB.getNextVisit() - Priority is null");
+		
+		if(!(priority  instanceof Priority))
+			throw new IllegalArgumentException("VisitQueueDB.getNextVisit() - parameter is not of Priority type");
+		
 		int size = database.size();
 		
 		for(int i = 0 ; i < size ; i++)
@@ -89,6 +115,13 @@ public class VisitQueueDB implements VisitDAO{
 	 */
 	@Override
 	public void remove(Priority priority) {
+		
+		if(priority == null)
+			throw new IllegalArgumentException("VisitQueueDB.remove() - Priority is null");
+		
+		if(!(priority  instanceof Priority))
+			throw new IllegalArgumentException("VisitQueueDB.remove() - parameter is not of Priority type");
+		
 		int size = database.size();
 		
 		for(int i = 0 ; i < size ; i++){
@@ -111,16 +144,22 @@ public class VisitQueueDB implements VisitDAO{
 	@Override
 	public int size(Priority priority) {
 		
+		if(priority == null)
+			throw new IllegalArgumentException("VisitQueueDB.size - parameter must not be null.");
+		if(!(priority instanceof Priority))
+			throw new IllegalArgumentException("VisitQueueDB.size - parameter must not be null.");
+		
 		int size = database.size();
-		int count = 0;
-		for(int i = 0 ; i < size ; i++){
-			
-			if(database.get(i).element().getPriority().equals(priority))
-				count++;
+		
+		for(int i = 0 ; i  < size ; i++){
+			if(database.get(i).element().getPriority() == priority)
+				return database.get(i).size();
 			
 		}
+			
+		return 0;
 		
-		return count;
+		
 		
 	}
 	/** Updates the first occurrence of the priority with a new priority and then puts it at the end of the priority list.
@@ -134,7 +173,7 @@ public class VisitQueueDB implements VisitDAO{
 		
 		if(oldPriority == null || newPriority == null)
 			throw new IllegalArgumentException("VisitQueueDB.update() - One of the priorities is null.");
-		if(oldPriority instanceof Priority || newPriority instanceof Priority)
+		if(!(oldPriority instanceof Priority && newPriority instanceof Priority))
 			throw new IllegalArgumentException("VisitQueueDB.update() - One of the priorities is not Of Priority type.");
 		
 		int size = database.size();
