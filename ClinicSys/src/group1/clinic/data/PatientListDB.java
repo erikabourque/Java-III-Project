@@ -76,22 +76,52 @@ public class PatientListDB implements PatientDAO {
 		database = listPersistenceObject.getPatientDatabase();
 	}
 	
-	/* (non-Javadoc)
-	 * @see dw317.clinic.data.interfaces.PatientDAO#add(dw317.clinic.business.interfaces.Patient)
-	 */
 	@Override
 	public void add(Patient aPatient) throws DuplicatePatientException {
-		// TODO Auto-generated method stub
-
+		// Make sure aPatient is not null
+		if(aPatient == null){
+			throw new IllegalArgumentException("add error - patient is null");
+		}
+		
+		// Create a copy of aPatient
+		Patient copy = new ClinicPatient(aPatient.getName().getFirstName(), 
+				aPatient.getName().getLastName(), aPatient.getRamq().getRamq());
+		copy.setMedication(aPatient.getMedication());
+		copy.setExistingConditions(Optional.of(aPatient.getExistingConditions()));
+		copy.setTelephoneNumber(Optional.of(aPatient.getTelephoneNumber()));
+		
+		int location = 0;
+		int comparisonResult;
+		boolean found = false;
+		
+		// Check for where to place 
+		while ((location < database.size()) && (!found))
+		{
+			// Positive means copy has not been reached yet in alphabet
+			// Negative means copy has been past in alphabet
+			comparisonResult = copy.compareTo(database.get(location));
+			
+			if (comparisonResult < 0){
+				found = true;
+				break;
+			}
+			
+			// Checks if patient exists already in database
+			if (comparisonResult == 0){
+				throw new DuplicatePatientException("Patient already exists in database: " + copy);
+			}
+			
+			location++;
+		}
+		
+		database.add(location, copy);
 	}
 
-	/* (non-Javadoc)
-	 * @see dw317.clinic.data.interfaces.PatientDAO#disconnect()
-	 */
 	@Override
 	public void disconnect() throws IOException {
-		// TODO Auto-generated method stub
-
+		listPersistenceObject.savePatientDatabase(database);
+		
+		database = null;
 	}
 
 
@@ -204,6 +234,10 @@ public class PatientListDB implements PatientDAO {
 	public String toString()
 	{
 		StringBuilder sb = new StringBuilder();
+		
+		if (database == null){
+			return "Database is null.";
+		}
 		
 		sb.append("Number of patients in database: " + database.size() + "\n");
 		
