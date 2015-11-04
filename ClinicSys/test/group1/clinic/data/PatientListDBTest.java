@@ -357,19 +357,17 @@ public class PatientListDBTest {
 	}
 	
 	public static void testAddPatient(){
-		out.println("\nTest Data and Expected Results Chart\nCase #\tNew Patient\tLocation in Results");
-		out.println("Case 1\tAZNC86031129*Char*Aznable\t1");
-		out.println("Case 2\tSHNJ78042312*John*Shnaucker\t5");
-		out.println("Case 3\tZAKN60022987*Norio*Zakamoto\t9");
-		out.println("Case 4\tnull\terror");
-		out.println("Case 5\tAZNC86031129*Char*Aznable*4167572322\t1");
-		out.println("Case 6\tAZNC86031129*Char*Aznable**NDC*54868-5987-1*Omeprazole\t1");
-		out.println("Case 7\tAZNC86031129*Char*Aznable*****Stomach\t1");
-		//out.println("Case 7\t" + String.format("%-45s", "DIN*00000000*testvalue") + "\tempty list");
-		//out.println("Case 8\t" + String.format("%-45s", "DIN*00000000*testvalue") + "\tempty list");
-		//out.println("Case 9\t" + String.format("%-45s", "null") + "\tError");
+		out.println("\nTest Data and Expected Results Chart\nCase #\t"
+				+ String.format("%-55s", "New Patient") + "\tLocation in Results");
+		out.println("Case 1\t" + String.format("%-55s", "AZNC86031129*Char*Aznable") + "\t1");
+		out.println("Case 2\t" + String.format("%-55s", "SHNJ78042312*John*Shnaucker") + "\t5");
+		out.println("Case 3\t" + String.format("%-55s", "ZAKN60022987*Norio*Zakamoto") + "\t9");
+		out.println("Case 4\t" + String.format("%-55s", "null") + "\terror");
+		out.println("Case 5\t" + String.format("%-55s", "AZNC86031129*Char*Aznable*4167572322") + "\t1");
+		out.println("Case 6\t" + String.format("%-55s", "AZNC86031129*Char*Aznable**NDC*54868-5987-1*Omeprazole") + "\t1");
+		out.println("Case 7\t" + String.format("%-55s", "AZNC86031129*Char*Aznable*****Stomach") + "\t1");
 		
-		out.println("\nResults Chart\nCase #\t" + String.format("%-45s", "Medication") + "\tResults");
+		out.println("\nResults");
 		testAddPatient("\nCase 1", new ClinicPatient("Char", "Aznable", "AZNC86031129"), true);
 		testAddPatient("\nCase 2", new ClinicPatient("John", "Shnaucker", "SHNJ78042312"), true);
 		testAddPatient("\nCase 3", new ClinicPatient("Norio", "Zakamoto", "ZAKN60022987"), true);
