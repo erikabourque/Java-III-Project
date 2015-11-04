@@ -26,7 +26,7 @@ public class PatientListDBTest {
 		SequentialTextFileList listObject = new SequentialTextFileList(
 				"testfiles/testPatients.txt", "testfiles/testVisits.txt");
 		PatientListDB patients = new PatientListDB (listObject);
-		out.println("Constructor success.");
+		out.println("\tConstructor success.");
 		
 		teardown();
 		}
@@ -46,7 +46,7 @@ public class PatientListDBTest {
 				"testfiles/testPatients.txt", "testfiles/testVisits.txt");
 		DefaultPatientVisitFactory factory = DefaultPatientVisitFactory.DEFAULT;
 		PatientListDB patients = new PatientListDB (listObject, factory);
-		out.println("Constructor success.");
+		out.println("\tConstructor success.");
 		
 		teardown();
 		}
@@ -66,7 +66,8 @@ public class PatientListDBTest {
 					"testfiles/testPatients.txt", "testfiles/testVisits.txt");
 			DefaultPatientVisitFactory factory = DefaultPatientVisitFactory.DEFAULT;
 			PatientListDB patients = new PatientListDB (listObject, factory);
-			out.println("Constructor success.");
+			out.println("\tConstructor success.");
+			out.println(patients.toString());
 			
 			teardown();
 		}

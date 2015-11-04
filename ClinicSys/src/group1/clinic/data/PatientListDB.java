@@ -39,6 +39,7 @@ public class PatientListDB implements PatientDAO {
 	public PatientListDB (ListPersistenceObject listPersistenceObject){
 		this.listPersistenceObject = listPersistenceObject;
 		factory = DefaultPatientVisitFactory.DEFAULT;
+		database = listPersistenceObject.getPatientDatabase();
 	}
 	
 	/**
@@ -53,6 +54,7 @@ public class PatientListDB implements PatientDAO {
 	PatientVisitFactory factory){
 		this.listPersistenceObject = listPersistenceObject;
 		this.factory = factory;
+		database = listPersistenceObject.getPatientDatabase();
 	}
 	
 	/* (non-Javadoc)
