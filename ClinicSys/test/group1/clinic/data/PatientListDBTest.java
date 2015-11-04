@@ -5,25 +5,49 @@ import static java.lang.System.out;
 import java.io.File;
 import java.io.IOException;
 
+import dw317.clinic.DefaultPatientVisitFactory;
 import group1.util.ListUtilities;
 
 public class PatientListDBTest {
 
 	public static void main(String[] args) {
 		testOneParamConstructor();
+		testTwoParamConstructor();
 		testToString();
 
 	}
 
 	public static void testOneParamConstructor(){
-		out.print("\nTesting the One Param Constructor\n");
+		out.println("\nTesting the One Param Constructor");
 		
 		try{
 		setup();
+		
 		SequentialTextFileList listObject = new SequentialTextFileList(
 				"testfiles/testPatients.txt", "testfiles/testVisits.txt");
 		PatientListDB patients = new PatientListDB (listObject);
-		out.println("Success.");
+		out.println("Constructor success.");
+		
+		teardown();
+		}
+		catch (Exception e){
+			out.print("\tUNEXPECTED EXCEPTION TYPE! " + e.getClass() + " "
+					+ e.getMessage() + " ==== FAILED TEST ====\n");
+		}
+	}
+	
+	public static void testTwoParamConstructor(){
+		out.println("\nTesting the Two Param Constructor");
+		
+		try{
+		setup();
+		
+		SequentialTextFileList listObject = new SequentialTextFileList(
+				"testfiles/testPatients.txt", "testfiles/testVisits.txt");
+		DefaultPatientVisitFactory factory = DefaultPatientVisitFactory.DEFAULT;
+		PatientListDB patients = new PatientListDB (listObject, factory);
+		out.println("Constructor success.");
+		
 		teardown();
 		}
 		catch (Exception e){
@@ -33,8 +57,23 @@ public class PatientListDBTest {
 	}
 	
 	public static void testToString(){
-		setup();
+		out.println("\nTesting the toString method");
 		
+		try{
+			setup();
+			
+			SequentialTextFileList listObject = new SequentialTextFileList(
+					"testfiles/testPatients.txt", "testfiles/testVisits.txt");
+			DefaultPatientVisitFactory factory = DefaultPatientVisitFactory.DEFAULT;
+			PatientListDB patients = new PatientListDB (listObject, factory);
+			out.println("Constructor success.");
+			
+			teardown();
+		}
+		catch (Exception e){
+			out.print("\tUNEXPECTED EXCEPTION TYPE! " + e.getClass() + " "
+					+ e.getMessage() + " ==== FAILED TEST ====\n");
+		}
 	}
 
 	private static void setup() {
