@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.IOException;
 
 import dw317.clinic.DefaultPatientVisitFactory;
+import dw317.clinic.data.NonExistingPatientException;
 import group1.clinic.business.Ramq;
 import group1.util.ListUtilities;
 
@@ -16,7 +17,7 @@ public class PatientListDBTest {
 		testTwoParamConstructor();
 		testToString();
 		testExists();
-		
+		testGetPatient();
 	}
 
 	public static void testOneParamConstructor(){
@@ -38,13 +39,13 @@ public class PatientListDBTest {
 		out.println("\tConstructor success.");
 		
 		if (!expectValid){
-			out.println("Expected invalid ==== FAILED TEST ====\n");
+			out.println("Expected invalid ==== FAILED TEST ====");
 		}
 		}
 		catch (IllegalArgumentException iae){
 			out.println("\t" + iae.getMessage());
 			if (expectValid){
-				out.println("Expected valid ==== FAILED TEST ====\n");
+				out.println("Expected valid ==== FAILED TEST ====");
 			}
 		}
 		catch (Exception e){
@@ -77,13 +78,13 @@ public class PatientListDBTest {
 		out.println("\tConstructor success.");
 
 		if (!expectValid){
-			out.println("Expected invalid ==== FAILED TEST ====\n");
+			out.println("Expected invalid ==== FAILED TEST ====");
 		}
 		}
 		catch (IllegalArgumentException iae){
 			out.println("\t" + iae.getMessage());
 			if (expectValid){
-				out.println("Expected valid ==== FAILED TEST ====\n");
+				out.println("Expected valid ==== FAILED TEST ====");
 			}
 		}
 		catch (Exception e){
@@ -136,6 +137,7 @@ public class PatientListDBTest {
 			out.println("Case 7\tTORD83511514\ttrue");
 			out.println("Case 8\tWAKN60022987\ttrue");
 			out.println("Case 9\tBOBN60022987\tfalse");
+			out.println("Case 10\tnull\terror");
 			
 			// Test Data
 			out.println("\nResults Chart\nCase #\tValue\t\tResult");
@@ -148,6 +150,9 @@ public class PatientListDBTest {
 			testExists(patients, "Case 7", new Ramq("TORD83511514"), true);
 			testExists(patients, "Case 8", new Ramq("WAKN60022987"), true);
 			testExists(patients, "Case 9", new Ramq("BOBN60022987"), false);
+			testExists(patients, "Case 9", null, false);
+			
+			teardown();
 		}
 		catch (Exception e){
 			out.println(e + " ==== FAILED TEST ====");
@@ -158,14 +163,21 @@ public class PatientListDBTest {
 	public static void testExists(PatientListDB patients, String testcase, Ramq ramq, boolean expected){
 
 		try{			
+			out.print(testcase + "\t" + ramq + "\t");
+			
 			boolean result = patients.exists(ramq);
-			out.println(testcase + "\t" + ramq.getRamq() + "\t" + result);
+			
+			out.println(result);
 			
 			if (result != expected){
-				out.println("Expected " + expected + " ==== FAILED TEST ====\n");
+				out.println("Expected " + expected + " ==== FAILED TEST ====");
 			}
-			
-			teardown();
+		}
+		catch (IllegalArgumentException iae){
+			out.println(iae.getMessage());
+			if (expected){
+				out.println("Expected valid ==== FAILED TEST ====");
+			}
 		}
 		catch (Exception e){
 			out.println("\tUNEXPECTED EXCEPTION TYPE! " + e.getClass() + " "
@@ -173,6 +185,79 @@ public class PatientListDBTest {
 		}
 	}
 	
+	public static void testGetPatient(){
+		try{
+			out.println("\nTesting the getPatient method");
+			setup();
+			
+			SequentialTextFileList listObject = new SequentialTextFileList(
+					"testfiles/testPatients.txt", "testfiles/testVisits.txt");
+			DefaultPatientVisitFactory factory = DefaultPatientVisitFactory.DEFAULT;
+			PatientListDB patients = new PatientListDB (listObject, factory);
+			out.println("\tConstructor success.");
+			
+			// Chart for Test Data
+			out.println("\nTest Data and Expected Results Chart\nCase #\tValue\t\tExpected Result");
+			out.println("Case 1\tLARR80072061\tLARR80072061*Renato*Laranja*5147341013*DIN*00800430*Vancocin*Staph Infection");
+			out.println("Case 2\tLISH87100101\tLISH87100101*Shao*Li**DIN*02238645*292 tablets*Pain");
+			out.println("Case 3\tRAOV86112001\tRAOV86112001*Vishal*Rao*5143634564*NDC*43479-501-51*Pimple punisher*Acne");
+			out.println("Case 4\tRODM90571001\tRODM90571001*Maria*Rodriguez*5145555511****");
+			out.println("Case 5\tSMIM85122501\tSMIM85122501*Mike*Smith*5143634564*DIN*02239497*Absorbine Jr*Athlete’s foot");
+			out.println("Case 6\tSUCF34050513\tSUCF34050513*Fernando*Sucre*5813085502****");
+			out.println("Case 7\tTORD83511514\tTORD83511514*Diana*Torres*6379315732*DIN*02204266*Dexamethasone-Omega*Asthma");
+			out.println("Case 8\tWAKN60022987\tWAKN60022987*Norio*Wakamoto*4389945870*NDC*0363-8001-01*Nicotine Transdermal System*Smoking Addiction");
+			out.println("Case 9\tBOBN60022987\tError");
+			out.println("Case 10\tnull\tError");
+			
+			// Test Data
+			out.println("\nResults Chart\nCase #\tValue\t\tResult");
+			testgetPatient(patients, "Case 1", new Ramq("LARR80072061"), true);
+			testgetPatient(patients, "Case 2", new Ramq("LISH87100101"), true);
+			testgetPatient(patients, "Case 3", new Ramq("RAOV86112001"), true);
+			testgetPatient(patients, "Case 4", new Ramq("RODM90571001"), true);
+			testgetPatient(patients, "Case 5", new Ramq("SMIM85122501"), true);
+			testgetPatient(patients, "Case 6", new Ramq("SUCF34050513"), true);
+			testgetPatient(patients, "Case 7", new Ramq("TORD83511514"), true);
+			testgetPatient(patients, "Case 8", new Ramq("WAKN60022987"), true);
+			testgetPatient(patients, "Case 9", new Ramq("BOBN60022987"), false);
+			testgetPatient(patients, "Case 10", null, false);
+			
+			teardown();
+		}
+		catch (Exception e){
+			out.println(e + " ==== FAILED TEST ====");
+		}
+		
+	}
+	
+	public static void testgetPatient(PatientListDB patients, String testcase, Ramq ramq, boolean expectValid){
+
+		try{			
+			
+			out.print(testcase + "\t" + ramq + "\t");
+			out.println(patients.getPatient(ramq));
+			
+			if (!expectValid){
+				out.println("Expected invalid ==== FAILED TEST ====");
+			}
+		}
+		catch (IllegalArgumentException iae){
+			out.println(iae.getMessage());
+			if (expectValid){
+				out.println("Expected valid ==== FAILED TEST ====");
+			}
+		}
+		catch (NonExistingPatientException nepe){
+			out.println(nepe.getMessage());
+			if (expectValid){
+				out.println("Expected valid ==== FAILED TEST ====");
+			}
+		}
+		catch (Exception e){
+			out.println("\tUNEXPECTED EXCEPTION TYPE! " + e.getClass() + " "
+					+ e.getMessage() + " ==== FAILED TEST ====");
+		}
+	}
 	private static void setup() {
 		String[] patients = new String[8];
 		patients[0] = "LARR80072061*Renato*Laranja*5147341013*" + "DIN*00800430*Vancocin*Staph Infection";

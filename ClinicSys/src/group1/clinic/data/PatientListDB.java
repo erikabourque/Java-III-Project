@@ -15,6 +15,7 @@ import dw317.clinic.data.DuplicatePatientException;
 import dw317.clinic.data.NonExistingPatientException;
 import dw317.clinic.data.interfaces.PatientDAO;
 import dw317.lib.medication.Medication;
+import group1.clinic.business.ClinicPatient;
 import group1.clinic.business.Ramq;
 import group1.util.ListUtilities;
 
@@ -90,18 +91,45 @@ public class PatientListDB implements PatientDAO {
 
 	}
 
-	/* (non-Javadoc)
-	 * @see dw317.clinic.data.interfaces.PatientDAO#getPatient(group1.clinic.business.Ramq)
-	 */
+
 	@Override
 	public Patient getPatient(Ramq ramq) throws NonExistingPatientException {
-		// TODO Auto-generated method stub
-		return null;
+		// Data validation
+		if (ramq == null){
+			throw new IllegalArgumentException("getPatient error - ramq is null.");
+		}
+		
+		// Make pattern to check for using the Ramq given
+		int result;
+		String pattern = ramq.getRamq();
+		
+		String array[] = new String[database.size()];
+		
+		for (int i = 0; i < database.size(); i++)
+		{
+			array[i] = database.get(i).getRamq().getRamq();
+		}
+		
+		// Patient[] array = database.toArray(new Patient[database.size()]); 
+		
+		result = ListUtilities.binarySearch(array, pattern);
+		
+		if (result == -1){
+			throw new NonExistingPatientException("getPatient error - Ramq does not match existing patients.");
+		}
+		
+		// Return reference to specified patient
+		return database.get(result);
 	}
 
 
 	@Override
 	public boolean exists(Ramq ramq) {
+		// Data validation
+		if (ramq == null){
+			throw new IllegalArgumentException("exists error - ramq is null.");
+		}
+		
 		// Make pattern to check for using the Ramq given
 		String pattern = ramq.getRamq();
 		
