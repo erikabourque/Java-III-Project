@@ -16,6 +16,7 @@ import dw317.clinic.data.NonExistingPatientException;
 import dw317.clinic.data.interfaces.PatientDAO;
 import dw317.lib.medication.Medication;
 import group1.clinic.business.Ramq;
+import group1.util.ListUtilities;
 
 /**
  * Represents the patient database as an internal
@@ -84,13 +85,29 @@ public class PatientListDB implements PatientDAO {
 		return null;
 	}
 
-	/* (non-Javadoc)
-	 * @see dw317.clinic.data.interfaces.PatientDAO#exists(group1.clinic.business.Ramq)
-	 */
+
 	@Override
 	public boolean exists(Ramq ramq) {
-		// TODO Auto-generated method stub
-		return false;
+		// Make pattern to check for using the Ramq given
+		String pattern = ramq.getRamq();
+		
+		String array[] = new String[database.size()];
+		
+		for (int i = 0; i < database.size(); i++)
+		{
+			array[i] = database.get(i).getRamq().getRamq();
+		}
+		
+		// Patient[] array = database.toArray(new Patient[database.size()]); 
+		
+		int result = ListUtilities.binarySearch(array, pattern);
+		
+		if (result != -1){
+			return true;
+		}
+		else{
+			return false;
+		}
 	}
 
 	/* (non-Javadoc)
