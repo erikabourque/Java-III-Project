@@ -4,9 +4,11 @@
 package group1.clinic.data;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Optional;
 
 import dw317.clinic.DefaultPatientVisitFactory;
 import dw317.clinic.business.interfaces.Patient;
@@ -15,6 +17,7 @@ import dw317.clinic.data.DuplicatePatientException;
 import dw317.clinic.data.NonExistingPatientException;
 import dw317.clinic.data.interfaces.PatientDAO;
 import dw317.lib.medication.Medication;
+import dw317.lib.medication.Medication.Scheme;
 import group1.clinic.business.ClinicPatient;
 import group1.clinic.business.Ramq;
 import group1.util.ListUtilities;
@@ -152,13 +155,35 @@ public class PatientListDB implements PatientDAO {
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see dw317.clinic.data.interfaces.PatientDAO#getPatientsPrescribed(dw317.lib.medication.Medication)
-	 */
 	@Override
 	public List<Patient> getPatientsPrescribed(Medication medication) {
-		// TODO Auto-generated method stub
-		return null;
+		// Data validation
+		if (medication == null){
+			throw new IllegalArgumentException("getPatientsPrescribed error - medication is null.");
+		}
+		
+		Scheme medScheme = medication.getScheme();
+		String medNumber = medication.getNumber();
+		Optional<Medication> patientMedication;
+		Scheme patientScheme;
+		String patientNumber;
+		
+		List<Patient> prescribed = new ArrayList<Patient>();
+		
+		for (int i = 0; i < database.size(); i++)
+		{
+			patientMedication = database.get(i).getMedication();
+			if (patientMedication.isPresent()){
+				patientScheme = patientMedication.get().getScheme();
+				patientNumber = patientMedication.get().getNumber();
+				
+				if (medScheme.equals(patientScheme) && medNumber.equals(patientNumber)){
+					prescribed.add(database.get(i));
+				}
+			}
+		}
+		
+		return prescribed;
 	}
 
 	/* (non-Javadoc)

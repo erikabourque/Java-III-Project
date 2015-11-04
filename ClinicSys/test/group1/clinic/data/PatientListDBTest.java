@@ -7,6 +7,9 @@ import java.io.IOException;
 
 import dw317.clinic.DefaultPatientVisitFactory;
 import dw317.clinic.data.NonExistingPatientException;
+import dw317.lib.medication.DINMedication;
+import dw317.lib.medication.Medication;
+import dw317.lib.medication.NDCMedication;
 import group1.clinic.business.Ramq;
 import group1.util.ListUtilities;
 
@@ -18,6 +21,7 @@ public class PatientListDBTest {
 		testToString();
 		testExists();
 		testGetPatient();
+		testgetPatientsPrescribed();
 	}
 
 	public static void testOneParamConstructor(){
@@ -258,6 +262,82 @@ public class PatientListDBTest {
 					+ e.getMessage() + " ==== FAILED TEST ====");
 		}
 	}
+	
+	public static void testgetPatientsPrescribed(){
+		try{
+			out.println("\nTesting the getPatientsPrescribed method");
+			setup();
+			
+			SequentialTextFileList listObject = new SequentialTextFileList(
+					"testfiles/testPatients.txt", "testfiles/testVisits.txt");
+			DefaultPatientVisitFactory factory = DefaultPatientVisitFactory.DEFAULT;
+			PatientListDB patients = new PatientListDB (listObject, factory);
+			out.println("\tConstructor success.");
+			
+			// Chart for Test Data
+			out.println("\nTest Data and Expected Results Chart\nCase #\t"
+					+ String.format("%-45s", "Medication") + "\tResults");
+			out.println("Case 1\t" + String.format("%-45s", "DIN*00800430*Vancocin")
+					+ "\tLARR80072061*Renato*Laranja*5147341013*DIN*00800430*Vancocin*Staph Infection");
+			out.println("Case 2\t" + String.format("%-45s", "DIN*02238645*292 tablets")
+					+ "\tLISH87100101*Shao*Li**DIN*02238645*292 tablets*Pain");
+			out.println("Case 3\t" + String.format("%-45s", "NDC*43479-501-51*Pimple punisher")
+					+ "\tRAOV86112001*Vishal*Rao*5143634564*NDC*43479-501-51*Pimple punisher*Acne");
+			out.println("Case 4\t" + String.format("%-45s", "DIN*02239497*Absorbine Jr")
+					+ "\tSMIM85122501*Mike*Smith*5143634564*DIN*02239497*Absorbine Jr*Athlete’s foot");
+			out.println("Case 5\t" + String.format("%-45s", "DIN*02204266*Dexamethasone-Omega")
+					+ "\tTORD83511514*Diana*Torres*6379315732*DIN*02204266*Dexamethasone-Omega*Asthma");
+			out.println("Case 6\t" + String.format("%-45s", "NDC*0363-8001-01*Nicotine Transdermal System")
+					+ "\tWAKN60022987*Norio*Wakamoto*4389945870*NDC*0363-8001-01*Nicotine Transdermal System*Smoking Addiction");
+			out.println("Case 7\t" + String.format("%-45s", "DIN*00000000*testvalue") + "\tempty list");
+			out.println("Case 8\t" + String.format("%-45s", "DIN*00000000*testvalue") + "\tempty list");
+			out.println("Case 9\t"  + String.format("%-45s", "null") + "\tError");
+			
+			// Test Data
+			out.println("\nResults Chart\nCase #\t"
+					+ String.format("%-45s", "Medication") + "\tResults");
+			testgetPatientsPrescribed(patients, "Case 1", new DINMedication("00800430", "Vancocin"), true);
+			testgetPatientsPrescribed(patients, "Case 2", new DINMedication("02238645", "292 tablets"), true);
+			testgetPatientsPrescribed(patients, "Case 3", new NDCMedication("43479-501-51", "Pimple punisher"), true);
+			testgetPatientsPrescribed(patients, "Case 4", new DINMedication("02239497", "Absorbine Jr"), true);
+			testgetPatientsPrescribed(patients, "Case 5", new DINMedication("02204266", "Dexamethasone-Omega"), true);
+			testgetPatientsPrescribed(patients, "Case 6", new NDCMedication("0363-8001-01", "Nicotine Transdermal System"), true);
+			testgetPatientsPrescribed(patients, "Case 7", new DINMedication("00000000", "testvalue"), true);
+			testgetPatientsPrescribed(patients, "Case 8", new NDCMedication("0000-0000-00", "testvalue"), true);
+			testgetPatientsPrescribed(patients, "Case 9", null, false);
+			
+			teardown();
+		}
+		catch (Exception e){
+			out.println(e + " ==== FAILED TEST ====");
+		}
+		
+	}
+	
+	public static void testgetPatientsPrescribed(PatientListDB patients, String testcase, 
+			Medication medication, boolean expectValid){
+
+		try{			
+			
+			out.print(testcase + "\t" + String.format("%-45s", medication) + "\t");
+			out.println(patients.getPatientsPrescribed(medication));
+			
+			if (!expectValid){
+				out.println("Expected invalid ==== FAILED TEST ====");
+			}
+		}
+		catch (IllegalArgumentException iae){
+			out.println(iae.getMessage());
+			if (expectValid){
+				out.println("Expected valid ==== FAILED TEST ====");
+			}
+		}
+		catch (Exception e){
+			out.println("\tUNEXPECTED EXCEPTION TYPE! " + e.getClass() + " "
+					+ e.getMessage() + " ==== FAILED TEST ====");
+		}
+	}
+	
 	private static void setup() {
 		String[] patients = new String[8];
 		patients[0] = "LARR80072061*Renato*Laranja*5147341013*" + "DIN*00800430*Vancocin*Staph Infection";
