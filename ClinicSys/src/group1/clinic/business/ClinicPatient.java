@@ -217,8 +217,7 @@ public final class ClinicPatient implements Patient {
 		if (medication.isPresent())
 			this.medication = medication;
 		else {
-			if (!(this.medication.isPresent()))
-				this.medication = Optional.empty();
+			this.medication = Optional.empty();
 		}
 	}
 

@@ -460,14 +460,6 @@ public class PatientListDBTest {
 			testUpdate("Case 9", "Renato", "Laranja", "LARR80072061", 
 					"5147341013", "DIN", "00800430", "Vancocin", "", true);
 			testUpdate("Case 10", null, false);
-			/**testExists(patients, "Case 3", new Ramq("RAOV86112001"), true);
-			testExists(patients, "Case 4", new Ramq("RODM90571001"), true);
-			testExists(patients, "Case 5", new Ramq("SMIM85122501"), true);
-			testExists(patients, "Case 6", new Ramq("SUCF34050513"), true);
-			testExists(patients, "Case 7", new Ramq("TORD83511514"), true);
-			testExists(patients, "Case 8", new Ramq("WAKN60022987"), true);
-			testExists(patients, "Case 9", new Ramq("BOBN60022987"), false);
-			testExists(patients, "Case 9", null, false);*/
 		} catch (Exception e) {
 			out.println(e + " ==== FAILED TEST ====");
 		}
