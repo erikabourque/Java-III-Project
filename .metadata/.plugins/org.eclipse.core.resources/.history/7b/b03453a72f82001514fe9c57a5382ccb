@@ -1,0 +1,14 @@
+/**
+ * 
+ */
+package group1.clinic.data;
+
+/**
+ * @author 1430468
+ *
+ */
+public class VisitQueueDB implements VisitDAO{
+
+	
+	
+}
