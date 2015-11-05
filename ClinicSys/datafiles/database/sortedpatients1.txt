@@ -1,0 +1,10 @@
+AZNC86031129*Char*Aznable*4167572322*NDC*54868-5987-1*Omeprazole*Stomach
+CENJ82100365*John*Cena*4385632147****
+JEDJ89561206*Joanna*Jedrzejczyk*4385562118*DIN*00223107*Conray 30*Brain Medication
+KRYN91043000*Nikita*Krylov*5143346519*DIN*01919407*Abenol*Headache
+LARR80072061*Renato*Laranja*5147341013*DIN*00800430*Vancocin*Staph Infection
+MARK05092322*Karl*Marx*5811648900*NDC*61979-001-59*Body Time Anti-Aging Day Cream Spf 30*Wrinkled Skin
+MCDR63080910*Ronald*McDonald*5144871981*DIN*02369362*Acuvail*Eye Pain
+SUCF34050513*Fernando*Sucre*5813085502****
+TORD83511514*Diana*Torres*6379315732*DIN*02204266*Dexamethasone-Omega*Asthma
+WAKN60022987*Norio*Wakamoto*4389945870*NDC*0363-8001-01*Nicotine Transdermal System*Smoking Addiction
