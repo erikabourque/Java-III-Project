@@ -27,6 +27,7 @@ public class PatientListDBTest {
 		testgetPatientsPrescribed();
 		testDisconnect();
 		testAddPatient();
+		testUpdate();
 	}
 
 	public static void testOneParamConstructor() {
@@ -111,11 +112,11 @@ public class PatientListDBTest {
 			out.println("\tConstructor success.");
 
 			out.println(patients.toString());
-
-			teardown();
 		} catch (Exception e) {
 			out.println(
 					"\tUNEXPECTED EXCEPTION TYPE! " + e.getClass() + " " + e.getMessage() + " ==== FAILED TEST ====");
+		} finally {
+			teardown();
 		}
 	}
 
@@ -353,6 +354,8 @@ public class PatientListDBTest {
 			out.println("Contents of database after disconnect: " + patients);
 		} catch (IOException e) {
 			out.println(e.getMessage());
+		} finally {
+			teardown();
 		}
 	}
 	
@@ -368,22 +371,22 @@ public class PatientListDBTest {
 		out.println("Case 7\t" + String.format("%-55s", "AZNC86031129*Char*Aznable*****Stomach") + "\t1");
 		
 		out.println("\nResults");
-		testAddPatient("\nCase 1", new ClinicPatient("Char", "Aznable", "AZNC86031129"), true);
-		testAddPatient("\nCase 2", new ClinicPatient("John", "Shnaucker", "SHNJ78042312"), true);
-		testAddPatient("\nCase 3", new ClinicPatient("Norio", "Zakamoto", "ZAKN60022987"), true);
-		testAddPatient("\nCase 4", null, false);
+		testAddPatient("Case 1", new ClinicPatient("Char", "Aznable", "AZNC86031129"), true);
+		testAddPatient("Case 2", new ClinicPatient("John", "Shnaucker", "SHNJ78042312"), true);
+		testAddPatient("Case 3", new ClinicPatient("Norio", "Zakamoto", "ZAKN60022987"), true);
+		testAddPatient("Case 4", null, false);
 		
 		Patient caseFive = new ClinicPatient("Char", "Aznable", "AZNC86031129");
 		caseFive.setTelephoneNumber(Optional.of("4167572322"));
-		testAddPatient("\nCase 5", caseFive, true);
+		testAddPatient("Case 5", caseFive, true);
 		
 		Patient caseSix = new ClinicPatient("Char", "Aznable", "AZNC86031129");
 		caseSix.setMedication(Optional.of(new NDCMedication("54868-5987-1", "Omeprazole")));
-		testAddPatient("\nCase 6", caseSix, true);
+		testAddPatient("Case 6", caseSix, true);
 		
 		Patient caseSeven = new ClinicPatient("Char", "Aznable", "AZNC86031129");
 		caseSeven.setExistingConditions(Optional.of("Stomach"));
-		testAddPatient("\nCase 7", caseSeven, true);
+		testAddPatient("Case 7", caseSeven, true);
 	}
 	
 	private static void testAddPatient(String testcase, Patient aPatient, boolean expectValid){
@@ -401,7 +404,7 @@ public class PatientListDBTest {
 			patients.disconnect();
 			PatientListDB patientsAgain = new PatientListDB(listObject, factory);
 			
-			out.print(patientsAgain);
+			out.println(patientsAgain);
 			
 			if (!expectValid) {
 				out.println("Expected invalid ==== FAILED TEST ====");
@@ -412,6 +415,159 @@ public class PatientListDBTest {
 			if (expectValid) {
 				out.println("Expected valid ==== FAILED TEST ====");
 			}
+		} finally {
+			teardown();
+		}
+	}
+	
+	public static void testUpdate(){
+		try {
+			out.println("\nTesting the update method");
+
+			// Chart for Test Data
+			out.println("\nTest Data and Expected Results Chart\nCase #\t" + String.format("%-55s", "Changed Value")
+				+ "\tExpected Changed Result");
+			out.println("Case 1\t" + String.format("%-55s", "0000000000*DIN*00800430*Vancocin*Staph Infection")
+				+ "\tLARR80072061*Renato*Laranja*0000000000*DIN*00800430*Vancocin*Staph Infection\ttrue");
+			out.println("Case 2\tLISH87100101\ttrue");
+			out.println("Case 3\tRAOV86112001\ttrue");
+			out.println("Case 4\tRODM90571001\ttrue");
+			out.println("Case 5\tSMIM85122501\ttrue");
+			out.println("Case 6\tSUCF34050513\ttrue");
+			out.println("Case 7\tTORD83511514\ttrue");
+			out.println("Case 8\tWAKN60022987\ttrue");
+			out.println("Case 9\tBOBN60022987\tfalse");
+			out.println("Case 10\tnull\terror");
+
+			// Test Data
+			out.println("\nResults Chart\nCase #\t" + String.format("%-55s", "Changed Value"));
+			testUpdate("Case 1", "Renato", "Laranja", "LARR80072061", 
+					"0000000000", "DIN", "00800430", "Vancocin", "Staph Infection", true);
+			testUpdate("Case 2", "Renato", "Laranja", "LARR80072061", 
+					"5147341013", "DIN", "00000000", "Vancocin", "Staph Infection", true);
+			testUpdate("Case 3", "Renato", "Laranja", "LARR80072061", 
+					"5147341013", "DIN", "00800430", "Lorazopan", "Staph Infection", true);
+			testUpdate("Case 4", "Renato", "Laranja", "LARR80072061", 
+					"5147341013", "DIN", "00800430", "Vancocin", "Nausea", true);
+			testUpdate("Case 5", "Renato", "Laranja", "LARR80072061", 
+					"5147341013", "NDC", "43479-501-51", "Vancocin", "Staph Infection", true);
+			testUpdate("Case 6", "Renato", "Laranja", "LARR80072061", 
+					"0000000000", "NDC", "43479-501-51", "Lorazopan", "Nausea", true);
+			testUpdate("Case 7", "Renato", "Laranja", "LARR80072061", 
+					"", "DIN", "00800430", "Vancocin", "Staph Infection", true);
+			testUpdate("Case 8", "Renato", "Laranja", "LARR80072061", 
+					"5147341013", "", "00000000", "Vancocin", "Staph Infection", true);
+			testUpdate("Case 9", "Renato", "Laranja", "LARR80072061", 
+					"5147341013", "DIN", "00800430", "Vancocin", "", true);
+			testUpdate("Case 10", null, false);
+			/**testExists(patients, "Case 3", new Ramq("RAOV86112001"), true);
+			testExists(patients, "Case 4", new Ramq("RODM90571001"), true);
+			testExists(patients, "Case 5", new Ramq("SMIM85122501"), true);
+			testExists(patients, "Case 6", new Ramq("SUCF34050513"), true);
+			testExists(patients, "Case 7", new Ramq("TORD83511514"), true);
+			testExists(patients, "Case 8", new Ramq("WAKN60022987"), true);
+			testExists(patients, "Case 9", new Ramq("BOBN60022987"), false);
+			testExists(patients, "Case 9", null, false);*/
+		} catch (Exception e) {
+			out.println(e + " ==== FAILED TEST ====");
+		}
+
+	}
+
+	private static void testUpdate(String testcase, String fname, 
+			String lname, String ramq, String phone, String medScheme, String medNumber, 
+			String medName, String ailment, boolean expected) {
+
+		try {
+			setup();
+
+			SequentialTextFileList listObject = new SequentialTextFileList("testfiles/testPatients.txt",
+					"testfiles/testVisits.txt");
+			DefaultPatientVisitFactory factory = DefaultPatientVisitFactory.DEFAULT;
+			PatientListDB patients = new PatientListDB(listObject, factory);
+			
+			// Creating modified patient
+			Patient modifiedPatient = new ClinicPatient(fname, lname, ramq);
+			modifiedPatient.setTelephoneNumber(Optional.of(phone));
+			
+			Medication meds = null;
+			if (medScheme.equals("DIN")){
+				meds = new DINMedication(medNumber, medName);
+			}
+			else if (medScheme.equals("NDC")){
+				meds = new NDCMedication(medNumber, medName);
+			}
+			
+			if (meds == null){
+				modifiedPatient.setMedication(Optional.empty());
+			}
+			else{
+				modifiedPatient.setMedication(Optional.of(meds));
+			}
+			
+			modifiedPatient.setExistingConditions(Optional.of(ailment));
+			
+			// Starting Testing
+			out.println(testcase + "\t" + modifiedPatient);
+
+			patients.update(modifiedPatient);
+			patients.disconnect();
+
+			PatientListDB patientsAgain = new PatientListDB(listObject, factory);
+			
+			out.println(patientsAgain);
+
+			if (!expected) {
+				out.println("Expected " + expected + " ==== FAILED TEST ====");
+			}
+			
+		} catch (IllegalArgumentException iae) {
+			out.println(iae.getMessage());
+			if (expected) {
+				out.println("Expected valid ==== FAILED TEST ====");
+			}
+		} catch (Exception e) {
+			out.println(
+					"\tUNEXPECTED EXCEPTION TYPE! " + e.getClass() + " " + e.getMessage() + " ==== FAILED TEST ====");
+		} finally {
+			teardown();
+		}
+	}
+	
+	private static void testUpdate(String testcase, Patient modifiedPatient, boolean expected) {
+
+		try {
+			setup();
+
+			SequentialTextFileList listObject = new SequentialTextFileList("testfiles/testPatients.txt",
+					"testfiles/testVisits.txt");
+			DefaultPatientVisitFactory factory = DefaultPatientVisitFactory.DEFAULT;
+			PatientListDB patients = new PatientListDB(listObject, factory);
+			
+			// Starting Testing
+			out.println(testcase + "\t" + modifiedPatient);
+
+			patients.update(modifiedPatient);
+			patients.disconnect();
+
+			PatientListDB patientsAgain = new PatientListDB(listObject, factory);
+			
+			out.println(patientsAgain);
+
+			if (!expected) {
+				out.println("Expected " + expected + " ==== FAILED TEST ====");
+			}
+			
+		} catch (IllegalArgumentException iae) {
+			out.println(iae.getMessage());
+			if (expected) {
+				out.println("Expected valid ==== FAILED TEST ====");
+			}
+		} catch (Exception e) {
+			out.println(
+					"\tUNEXPECTED EXCEPTION TYPE! " + e.getClass() + " " + e.getMessage() + " ==== FAILED TEST ====");
+		} finally {
+			teardown();
 		}
 	}
 	

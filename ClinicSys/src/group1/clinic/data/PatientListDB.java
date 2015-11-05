@@ -163,25 +163,23 @@ public class PatientListDB implements PatientDAO {
 			throw new IllegalArgumentException("exists error - ramq is null.");
 		}
 		
-		// Make pattern to check for using the Ramq given
-		String pattern = ramq.getRamq();
-		
+		String pattern = ramq.getRamq();		
 		String array[] = new String[database.size()];
 		
+		// Creating array of String ramq to search with
 		for (int i = 0; i < database.size(); i++)
 		{
 			array[i] = database.get(i).getRamq().getRamq();
 		}
 		
-		// Patient[] array = database.toArray(new Patient[database.size()]); 
-		
+		// Use ListUtilities binarySearch
 		int result = ListUtilities.binarySearch(array, pattern);
 		
-		if (result != -1){
-			return true;
+		if (result == -1){
+			return false;
 		}
 		else{
-			return false;
+			return true;
 		}
 	}
 
@@ -196,10 +194,10 @@ public class PatientListDB implements PatientDAO {
 		String medNumber = medication.getNumber();
 		Optional<Medication> patientMedication;
 		Scheme patientScheme;
-		String patientNumber;
-		
+		String patientNumber;		
 		List<Patient> prescribed = new ArrayList<Patient>();
 		
+		// Search through database for medications, checks for match, adds match to list
 		for (int i = 0; i < database.size(); i++)
 		{
 			patientMedication = database.get(i).getMedication();
@@ -216,12 +214,42 @@ public class PatientListDB implements PatientDAO {
 		return prescribed;
 	}
 
-	/* (non-Javadoc)
-	 * @see dw317.clinic.data.interfaces.PatientDAO#update(dw317.clinic.business.interfaces.Patient)
-	 */
+	
 	@Override
 	public void update(Patient modifiedPatient) throws NonExistingPatientException {
-		// TODO Auto-generated method stub
+		// Data validation
+		if (modifiedPatient == null){
+			throw new IllegalArgumentException("update error - modified patient is null.");
+		}
+		
+		String modRamq = modifiedPatient.getRamq().getRamq();		
+		String array[] = new String[database.size()];
+		
+		// Creating array of String ramq to search with
+		for (int i = 0; i < database.size(); i++)
+		{
+			array[i] = database.get(i).getRamq().getRamq();
+		}
+		
+		// Use ListUtilities binarySearch
+		int result = ListUtilities.binarySearch(array, modRamq);
+		
+		// Throw error if patient does not exist
+		if (result == -1){
+			throw new NonExistingPatientException("Modified patient RAMQ does not match an existing patient.");
+		}
+		
+		// Set telephone number, medication and condition from modified patient
+		database.get(result).setTelephoneNumber(Optional.of(modifiedPatient.getTelephoneNumber()));
+		
+		if (modifiedPatient.getMedication().isPresent()){
+			database.get(result).setMedication(modifiedPatient.getMedication());
+		}
+		else{
+			database.get(result).setMedication(Optional.empty());
+		}
+		
+		database.get(result).setExistingConditions(Optional.of(modifiedPatient.getExistingConditions()));
 
 	}
 	/**
