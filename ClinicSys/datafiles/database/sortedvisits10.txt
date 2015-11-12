@@ -1,0 +1,8 @@
+STRJ78560320*2013*4*11*20*24*2013*4*11*20*58*4*Ankle_discoleration_and_pain
+VILE88512111*2014*9*28*15*35*2014*9*28*15*42*2*Elevated_heartbeat_for_extensive_period
+SANR96121409*2014*11*3*11*21*2013*11*3*12*15*2*Migrane_and_head_pain
+DEPJ80020323*2015*5*5*17*55*2015*5*5*18*40*5*Leg_pain
+MART80062034*2015*6*3*9*43*******Difficulty_focusing
+BROJ90022120*2015*7*23*11*51*2015*7*23*12*50*3*Abdomen_pain
+LYNJ97582307*2015*8*8*6*25*2015*8*8*8*5*5*Back_pain
+MASC80122779*2015*10*1*8*25*2015*12*1*10*35*3*Difficulty_urinating

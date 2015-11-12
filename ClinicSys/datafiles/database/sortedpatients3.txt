@@ -1,0 +1,10 @@
+CANA76080309*Anders*Canters*5148568273*NDC*0280-8005-40*Midol Complete*Back Pain
+CASJ78010619*Justin*Case*5145817777*NDC*58232-0750-2*BENADRYL Extra Strength Itch Cooling*Poison Ivy
+DEVR74570194*Rashanda*Devil*5148481889*NDC*44567-804-01*Piperacillin and Tazobactam*Appendicitis
+ESCP87061943*Pablo*Escobar*4503841662*NDC*0527-1728-74*Cocaine Hydrochloride*Broken Femur
+FRAC67542085*Crystale*Fratch*4384828374*NDC*50580-451-03*TYLENOL*Severe Migraine
+GASK85111884*Krey*Gasm*5144781827*NDC*45865-356-90*Gabapentin*Concussion
+HUNM89031203*Michael*Hunt*5142344747*NDC*37000-812-08*Vicks NyQuil*Pneumonia
+KEEK98581764*Kappa*Keepo*3489482711*NDC*58394-634-03*BeneFIX*Hemophilia
+REDC60582753*Claire*Redfield*4502938133*NDC*55714-4589-1*Cataracts*Cataracts
+SHNJ78042312*John*Shnaucker*4387381122*NDC*49781-081-25*Adult Glycerin Laxative*Dehydration

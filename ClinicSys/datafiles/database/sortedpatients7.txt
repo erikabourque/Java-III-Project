@@ -1,0 +1,10 @@
+BLAZ90021701*Zack*Black*5142669534****Punctured on waist from a bullet
+GARM50100201*Michael*Garson*5147786969****Heart attack
+HEIA05522801*Alice*Hei*5143252593*DIN*95235913*Childrens Tylenol*Cold flu
+LULA62042301*Laurence*Lu*5148389774*DIN*56902850*Oracort*Mouth ulcers
+LYAN87571501*Annie*Ly*5141234321*DIN*20945203*Sleeping pills*Insomnia
+MILJ85120502*Joel*Miller*5149325940*DIN*29134079*Silvadene Cream*Third degree burn
+MINR96022202*Ricky*Minaj*5144134405*NDC*4233-0449-23*Pain killers*Broken Nail
+PATS72052901*Sam*Patel*5145939963****Lung problems
+PENY93071901*Yilong*Peng*5142669534****Coma
+SIMJ00610602*Jessica*Simons*5141213345*NDC*4233-5925-88*Pain killers*Fractured leg bone

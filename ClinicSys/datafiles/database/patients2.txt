@@ -1,0 +1,10 @@
+ANDA94082123*David*An*5144886268****
+DECG48102711*Giovanni*De Campo*5142603016*DIN*01945157*Claritin Allergy + Sinus*Seasonal allergy
+FERT63043054*Thomas*Ferguson*4507409164*DIN*01934139*Ration-indomethacin*Chronic back pain
+BALV79030901*Vishnu*Balakrishnan*4388787131****
+ABRV86032865*Vladimir*Abramovich*5142024702*DIN*02271478*Act Lisinopril*High blood pressure
+SCHK70550629*Kamilla*Schmidt*5147218375****
+ALVA03620147*Adelia*Alves*4381512250*NDC*6332-3690-30*Acetylcysteine*Common cold
+BOUV99512238*Valerie*Bouchard*5143884200*NDC*0074-3799-01*Humira*Severe psoriasis
+KOSI89611442*Si-yeon*Ko*4505298315*NDC*0025-1031-31*Aldactone*Hypokalemia
+DAMA92550807*Alessia*D'Amore*5144608360*DIN*02301482*Cymbalta*Severe depression
