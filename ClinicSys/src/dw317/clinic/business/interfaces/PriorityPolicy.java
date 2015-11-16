@@ -4,8 +4,7 @@ import java.io.Serializable;
 import java.util.Optional;
 
 /**
- * Interface that allows user to call next patient
- * depending on their patient calling algorithm.
+ * Interface for PriorityPolicy objects.
  * 
  * @author Uen Yi Cindy Hung
  * @version 16/11/2015
