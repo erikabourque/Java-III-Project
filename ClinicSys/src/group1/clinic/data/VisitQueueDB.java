@@ -124,17 +124,15 @@ public class VisitQueueDB implements VisitDAO {
 		if (!(priority instanceof Priority))
 			throw new IllegalArgumentException("VisitQueueDB.getNextVisit() - parameter is not of Priority type");
 
-		//int size = database.size();
+		// int size = database.size();
 
-		//for (int i = 0; i < size; i++) {
-			try {
-				//if (database.get(i).element().getPriority().equals(priority))
-					return Optional.ofNullable(database.get(priority.getCode()).element());
-			}
-
-			catch (NoSuchElementException nsee) {
-			}
-		//}
+		// for (int i = 0; i < size; i++) {
+		try {
+			// if (database.get(i).element().getPriority().equals(priority))
+			return Optional.ofNullable(database.get(priority.getCode()).element());
+		} catch (NoSuchElementException nsee) {
+		}
+		// }
 		return null;
 	}
 
@@ -156,16 +154,16 @@ public class VisitQueueDB implements VisitDAO {
 
 		int size = database.size();
 
-		//for (int i = 0; i < size; i++) {		
-			try {
-				//if (database.get(i).element().getPriority().equals(priority)){				
-				database.get(priority.getCode()).remove();
-					//database.get(i).remove();
-					//break;
-				//}
-			} catch (NoSuchElementException nsee) {
-			}
-		//}
+		// for (int i = 0; i < size; i++) {
+		try {
+			// if (database.get(i).element().getPriority().equals(priority)){
+			database.get(priority.getCode()).remove();
+			// database.get(i).remove();
+			// break;
+			// }
+		} catch (NoSuchElementException nsee) {
+		}
+		// }
 	}
 
 	/**
