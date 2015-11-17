@@ -41,10 +41,10 @@ public class DawsonClinicPriorityPolicy implements PriorityPolicy {
 	public Optional<Visit> getNextVisit() {
 		// Check if anymore visits to dequeue
 		for (int i = 1; i < Priority.values().length+1; i++) {
-			if (visitDB.getNextVisit(Priority.getPriorityCode(i)) != null)
-				break;
 			if (i == 6)
 				return Optional.empty();
+			if (visitDB.getNextVisit(Priority.getPriorityCode(i)) != null)
+				break;			
 		}
 
 		// Dequeue all priority 1 first
