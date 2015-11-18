@@ -13,7 +13,7 @@ public class DawsonClinicPriorityPolicy implements PriorityPolicy {
 	private static final long serialVersionUID = 42031768871L;
 	private VisitDAO visitDB;
 	private int current = 2;
-	private int next = current + 1;
+	private int next;
 	private LocalDateTime currentPriorityTime;
 	private LocalDateTime nextPriorityTime;
 	private Optional<Visit> aVisit;
@@ -64,7 +64,7 @@ public class DawsonClinicPriorityPolicy implements PriorityPolicy {
 			}
 
 			next = current + 1;
-			if (next >= Priority.values().length - 1)
+			if (next >= Priority.values().length)
 				next = 2;
 			// Check if there is any Visits with the next Priority
 			while (visitDB.getNextVisit(Priority.getPriorityCode(next)) == null) {
@@ -78,10 +78,10 @@ public class DawsonClinicPriorityPolicy implements PriorityPolicy {
 		// There is more than 1 type of Priority left
 		if (current != next) {
 			// Check the registration time
-			nextPriorityTime = (visitDB.getNextVisit(Priority.getPriorityCode(next))).get()
-					.getRegistrationDateAndTime();
 			currentPriorityTime = (visitDB.getNextVisit(Priority.getPriorityCode(current))).get()
 					.getRegistrationDateAndTime();
+			nextPriorityTime = (visitDB.getNextVisit(Priority.getPriorityCode(next))).get()
+					.getRegistrationDateAndTime();			
 
 			// The current priority patient registered BEFORE the next priority
 			// patient
@@ -98,7 +98,7 @@ public class DawsonClinicPriorityPolicy implements PriorityPolicy {
 			{
 				// Increment 'current' to serve the next priority patients
 				current = next;
-				next = (current >= Priority.values().length-1) ? 2 : current + 1;
+				next = (current >= Priority.values().length) ? 2 : current + 1;
 				aVisit = visitDB.getNextVisit(Priority.getPriorityCode(current));
 				visitDB.remove(Priority.getPriorityCode(current));
 				return aVisit;
