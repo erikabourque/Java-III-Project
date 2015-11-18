@@ -26,11 +26,11 @@ public class DawsonClinicPriorityPolicyTest {
 		 * code.
 		 */
 
-		testbase("2 of priority 1, then one of each priority.","datafiles/prioritypolicy/test1Patient.txt", "datafiles/prioritypolicy/test1Visit.txt");
-		testbase("2 of each priority BUT requires a second round to go down the list","datafiles/prioritypolicy/test2Patient.txt", "datafiles/prioritypolicy/test2Visit.txt");
-		testbase("at least 2 of each priority WITH 2 rounds BUT no priority 3","datafiles/prioritypolicy/test3Patient.txt", "datafiles/prioritypolicy/test3Visit.txt");
-		testbase("2 of each priority WITH 2 rounds BUT all priority 5 are dequeued in second round","datafiles/prioritypolicy/test4Patient.txt", "datafiles/prioritypolicy/test4Visit.txt");
-		testbase("2 of each priority WITH 2 rounds WITH empty lines","datafiles/prioritypolicy/test5Patient.txt", "datafiles/prioritypolicy/test5Visit.txt");
+		testbase("Test 1: 1 of each priority","datafiles/prioritypolicy/test1Patient.txt", "datafiles/prioritypolicy/test1Visit.txt");
+		testbase("Test 2: 2 of each priority","datafiles/prioritypolicy/test2Patient.txt", "datafiles/prioritypolicy/test2Visit.txt");
+		testbase("Test 3: 2 of each priority BUT no priority 3","datafiles/prioritypolicy/test3Patient.txt", "datafiles/prioritypolicy/test3Visit.txt");
+		testbase("Test 4: 2 of each priority with alternating years 2010 and 2015","datafiles/prioritypolicy/test4Patient.txt", "datafiles/prioritypolicy/test4Visit.txt");
+		testbase("Test 5: WITH empty lines","datafiles/prioritypolicy/test5Patient.txt", "datafiles/prioritypolicy/test5Visit.txt");
 		//testbase("","datafiles/prioritypolicy/test6Patient.txt", "datafiles/prioritypolicy/test6Visit.txt");
 		//testbase("","datafiles/prioritypolicy/test7Patient.txt", "datafiles/prioritypolicy/test7Visit.txt");
 
