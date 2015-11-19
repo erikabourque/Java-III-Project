@@ -6,7 +6,9 @@ package group1.clinic.data;
 import group1.clinic.business.Priority;
 import group1.util.Utilities;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -23,6 +25,8 @@ public class ObjectSerializedList implements ListPersistenceObject {
 	
 	private String patientFilename;
 	private String visitFilename;
+	FileOutputStream fout;
+	ObjectOutputStream oos;
 	
 	public void convertSequentialFilesToSerialized(String
 			sequentialPatients, String sequentialVisits)
@@ -92,6 +96,14 @@ public class ObjectSerializedList implements ListPersistenceObject {
 	@Override
 	public void savePatientDatabase(List<Patient> patients) throws IOException {
 		// TODO Auto-generated method stub
+		
+		for (int i = 0;  i < patients.size(); i++) {
+		  fout = new FileOutputStream("datafiles/database/patients.ser", true);
+		    oos = new ObjectOutputStream(fout);
+		    oos.writeObject(patients.get(i).toString());
+		}
+		fout.close();
+		oos.close();
 
 	}
 
@@ -101,7 +113,13 @@ public class ObjectSerializedList implements ListPersistenceObject {
 	@Override
 	public void saveVisitDatabase(List<Queue<Visit>> visits) throws IOException {
 		// TODO Auto-generated method stub
-
+		for (int i = 0;  i < visits.size(); i++) {
+			  fout = new FileOutputStream("datafiles/database/visit.ser", true);
+			    oos = new ObjectOutputStream(fout);
+			    oos.writeObject(visits.get(i).toString());
+			}
+			fout.close();
+			oos.close();
 	}
 	private Visit[][] separateSortedVisitArray(Visit[] sorted) {
 		int length = sorted.length;
