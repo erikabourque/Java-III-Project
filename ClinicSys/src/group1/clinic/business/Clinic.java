@@ -16,9 +16,11 @@ import dw317.clinic.data.NonExistingPatientException;
 import dw317.clinic.data.interfaces.PatientDAO;
 import dw317.clinic.data.interfaces.VisitDAO;
 import dw317.lib.medication.Medication;
+import group1.dawsonclinic.*;
 
-/**
- * @author 1430468
+/** Acts as an interface between the user and the code part. 
+ * @author Danieil Skrinikov
+ * @version 11/20/2015
  *
  */
 public class Clinic  implements PatientVisitManager{
@@ -27,6 +29,13 @@ public class Clinic  implements PatientVisitManager{
 	private VisitDAO visitConnection;
 	private ClinicFactory factory;
 	
+	/** Constructor. Instantiates the private parameters for the object.
+	 * 
+	 * @param patientConnection 	existing connections to Patient database.
+	 * @param visitConnection 		existing connection to Visit database.
+	 * @param factory				connection to existing factory type object.
+	 *
+	 */
 	public Clinic(PatientDAO patientConnection, VisitDAO visitConnection,
 			ClinicFactory factory){
 		
@@ -41,13 +50,23 @@ public class Clinic  implements PatientVisitManager{
 		this.factory = factory;
 		
 	}
-
+	
+	/** Closes all connections of the clinic.
+	 * 
+	 * Throws IOException if there is a problem when saving any of the databases.
+	 * 
+	 */
 	@Override
 	public void closeClinic() throws IOException {
 		// TODO Auto-generated method stub
 		
 	}
-
+	
+	/** Creates a visit for a provided patient with a given complaint. Afterwards adds the visit into the database.
+	 * 	
+	 * 	@param patient		Existing Patient type order for which a visit needs to be created.
+	 * 	@param complaint	complaint that the patient has.
+	 */
 	@Override
 	public void createVisit(Patient patient, String complaint) {
 		
@@ -61,7 +80,10 @@ public class Clinic  implements PatientVisitManager{
 		visitConnection.add(aVisit);
 		
 	}
-
+	
+	/**
+	 * 
+	 */
 	@Override
 	public Patient findPatient(String ramq) throws NonExistingPatientException {
 		
@@ -82,8 +104,9 @@ public class Clinic  implements PatientVisitManager{
 	@Override
 	public Optional<Visit> nextForTriage() {
 		
-		return;
-		
+		//DawsonClinicPriorityPolicy policy = new DawsonClinicPriorityPolicy(visitConnection);
+		//return policy.getNextVisit();
+		return null;
 	}
 
 	@Override
@@ -96,7 +119,13 @@ public class Clinic  implements PatientVisitManager{
 	public void registerNewPatient(String firstName, String lastName,
 			String ramq, String telephone, Medication meds, String conditions)
 			throws DuplicatePatientException {
-		// TODO Auto-generated method stub
+		
+		Patient patient = new ClinicPatient(firstName,lastName,ramq);
+		patient.setExistingConditions(Optional.of(conditions));
+		patient.setMedication(Optional.of(meds));
+		patient.setTelephoneNumber(Optional.of(telephone));
+		
+		patientConnection.add(patient);
 		
 	}
 
