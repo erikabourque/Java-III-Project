@@ -25,9 +25,9 @@ import group1.dawsonclinic.*;
  */
 public class Clinic  implements PatientVisitManager{
 	
-	private PatientDAO patientConnection;
-	private VisitDAO visitConnection;
-	private ClinicFactory factory;
+	private final PatientDAO patientConnection;
+	private final VisitDAO visitConnection;
+	private final ClinicFactory factory;
 	
 	/** Constructor. Instantiates the private parameters for the object.
 	 * 
@@ -58,7 +58,9 @@ public class Clinic  implements PatientVisitManager{
 	 */
 	@Override
 	public void closeClinic() throws IOException {
-		// TODO Auto-generated method stub
+		patientConnection.disconnect();
+		visitConnection.disconnect();
+		
 		
 	}
 	
@@ -100,25 +102,47 @@ public class Clinic  implements PatientVisitManager{
 		//Validate meds
 		return patientConnection.getPatientsPrescribed(meds);
 	}
-
+	
+	/** First creates a DawsonClinicPriorityPolicy object. This object has implementation of a method that returns 
+	 * 	the next visit in line.
+	 *
+	 * 	@return Optional visit that will be next for triage.
+	 */
 	@Override
 	public Optional<Visit> nextForTriage() {
 		
-		//DawsonClinicPriorityPolicy policy = new DawsonClinicPriorityPolicy(visitConnection);
-		//return policy.getNextVisit();
-		return null;
+		DawsonClinicPriorityPolicy policy = new DawsonClinicPriorityPolicy(visitConnection);
+		return policy.getNextVisit();
 	}
-
+	
+	
 	@Override
 	public Optional<Visit> nextForExamination() {
-		// TODO Auto-generated method stub
-		return null;
+		DawsonClinicPriorityPolicy policy = new DawsonClinicPriorityPolicy(visitConnection);
+		return policy.getNextForExamination();
 	}
-
+	/** First creates a new patient. Then sets additional information about the patient. When all this is done adds 
+	 *  the patient to the patientConnection database.
+	 *  
+	 *  @param firstName 	First name of the patient
+	 *  @param lastName		Last name of the patient.
+	 *  @param ramq			Ramq number of the patient.
+	 *  @param telephone	Telephone of the patient.
+	 *  @param meds			Medication that the patient is taking.
+	 *  @param conditions	Conditions that the patient exhibits.
+	 * 
+	 */
 	@Override
 	public void registerNewPatient(String firstName, String lastName,
 			String ramq, String telephone, Medication meds, String conditions)
 			throws DuplicatePatientException {
+		
+		if(firstName == null || firstName.length() == 0)
+			throw new IllegalArgumentException("Clinic.registerNewPatient() - FirstName is null or empty.");
+		if(lastName == null || lastName.length() == 0)
+			throw new IllegalArgumentException("Clinic.registerNewPatient() - LastName is null or empty.");
+		if(ramq == null || ramq.length() != 12)
+			throw new IllegalArgumentException("Clinic.registerNewPatient() - Ramq is null or has invalid amount of characters.");
 		
 		Patient patient = new ClinicPatient(firstName,lastName,ramq);
 		patient.setExistingConditions(Optional.of(conditions));
