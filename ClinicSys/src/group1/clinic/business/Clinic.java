@@ -95,7 +95,12 @@ public class Clinic  implements PatientVisitManager{
 		return patientConnection.getPatient(ramqPatient);
 		
 	}
-
+	
+	/** Returns a list of patients which use the given medications.
+	 * 
+	 * @param meds Medication that will be used to search for patients.
+	 * @return List<Patient> List of Patients which all use the given medication.
+	 */
 	@Override
 	public List<Patient> findPatientsPrescribed(Medication meds) {
 		
@@ -103,23 +108,26 @@ public class Clinic  implements PatientVisitManager{
 		return patientConnection.getPatientsPrescribed(meds);
 	}
 	
-	/** First creates a DawsonClinicPriorityPolicy object. This object has implementation of a method that returns 
-	 * 	the next visit in line.
+	/** Returns the next Visit with a non assigned priority.
 	 *
 	 * 	@return Optional visit that will be next for triage.
 	 */
 	@Override
 	public Optional<Visit> nextForTriage() {
 		
-		DawsonClinicPriorityPolicy policy = new DawsonClinicPriorityPolicy(visitConnection);
-		return policy.getNextVisit();
+		return visitConnection.getNextVisit(Priority.NOTASSIGNED);
 	}
 	
-	
+	/** Instantiates the DawsonClinicPriorityPolicy.
+	 * 	Using the object returns next patient for examination.
+	 * 
+	 * @return Optional<Visit> Represents the next Visit that will be examined.
+	 * 
+	 */
 	@Override
 	public Optional<Visit> nextForExamination() {
 		DawsonClinicPriorityPolicy policy = new DawsonClinicPriorityPolicy(visitConnection);
-		return policy.getNextForExamination();
+		return policy.getNextVisit();
 	}
 	/** First creates a new patient. Then sets additional information about the patient. When all this is done adds 
 	 *  the patient to the patientConnection database.
