@@ -4,6 +4,8 @@
 package group1.util;
 
 import java.io.IOException;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
@@ -13,6 +15,7 @@ import java.io.ObjectOutputStream;
  * Provides Utilities such as for serializing and deserializing objects.
  * 
  * @author Erika Bourque
+ * @author Uen Yi Hung
  * @version 12/11/2015
  */
 public class Utilities {
@@ -71,5 +74,31 @@ public class Utilities {
 			if (in != null)
 				in.close();
 		}
+	}
+
+	/**
+	 * @throws IOException 
+	 * Using Serialization to create deep copies. 
+	 * 
+	 * @param obj
+	 * @return
+	 * @throws IOException
+	 * @throws ClassNotFoundException 
+	 */
+	@SuppressWarnings("unchecked")
+	static <T> T copyOf(T obj) throws IOException, ClassNotFoundException {
+	
+			ByteArrayOutputStream byteArrayOut = new ByteArrayOutputStream();
+			ObjectOutputStream objOut = new ObjectOutputStream(byteArrayOut);
+			objOut.writeObject(obj);
+			objOut.close();
+
+			ByteArrayInputStream byteArrayIn = new ByteArrayInputStream(byteArrayOut.toByteArray());
+			ObjectInputStream objIn = new ObjectInputStream(byteArrayIn);
+			
+			T deepCopy = (T) objIn.readObject();
+			objIn.close();
+			return deepCopy;
+		
 	}
 }
