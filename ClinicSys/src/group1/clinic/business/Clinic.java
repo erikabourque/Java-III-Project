@@ -28,6 +28,7 @@ public class Clinic  implements PatientVisitManager{
 	private final PatientDAO patientConnection;
 	private final VisitDAO visitConnection;
 	private final ClinicFactory factory;
+	private static final long serialVersionUID = 42031768871L;
 	
 	/** Constructor. Instantiates the private parameters for the object.
 	 * 
@@ -83,13 +84,17 @@ public class Clinic  implements PatientVisitManager{
 		
 	}
 	
-	/**
+	/** Looks through the patientConnection database to find a patient which has a matching ramq number.
+	 * 
+	 * Throws NonExistingPatientException if the patient can not be found in the database.
+	 * 
+	 * @param ramq String representation of the ramq.
 	 * 
 	 */
 	@Override
 	public Patient findPatient(String ramq) throws NonExistingPatientException {
 		
-		//Validate ramq todo
+		validateRamq(ramq);
 		Ramq ramqPatient = new Ramq(ramq);
 		
 		return patientConnection.getPatient(ramqPatient);
@@ -104,7 +109,9 @@ public class Clinic  implements PatientVisitManager{
 	@Override
 	public List<Patient> findPatientsPrescribed(Medication meds) {
 		
-		//Validate meds
+		if(meds == null)
+			throw new IllegalArgumentException("Clinic findPatientsPrescribed() - Given parameter is null");
+		
 		return patientConnection.getPatientsPrescribed(meds);
 	}
 	
@@ -159,6 +166,31 @@ public class Clinic  implements PatientVisitManager{
 		
 		patientConnection.add(patient);
 		
+	}
+	
+	/** Checks if the ramq is null, if the ramq contains 12 characters. Then looks at the first 4 characters of the ramq to look if they are
+	 *  alphabet characters. Then looks if the last 8 characters are digits.
+	 *  
+	 *  Throws IllegalArgumentException 
+	 *  						If any of the conditions are not met.
+	 * 
+	 * @param ramq String representation of a ramq which will be checked.
+	 */
+	private void validateRamq(String ramq){
+		
+		if(ramq == null || ramq.length() != 12)
+			throw new IllegalArgumentException("Clinic.findPatient() - Ramq string is either null or does not contain 12 characters.");
+		
+		String letters = ramq.substring(0,4);
+		String numbers = ramq.substring(4);
+		
+		for(int i = 0 ; i < 4 ; i++)
+			if(Character.isAlphabetic(letters.charAt(i)))
+				throw new IllegalArgumentException("Clinic.findPatient() - Ramq contains digits in the first 4 characters.");
+		
+		for(int i = 0 ; i < 8 ; i++ )
+			if(Character.isDigit(numbers.charAt(i)))
+				throw new IllegalArgumentException("Clinic.findPatient() - Ramq contains non digits in last 8 characters.");
 	}
 
 }
