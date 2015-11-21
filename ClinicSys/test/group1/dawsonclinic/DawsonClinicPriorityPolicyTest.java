@@ -27,20 +27,26 @@ public class DawsonClinicPriorityPolicyTest {
 		 */
 
 		// TEST getNext() method
-		testbase("Test 1: 1 of each priority", "datafiles/prioritypolicy/test1Patient.txt",
+		testbase("Test 1: 1 of each priority: 1 1 2 3 4 5", "datafiles/prioritypolicy/test1Patient.txt",
 				"datafiles/prioritypolicy/test1Visit.txt");
-		testbase("Test 2: 2 of each priority", "datafiles/prioritypolicy/test2Patient.txt",
+		
+		testbase("Test 2: 2 of each priority: 1 1 2 3 2 4 3 5 4 5", "datafiles/prioritypolicy/test2Patient.txt",
 				"datafiles/prioritypolicy/test2Visit.txt");
-		testbase("Test 3: 2 of each priority BUT no priority 3", "datafiles/prioritypolicy/test3Patient.txt",
-				"datafiles/prioritypolicy/test3Visit.txt");
-		testbase("Test 4: 2 of each priority with alternating years 2010 and 2015",
+		
+		testbase("Test 3: 2 of each priority BUT no priority 3: 1 1 2 2 4 2 5 4 4 5",
+				"datafiles/prioritypolicy/test3Patient.txt", "datafiles/prioritypolicy/test3Visit.txt");
+		
+		testbase("Test 4: 2 of each priority with alternating years 2010 and 2015: 1 1 2 3 2 4 3 5 4 5",
 				"datafiles/prioritypolicy/test4Patient.txt", "datafiles/prioritypolicy/test4Visit.txt");
-		testbase("Test 5: WITH empty lines", "datafiles/prioritypolicy/test5Patient.txt",
+		
+		testbase("Test 5: WITH empty lines: 1 1 2 3 2 4 3 4 5 5", "datafiles/prioritypolicy/test5Patient.txt",
 				"datafiles/prioritypolicy/test5Visit.txt");
-		// testbase("","datafiles/prioritypolicy/test6Patient.txt",
-		// "datafiles/prioritypolicy/test6Visit.txt");
-		// testbase("","datafiles/prioritypolicy/test7Patient.txt",
-		// "datafiles/prioritypolicy/test7Visit.txt");
+		
+		testbase("Test 6: 1 full cycle: 2 3 2 4 3 2 5 2 3 4", "datafiles/prioritypolicy/test6Patient.txt",
+				"datafiles/prioritypolicy/test6Visit.txt");
+		
+		testbase("Test 7: 5 2 4 5 2 3 4 5 2 5 2","datafiles/prioritypolicy/test7Patient.txt",
+		"datafiles/prioritypolicy/test7Visit.txt");
 
 	}
 

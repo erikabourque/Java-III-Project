@@ -77,28 +77,27 @@ public class Utilities {
 	}
 
 	/**
-	 * @throws IOException 
-	 * Using Serialization to create deep copies. 
+	 * Using Serialization to create deep copies.
 	 * 
 	 * @param obj
-	 * @return
+	 * @return T An object of type <T>.
 	 * @throws IOException
-	 * @throws ClassNotFoundException 
+	 * @throws ClassNotFoundException
 	 */
 	@SuppressWarnings("unchecked")
-	static <T> T copyOf(T obj) throws IOException, ClassNotFoundException {
-	
-			ByteArrayOutputStream byteArrayOut = new ByteArrayOutputStream();
-			ObjectOutputStream objOut = new ObjectOutputStream(byteArrayOut);
-			objOut.writeObject(obj);
-			objOut.close();
+	public static <T> T copyOf(T obj) throws IOException, ClassNotFoundException {
 
-			ByteArrayInputStream byteArrayIn = new ByteArrayInputStream(byteArrayOut.toByteArray());
-			ObjectInputStream objIn = new ObjectInputStream(byteArrayIn);
-			
-			T deepCopy = (T) objIn.readObject();
-			objIn.close();
-			return deepCopy;
-		
+		ByteArrayOutputStream byteArrayOut = new ByteArrayOutputStream();
+		ObjectOutputStream objOut = new ObjectOutputStream(byteArrayOut);
+		objOut.writeObject(obj);
+		objOut.close();
+
+		ByteArrayInputStream byteArrayIn = new ByteArrayInputStream(byteArrayOut.toByteArray());
+		ObjectInputStream objIn = new ObjectInputStream(byteArrayIn);
+
+		T deepCopy = (T) objIn.readObject();
+		objIn.close();
+		return deepCopy;
+
 	}
 }

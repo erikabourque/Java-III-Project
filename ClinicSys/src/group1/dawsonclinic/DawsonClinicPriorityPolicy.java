@@ -1,6 +1,7 @@
 package group1.dawsonclinic;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Optional;
 import dw317.clinic.business.interfaces.PriorityPolicy;
 import dw317.clinic.business.interfaces.Visit;
