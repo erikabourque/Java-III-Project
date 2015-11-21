@@ -18,7 +18,7 @@ import java.util.LinkedList;
  * Provides a Sequential Text File List
  * 
  * @author	Uen Yi Hung (Cindy)
- * @version 28/10/2015
+ * @version 20/11/2015
  */
 public class SequentialTextFileList implements ListPersistenceObject {
 	//variables

@@ -85,12 +85,11 @@ public class DawsonClinicPriorityPolicy implements PriorityPolicy {
 					return aVisit;
 				}					
 			}
-
 			
 			// Get the registration times
 			currentPriorityTime = (visitDB.getNextVisit(Priority.getPriorityCode(policy[counter]))).get()
 					.getRegistrationDateAndTime();
-			
+			 
 			higherPriorityTime = (visitDB.getNextVisit(Priority.getPriorityCode(policy[counter]-higherCounter))).get()
 					.getRegistrationDateAndTime();
 			
