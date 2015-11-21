@@ -16,7 +16,7 @@ import static java.lang.System.out;
  * @version 18/09/2015
  *
  */
-public final class ClinicVisit implements Visit {
+public final class ClinicVisit implements Visit{
 
 	// VARIABLES
 	static final long serialVersionUID = 42031768871L;
@@ -105,17 +105,18 @@ public final class ClinicVisit implements Visit {
 	public Patient getPatient() {
 		ClinicPatient tempPatient = new ClinicPatient(aPatient.getName().getFirstName(),
 				aPatient.getName().getLastName(), aPatient.getRamq().getRamq());
+		
 		tempPatient.setExistingConditions(Optional.of(aPatient.getExistingConditions()));
 		if (aPatient.getMedication().isPresent())
 			tempPatient.setMedication(Optional.of(aPatient.getMedication().get()));
 		tempPatient.setTelephoneNumber(Optional.of(aPatient.getTelephoneNumber()));
 
 		try {
-			tempPatient = Utilities.copyOf(tempPatient);
+			tempPatient = (ClinicPatient) Utilities.copyOf(tempPatient);
 		} catch (ClassNotFoundException cnfe) {
-			out.println("Error, class not found");
+			out.println("Error, class not found " + cnfe.getMessage());
 		} catch (IOException ioe) {
-			out.println("Error, input error");
+			out.println("Error copying " + ioe.getMessage());
 		}
 
 		return tempPatient;

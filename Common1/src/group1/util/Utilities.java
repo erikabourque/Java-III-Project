@@ -88,9 +88,9 @@ public class Utilities {
 	public static <T> T copyOf(T obj) throws IOException, ClassNotFoundException {
 
 		ByteArrayOutputStream byteArrayOut = new ByteArrayOutputStream();
-		ObjectOutputStream objOut = new ObjectOutputStream(byteArrayOut);
-		objOut.writeObject(obj);
-		objOut.close();
+		ObjectOutputStream output = new ObjectOutputStream(byteArrayOut);
+		output.writeObject(obj);
+		output.close();
 
 		ByteArrayInputStream byteArrayIn = new ByteArrayInputStream(byteArrayOut.toByteArray());
 		ObjectInputStream objIn = new ObjectInputStream(byteArrayIn);
