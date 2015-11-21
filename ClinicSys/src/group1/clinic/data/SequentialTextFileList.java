@@ -172,6 +172,20 @@ public class SequentialTextFileList implements ListPersistenceObject {
 			p++;
 			subsetCtr = 0;
 		}
+		
+		/**
+		 * 20/11/2015: I had to add these line of codes in or it would break my code.
+		 * Without these lines, the priorities that are not gone through are not resized,
+		 * causing errors in DawsonClinicPriorityPolicy.
+		 */
+		while (p < Priority.values().length){
+			Visit[] resized = new Visit[subsetCtr];
+			for (int i = 0; i < subsetCtr; i++) {
+				resized[i] = subsets[p][i];
+			}
+			subsets[p] = resized;
+			p++;
+		}
 		return subsets;
 	}
 }
