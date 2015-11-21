@@ -3,10 +3,13 @@ package group1.clinic.business;
 import dw317.clinic.business.interfaces.Patient;
 import dw317.clinic.business.interfaces.Visit;
 import group1.clinic.business.Priority;
+import group1.util.Utilities;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Optional;
+import static java.lang.System.out;
 
 /**
  * @author Uen Yi Cindy Hung
@@ -18,10 +21,10 @@ public final class ClinicVisit implements Visit {
 	// VARIABLES
 	static final long serialVersionUID = 42031768871L;
 	private Patient aPatient;
-	private Optional<String> complaint=Optional.empty();
+	private Optional<String> complaint = Optional.empty();
 	private Priority priority;
 	private LocalDateTime registrationDateTime;
-	private Optional<LocalDateTime> triageDateTime=Optional.empty();
+	private Optional<LocalDateTime> triageDateTime = Optional.empty();
 
 	// CONSTRUCTOR
 	/**
@@ -91,9 +94,7 @@ public final class ClinicVisit implements Visit {
 	 * @return String
 	 */
 	public String getComplaint() {
-		if (complaint.isPresent())
-			return complaint.get();
-		return "";
+		return complaint.orElse("");
 	}
 
 	/**
@@ -102,15 +103,20 @@ public final class ClinicVisit implements Visit {
 	 * @return Patient
 	 */
 	public Patient getPatient() {
-		ClinicPatient tempPatient = new ClinicPatient(aPatient.getName()
-				.getFirstName(), aPatient.getName().getLastName(),
-				aPatient.getRamq().getRamq());
-		tempPatient.setExistingConditions(Optional.of(aPatient
-				.getExistingConditions()));
+		ClinicPatient tempPatient = new ClinicPatient(aPatient.getName().getFirstName(),
+				aPatient.getName().getLastName(), aPatient.getRamq().getRamq());
+		tempPatient.setExistingConditions(Optional.of(aPatient.getExistingConditions()));
 		if (aPatient.getMedication().isPresent())
 			tempPatient.setMedication(Optional.of(aPatient.getMedication().get()));
-		tempPatient.setTelephoneNumber(Optional.of(aPatient
-				.getTelephoneNumber()));
+		tempPatient.setTelephoneNumber(Optional.of(aPatient.getTelephoneNumber()));
+
+		try {
+			tempPatient = Utilities.copyOf(tempPatient);
+		} catch (ClassNotFoundException cnfe) {
+			out.println("Error, class not found");
+		} catch (IOException ioe) {
+			out.println("Error, input error");
+		}
 
 		return tempPatient;
 	}
@@ -182,9 +188,7 @@ public final class ClinicVisit implements Visit {
 		try {
 			priority = aPriority;
 		} catch (Exception e) {
-			System.out
-					.println("Error, the priority entered does not exists. Invalid value = "
-							+ aPriority);
+			System.out.println("Error, the priority entered does not exists. Invalid value = " + aPriority);
 		}
 	}
 
@@ -205,26 +209,16 @@ public final class ClinicVisit implements Visit {
 	 *            new registration seconds. Expected to have a value from 1 to
 	 *            3599.
 	 */
-	public void setRegistrationDateAndTime(int year, int month, int day,
-			int hour, int sec) {
+	public void setRegistrationDateAndTime(int year, int month, int day, int hour, int sec) {
 		try {
 			if ((LocalDateTime.now().getYear() - year) > 150)
-			throw new IllegalArgumentException(
-					"Error, the date entered is too old.\n" + "Today we are: "
-							+ LocalDate.now() + ". Invalid value = " + year
-							+ "-" + month + "-" + day);
-		
-			registrationDateTime = LocalDateTime.of(year, month, day, hour,
-					(sec / 60));
+				throw new IllegalArgumentException("Error, the date entered is too old.\n" + "Today we are: "
+						+ LocalDate.now() + ". Invalid value = " + year + "-" + month + "-" + day);
+
+			registrationDateTime = LocalDateTime.of(year, month, day, hour, (sec / 60));
 		} catch (Exception e) {
-			System.out
-					.print("Error, please enter a valid date and time. Invalid values = year:"
-							+ year
-							+ " month: "
-							+ month
-							+ " day: "
-							+ day
-							+ " hour: " + hour + " seconds: " + sec);
+			System.out.print("Error, please enter a valid date and time. Invalid values = year:" + year + " month: "
+					+ month + " day: " + day + " hour: " + hour + " seconds: " + sec);
 		}
 	}
 
@@ -259,35 +253,25 @@ public final class ClinicVisit implements Visit {
 	 * @param sec
 	 *            new triage seconds. Expected to have a value from 1 to 3599.
 	 */
-	public void setTriageDateAndTime(int year, int month, int day, int hour,
-			int sec) {
+	public void setTriageDateAndTime(int year, int month, int day, int hour, int sec) {
 		try {
-			triageDateTime = Optional.of(LocalDateTime.of(year, month, day,
-					hour, (sec / 60)));
+			triageDateTime = Optional.of(LocalDateTime.of(year, month, day, hour, (sec / 60)));
 			if (registrationDateTime.compareTo(triageDateTime.get()) > 1)
 				throw new IllegalArgumentException(
 						"Error, triage's date and time may not be before registration's date and time. \n"
-								+ "Registration date and time is: "
-								+ registrationDateTime
-								+ "Invalid value = "
+								+ "Registration date and time is: " + registrationDateTime + "Invalid value = "
 								+ triageDateTime.get());
 		} catch (Exception e) {
-			System.out
-					.print("Error, please enter a valid date and time. Invalid values = year:"
-							+ year
-							+ " month: "
-							+ month
-							+ " day: "
-							+ day
-							+ " hour: " + hour + " seconds: " + sec);
+			System.out.print("Error, please enter a valid date and time. Invalid values = year:" + year + " month: "
+					+ month + " day: " + day + " hour: " + hour + " seconds: " + sec);
 		}
 
 	}
 
 	/**
 	 * Overloaded method. Calls the setTriageDateAndTime method which will
-	 * change a person's triage time with the Optional<LocalDateAndTime>
-	 * instance.
+	 * change a person's triage time with the Optional
+	 * <LocalDateAndTime> instance.
 	 * 
 	 * @param datetime
 	 *            Optional<LocalDateTime> instance.
@@ -313,18 +297,14 @@ public final class ClinicVisit implements Visit {
 		String toReturn = "";
 
 		toReturn += aPatient.getRamq().getRamq() + "*";
-		toReturn += registrationDateTime.getYear() + "*"
-				+ registrationDateTime.getMonthValue() + "*"
+		toReturn += registrationDateTime.getYear() + "*" + registrationDateTime.getMonthValue() + "*"
 				+ registrationDateTime.getDayOfMonth() + "*";
-		toReturn += registrationDateTime.getHour() + "*"
-				+ registrationDateTime.getMinute() + "*";
+		toReturn += registrationDateTime.getHour() + "*" + registrationDateTime.getMinute() + "*";
 
 		if (triageDateTime.isPresent()) {
-			toReturn += triageDateTime.get().getYear() + "*"
-					+ triageDateTime.get().getMonthValue() + "*"
+			toReturn += triageDateTime.get().getYear() + "*" + triageDateTime.get().getMonthValue() + "*"
 					+ triageDateTime.get().getDayOfMonth() + "*";
-			toReturn += triageDateTime.get().getHour() + "*"
-					+ triageDateTime.get().getMinute();
+			toReturn += triageDateTime.get().getHour() + "*" + triageDateTime.get().getMinute();
 		}
 
 		toReturn += "*";

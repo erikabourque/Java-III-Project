@@ -65,7 +65,7 @@ public class ClinicVisitTest {
 		ClinicVisit aVisit = new ClinicVisit(aPatient);
 
 		try {
-			aVisit.setComplaint(Optional.of(complaint));
+			aVisit.setComplaint(Optional.ofNullable(complaint));
 			if (aVisit.getComplaint().toString().equalsIgnoreCase(expectedComplaint))
 				out.println("The expected complaint is: " + expectedComplaint + "The complaint returned is: "
 						+ aVisit.getComplaint() + "\n");
