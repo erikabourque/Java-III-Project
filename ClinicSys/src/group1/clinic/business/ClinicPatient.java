@@ -13,7 +13,7 @@ import java.util.Optional;
 
 /**
  * @author Uen Yi Cindy Hung
- * @author Danield Shrinikov (partial)
+ * @author Danield Skrinikov 
  * @version 21/09/2015
  *
  */
@@ -275,11 +275,17 @@ public final class ClinicPatient implements Patient {
 	/**
 	 * Checks if field values is null, empty or present.
 	 * 
+	 * 21/11/2015 change. added is present.
+	 * 
 	 * @param String
 	 *            fieldValue
 	 * @return boolean
 	 */
 	private final boolean validateExistence(Optional<String> fieldValue) {
+		
+		if(!(fieldValue.isPresent()))
+			return false;
+		
 		if (!(fieldValue.get().equals(null))) {
 			if (fieldValue.isPresent()) {
 				fieldValue.get().trim();

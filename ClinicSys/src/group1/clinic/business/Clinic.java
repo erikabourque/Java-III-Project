@@ -30,6 +30,8 @@ public class Clinic  implements PatientVisitManager{
 	private final ClinicFactory factory;
 	private static final long serialVersionUID = 42031768871L;
 	
+	private boolean isConnected = true;
+	
 	/** Constructor. Instantiates the private parameters for the object.
 	 * 
 	 * @param patientConnection 	existing connections to Patient database.
@@ -40,7 +42,7 @@ public class Clinic  implements PatientVisitManager{
 	public Clinic(PatientDAO patientConnection, VisitDAO visitConnection,
 			ClinicFactory factory){
 		
-		if(patientConnection == null || visitConnection == null || factory == null){
+		if(patientConnection == null || visitConnection == null){
 			
 			throw new IllegalArgumentException("Clinic - One of the given parameters is null");
 			
@@ -48,7 +50,11 @@ public class Clinic  implements PatientVisitManager{
 		
 		this.patientConnection = patientConnection;
 		this.visitConnection = visitConnection;
-		this.factory = factory;
+		
+		if(factory == null)
+			this.factory = DawsonClinicFactory.DAWSON_CLINIC;
+		else
+			this.factory = factory;
 		
 	}
 	
@@ -62,7 +68,7 @@ public class Clinic  implements PatientVisitManager{
 		patientConnection.disconnect();
 		visitConnection.disconnect();
 		
-		
+		isConnected = false;
 	}
 	
 	/** Creates a visit for a provided patient with a given complaint. Afterwards adds the visit into the database.
@@ -75,6 +81,9 @@ public class Clinic  implements PatientVisitManager{
 		
 		if(patient == null)
 			throw new IllegalArgumentException("Clinic.createVisit() - Patient type parameter is null.");
+		
+		if(!isConnected)
+			throw new IllegalArgumentException("Clinic - Connection to the database has been closed.");
 		
 		Visit aVisit = new ClinicVisit(patient);
 		
@@ -94,6 +103,9 @@ public class Clinic  implements PatientVisitManager{
 	@Override
 	public Patient findPatient(String ramq) throws NonExistingPatientException {
 		
+		if(!isConnected)
+			throw new IllegalArgumentException("Clinic - Connection to the database has been closed.");
+		
 		validateRamq(ramq);
 		Ramq ramqPatient = new Ramq(ramq);
 		
@@ -109,6 +121,9 @@ public class Clinic  implements PatientVisitManager{
 	@Override
 	public List<Patient> findPatientsPrescribed(Medication meds) {
 		
+		if(!isConnected)
+			throw new IllegalArgumentException("Clinic - Connection to the database has been closed.");
+		
 		if(meds == null)
 			throw new IllegalArgumentException("Clinic findPatientsPrescribed() - Given parameter is null");
 		
@@ -122,6 +137,9 @@ public class Clinic  implements PatientVisitManager{
 	@Override
 	public Optional<Visit> nextForTriage() {
 		
+		if(!isConnected)
+			throw new IllegalArgumentException("Clinic - Connection to the database has been closed.");
+		
 		return visitConnection.getNextVisit(Priority.NOTASSIGNED);
 	}
 	
@@ -133,6 +151,10 @@ public class Clinic  implements PatientVisitManager{
 	 */
 	@Override
 	public Optional<Visit> nextForExamination() {
+		
+		if(!isConnected)
+			throw new IllegalArgumentException("Clinic - Connection to the database has been closed.");
+		
 		DawsonClinicPriorityPolicy policy = new DawsonClinicPriorityPolicy(visitConnection);
 		return policy.getNextVisit();
 	}
@@ -152,6 +174,9 @@ public class Clinic  implements PatientVisitManager{
 			String ramq, String telephone, Medication meds, String conditions)
 			throws DuplicatePatientException {
 		
+		if(!isConnected)
+			throw new IllegalArgumentException("Clinic - Connection to the database has been closed.");
+		
 		if(firstName == null || firstName.length() == 0)
 			throw new IllegalArgumentException("Clinic.registerNewPatient() - FirstName is null or empty.");
 		if(lastName == null || lastName.length() == 0)
@@ -160,9 +185,9 @@ public class Clinic  implements PatientVisitManager{
 			throw new IllegalArgumentException("Clinic.registerNewPatient() - Ramq is null or has invalid amount of characters.");
 		
 		Patient patient = new ClinicPatient(firstName,lastName,ramq);
-		patient.setExistingConditions(Optional.of(conditions));
-		patient.setMedication(Optional.of(meds));
-		patient.setTelephoneNumber(Optional.of(telephone));
+		patient.setExistingConditions(Optional.ofNullable(conditions));
+		patient.setMedication(Optional.ofNullable(meds));
+		patient.setTelephoneNumber(Optional.ofNullable(telephone));
 		
 		patientConnection.add(patient);
 		
@@ -185,11 +210,11 @@ public class Clinic  implements PatientVisitManager{
 		String numbers = ramq.substring(4);
 		
 		for(int i = 0 ; i < 4 ; i++)
-			if(Character.isAlphabetic(letters.charAt(i)))
+			if(!(Character.isAlphabetic(letters.charAt(i))))
 				throw new IllegalArgumentException("Clinic.findPatient() - Ramq contains digits in the first 4 characters.");
 		
 		for(int i = 0 ; i < 8 ; i++ )
-			if(Character.isDigit(numbers.charAt(i)))
+			if(!(Character.isDigit(numbers.charAt(i))))
 				throw new IllegalArgumentException("Clinic.findPatient() - Ramq contains non digits in last 8 characters.");
 	}
 
