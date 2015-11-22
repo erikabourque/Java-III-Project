@@ -26,14 +26,14 @@ public class VisitQueueDBTest {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		//toStringTest();
+		toStringTest();
 		addTest();
-		//removeTest();
-		//updateTest();
-		//getNextVisitTest();
-		//sizeTest();
-		//disconnectTest();
-		//constructorsTest();
+		removeTest();
+		updateTest();
+		getNextVisitTest();
+		sizeTest();
+		disconnectTest();
+		constructorsTest();
 	}
 	
 	@SuppressWarnings("unused")
@@ -160,7 +160,7 @@ public class VisitQueueDBTest {
 		ListPersistenceObject a = new SequentialTextFileList("testfiles/testPatients.txt", "testfiles/testVisits.txt");
 		VisitQueueDB db = new VisitQueueDB(a);
 		try{
-		db.update(Priority.NOTASSIGNED, Priority.URGENT);
+		db.update(Priority.NOTASSIGNED, Priority.VERYURGENT);
 		System.out.println("Update Test - JEDJ must become priority 2\n\n"+db);
 		
 		}
