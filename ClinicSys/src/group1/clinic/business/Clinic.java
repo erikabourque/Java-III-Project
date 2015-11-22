@@ -18,7 +18,7 @@ import dw317.clinic.data.interfaces.VisitDAO;
 import dw317.lib.medication.Medication;
 import group1.dawsonclinic.*;
 
-/** Acts as an interface between the user and the code part. 
+/** Acts as an Interface between the user and the code part. 
  * @author Danieil Skrinikov
  * @version 11/20/2015
  *
