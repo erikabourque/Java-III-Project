@@ -26,14 +26,14 @@ public class VisitQueueDBTest {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		toStringTest();
+		//toStringTest();
 		addTest();
-		removeTest();
-		updateTest();
-		getNextVisitTest();
-		sizeTest();
-		disconnectTest();
-		constructorsTest();
+		//removeTest();
+		//updateTest();
+		//getNextVisitTest();
+		//sizeTest();
+		//disconnectTest();
+		//constructorsTest();
 	}
 	
 	@SuppressWarnings("unused")
