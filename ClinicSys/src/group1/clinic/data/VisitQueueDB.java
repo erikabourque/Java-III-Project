@@ -124,12 +124,11 @@ public class VisitQueueDB implements VisitDAO {
 		if (!(priority instanceof Priority))
 			throw new IllegalArgumentException("VisitQueueDB.getNextVisit() - parameter is not of Priority type");
 
-		try{
-			
+		try {
+
 			return Optional.ofNullable(database.get(priority.getCode()).element());
-			
-		}
-		catch(NoSuchElementException nsee){
+
+		} catch (NoSuchElementException nsee) {
 			return null;
 		}
 	}
@@ -150,15 +149,13 @@ public class VisitQueueDB implements VisitDAO {
 		if (!(priority instanceof Priority))
 			throw new IllegalArgumentException("VisitQueueDB.remove() - parameter is not of Priority type");
 
-		try{
+		try {
 			database.get(priority.getCode()).remove();
-			
-		}
-		catch(NoSuchElementException nsee){
+
+		} catch (NoSuchElementException nsee) {
 			throw new IllegalArgumentException("VisitQueueDB.remove() - No visits with such priority.");
-			
+
 		}
-		
 
 	}
 
@@ -177,14 +174,12 @@ public class VisitQueueDB implements VisitDAO {
 		if (!(priority instanceof Priority))
 			throw new IllegalArgumentException("VisitQueueDB.size - parameter must not be null.");
 
-		try{
-			 return database.get(priority.getCode()).size();
-		}
-		catch(NoSuchElementException nsee){
+		try {
+			return database.get(priority.getCode()).size();
+		} catch (NoSuchElementException nsee) {
 			return 0;
-			
+
 		}
-		
 
 	}
 
@@ -208,15 +203,14 @@ public class VisitQueueDB implements VisitDAO {
 					"VisitQueueDB.update() - One of the priorities is not Of Priority type.");
 
 		Visit temp;
-		
-		try{
-			
+
+		try {
+
 			temp = database.get(oldPriority.getCode()).poll();
 			temp.setPriority(newPriority);
 			database.get(newPriority.getCode()).add(temp);
-			
-		}
-		catch(NoSuchElementException nsee){
+
+		} catch (NoSuchElementException nsee) {
 			throw new NonExistingVisitException("VisitQueueDB - No patient found with such priority.");
 		}
 
@@ -234,18 +228,18 @@ public class VisitQueueDB implements VisitDAO {
 		String returnString = "";
 
 		for (int i = 0; i < database.size(); i++) {
-			try{
-			returnString += "Number of priority " + database.get(i).element().getPriority().getCode()
-					+ " visits in databse: ";
+			try {
+				returnString += "Number of priority " + database.get(i).element().getPriority().getCode()
+						+ " visits in databse: ";
 
-			returnString += database.get(i).size() + "\n";
+				returnString += database.get(i).size() + "\n";
+			} catch (NoSuchElementException nsee) {
+				// This code is void to not show that there is 0 priority X
+				// visits in the database.
+
 			}
-			catch(NoSuchElementException nsee){
-				//This code is void to not show that there is 0 priority X visits in the database.
-				
-			}
-			
-			//We know that this has at least one occurence in the array.
+
+			// We know that this has at least one occurence in the array.
 			Object[] obj = database.get(i).toArray();
 			for (int j = 0; j < obj.length; j++)
 				returnString += obj[j] + "\n";
