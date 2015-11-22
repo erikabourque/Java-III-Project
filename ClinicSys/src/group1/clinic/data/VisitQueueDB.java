@@ -8,6 +8,7 @@ import group1.clinic.business.Priority;
 import java.io.IOException;
 import java.util.Optional;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Queue;
 
 import dw317.clinic.DefaultPatientVisitFactory;
@@ -123,12 +124,13 @@ public class VisitQueueDB implements VisitDAO {
 		if (!(priority instanceof Priority))
 			throw new IllegalArgumentException("VisitQueueDB.getNextVisit() - parameter is not of Priority type");
 
-		int size = database.size();
+		try {
 
-		for (int i = 0; i < size; i++)
-			if (database.get(i).element().getPriority().equals(priority))
-				return Optional.ofNullable(database.get(i).element());
-		return null;
+			return Optional.ofNullable(database.get(priority.getCode()).element());
+
+		} catch (NoSuchElementException nsee) {
+			return null;
+		}
 	}
 
 	/**
@@ -147,14 +149,11 @@ public class VisitQueueDB implements VisitDAO {
 		if (!(priority instanceof Priority))
 			throw new IllegalArgumentException("VisitQueueDB.remove() - parameter is not of Priority type");
 
-		int size = database.size();
+		try {
+			database.get(priority.getCode()).remove();
 
-		for (int i = 0; i < size; i++) {
-
-			if (database.get(i).element().getPriority().equals(priority)) {
-				database.remove(i);
-				break;
-			}
+		} catch (NoSuchElementException nsee) {
+			throw new IllegalArgumentException("VisitQueueDB.remove() - No visits with such priority.");
 
 		}
 
@@ -175,15 +174,12 @@ public class VisitQueueDB implements VisitDAO {
 		if (!(priority instanceof Priority))
 			throw new IllegalArgumentException("VisitQueueDB.size - parameter must not be null.");
 
-		int size = database.size();
-
-		for (int i = 0; i < size; i++) {
-			if (database.get(i).element().getPriority() == priority)
-				return database.get(i).size();
+		try {
+			return database.get(priority.getCode()).size();
+		} catch (NoSuchElementException nsee) {
+			return 0;
 
 		}
-
-		return 0;
 
 	}
 
@@ -206,23 +202,17 @@ public class VisitQueueDB implements VisitDAO {
 			throw new IllegalArgumentException(
 					"VisitQueueDB.update() - One of the priorities is not Of Priority type.");
 
-		int size = database.size();
-		int pos = -1;
+		Visit temp;
 
-		for (int i = 0; i < size; i++) {
+		try {
 
-			if (database.get(i).element().getPriority().equals(oldPriority)) {
+			temp = database.get(oldPriority.getCode()).poll();
+			temp.setPriority(newPriority);
+			database.get(newPriority.getCode()).add(temp);
 
-				pos = i;
-				break;
-
-			}
-
+		} catch (NoSuchElementException nsee) {
+			throw new NonExistingVisitException("VisitQueueDB - No patient found with such priority.");
 		}
-		int code = newPriority.getCode();
-		Visit temp = database.get(pos).poll();
-		temp.setPriority(newPriority);
-		database.get(code).add(temp);
 
 	}
 
@@ -238,11 +228,18 @@ public class VisitQueueDB implements VisitDAO {
 		String returnString = "";
 
 		for (int i = 0; i < database.size(); i++) {
-			returnString += "Number of priority " + database.get(i).element().getPriority().getCode()
-					+ " visits in databse: ";
+			try {
+				returnString += "Number of priority " + database.get(i).element().getPriority().getCode()
+						+ " visits in databse: ";
 
-			returnString += database.get(i).size() + "\n";
+				returnString += database.get(i).size() + "\n";
+			} catch (NoSuchElementException nsee) {
+				// This code is void to not show that there is 0 priority X
+				// visits in the database.
 
+			}
+
+			// We know that this has at least one occurence in the array.
 			Object[] obj = database.get(i).toArray();
 			for (int j = 0; j < obj.length; j++)
 				returnString += obj[j] + "\n";
