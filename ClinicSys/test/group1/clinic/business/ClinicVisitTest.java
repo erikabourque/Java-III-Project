@@ -8,7 +8,7 @@ import dw317.clinic.business.interfaces.Patient;
 
 /**
  * @author Uen Yi Cindy Hung
- * @version 21/09/2015
+ * @version 22/011/2015
  *
  */
 public class ClinicVisitTest {

@@ -15,7 +15,7 @@ import dw317.lib.Name;
  * automatically converted to upper case.
  * 
  * @author Erika Bourque
- * @version 1.0
+ * @version 1.1 22/11/2015
  */
 public class Ramq implements Comparable<Ramq>, Serializable{
 
