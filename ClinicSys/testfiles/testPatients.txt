@@ -1,8 +1,0 @@
-LARR80072061*Renato*Laranja*5147341013*DIN*00800430*Vancocin*Staph Infection
-LISH87100101*Shao*Li**DIN*02238645*292 tablets*Pain
-RAOV86112001*Vishal*Rao*5143634564*NDC*43479-501-51*Pimple punisher*Acne
-RODM90571001*Maria*Rodriguez*5145555511****
-SMIM85122501*Mike*Smith*5143634564*DIN*02239497*Absorbine Jr*Athlete’s foot
-SUCF34050513*Fernando*Sucre*5813085502****
-TORD83511514*Diana*Torres*6379315732*DIN*02204266*Dexamethasone-Omega*Asthma
-WAKN60022987*Norio*Wakamoto*4389945870*NDC*0363-8001-01*Nicotine Transdermal System*Smoking Addiction

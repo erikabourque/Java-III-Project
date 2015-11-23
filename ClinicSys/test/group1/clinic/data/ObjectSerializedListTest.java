@@ -10,11 +10,8 @@ import group1.util.ListUtilities;
 
 public class ObjectSerializedListTest {
 
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		
+	public static void main(String[] args) {		
 		testTwoParamConstructor();
-		constructorsTest();
 	}
 	
 
@@ -53,64 +50,17 @@ public class ObjectSerializedListTest {
 			if (expectValid) {
 				out.println("Expected valid ==== FAILED TEST ====");
 			}
-		} catch (Exception e) {
+		} catch (NullPointerException npe) {
+			out.println("\t" + npe.getMessage());
+			if (expectValid) {
+				out.println("Expected valid ==== FAILED TEST ====");
+			}
+		}catch (Exception e) {
 			out.println(
 					"\tUNEXPECTED EXCEPTION TYPE! " + e.getClass() + " " + e.getMessage() + " ==== FAILED TEST ====");
 		}
 	}
-public static void constructorsTest(){
-		
-		setup();
-		System.out.println("Testing the constructors\n");
-		
-		
-		try{
-			System.out.println("expected; failed");
-		 VisitQueueDB db = new VisitQueueDB(null);
-		
-		}
-		catch(IllegalArgumentException e){
-			System.out.println(e);
-			
-		}
-		try{
-			System.out.println("expected; failed");
-			 VisitQueueDB db = new VisitQueueDB(null,null);
-			
-			}
-			catch(IllegalArgumentException e){
-				System.out.println(e);
-				
-			}
-		try{
-			System.out.println("expected; failed");
-			ListPersistenceObject a = new SequentialTextFileList("testfiles/testPatients.txt", "testfiles/testVisits.txt");
-			VisitQueueDB db = new VisitQueueDB(a,null);
-			
-			}
-			catch(IllegalArgumentException e){
-				System.out.println(e);
-				
-			}
-		try{
-			System.out.println("expected; failed");
-			ListPersistenceObject a = new SequentialTextFileList("testfiles/testPatients.txt", "testfiles/testVisits.txt");
-			VisitQueueDB db = new VisitQueueDB(null,DefaultPatientVisitFactory.DEFAULT);
-			
-			}
-			catch(IllegalArgumentException e){
-				System.out.println(e);
-				
-			}
-		System.out.println("expected; true");
-		ListPersistenceObject a = new SequentialTextFileList("testfiles/testPatients.txt", "testfiles/testVisits.txt");
-		VisitQueueDB db = new VisitQueueDB(a,DefaultPatientVisitFactory.DEFAULT);
-		System.out.println("SUCCESS");
-			
-		
-		teardown();
-		
-	}
+
 private static void setupPatient() {
 	String[] patients = new String[8];
 	patients[0] = "LARR80072061*Renato*Laranja*5147341013*" + "DIN*00800430*Vancocin*Staph Infection";
@@ -153,53 +103,6 @@ private static void teardownPatient() {
 	if (theFile.exists()) {
 		theFile.delete();
 	}
-}
-private static void setup()  {
-	
-	String[] patients = new String[]{
-			"AZNC86031129*Char*Aznable*4167572322*NDC*54868-5987-1*Omeprazole*Stomach",
-			"CENJ82100365*John*Cena*4385632147****",
-			"JEDJ89561206*Joanna*Jedrzejczyk*4385562118*DIN*00223107*Conray 30*Brain Medication",
-			"LARR80072061*Renato*Laranja*5147341013*DIN*00800430*Vancocin*Staph Infection",
-			"MARK05092322*Karl*Marx*5811648900*NDC*61979-001-59*Body Time Anti-Aging Day Cream Spf 30*Wrinkled Skin",
-			"MCDR63080910*Ronald*McDonald*5144871981*DIN*02369362*Acuvail*Eye Pain",
-			"SUCF34050513*Fernando*Sucre*5813085502****",
-			"TORD83511514*Diana*Torres*6379315732*DIN*02204266*Dexamethasone-Omega*Asthma",
-			"WAKN60022987*Norio*Wakamoto*4389945870*NDC*0363-8001-01*Nicotine Transdermal System*Smoking Addiction"
-	};
-	
-	String[] visits = new String[]{
-			"JEDJ89561206*2015*12*9*4*45*******",
-			"MCDR63080910*2015*12*9*8*23*******",
-			"WAKN60022987*2014*12*31*23*52*2015*1*1*0*8*1*Heart stroke",
-			"TORD83511514*2012*2*29*11*30*2012*2*29*12*0*2*Asthmatic spasm",
-			"AZNC86031129*2015*3*12*23*17*2015*3*13*0*11*3*Acute allergy",
-			"LARR80072061*2015*4*2*12*50*2015*4*2*13*35*4*Stomach pain",
-			"SUCF34050513*2015*1*7*6*10*2015*1*7*14*59*5*Finger injury"
-			
-	};
-	
-	File dir = new File("testfiles");
-	try{
-		if (!dir.exists()){
-			dir.mkdirs();
-		} 
-		ListUtilities.saveListToTextFile(patients, "testfiles/testPatients.txt");
-		ListUtilities.saveListToTextFile(visits, "testfiles/testVisits.txt");
-	}
-	catch(IOException io){
-		System.out.println("Error creating file in setUp()");
-	}
-}
-private static void teardown() {
-	File theFile = new File("testfiles/testPatients.txt");
-	if (theFile.exists()) {
-		theFile.delete();
-	}
-	theFile = new File("testfiles/testVisits.txt");
-	if (theFile.exists()){
-		theFile.delete();
-	} 
 }
 
 }
