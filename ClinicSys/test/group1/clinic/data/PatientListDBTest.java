@@ -41,7 +41,7 @@ public class PatientListDBTest {
 		teardown();
 	}
 
-	private static void testOneParamConstructor(String testcase, SequentialTextFileList listObject,
+	private static void testOneParamConstructor(String testcase, SequentialTextFileList listObject, 
 			boolean expectValid) {
 		try {
 			out.println(testcase);

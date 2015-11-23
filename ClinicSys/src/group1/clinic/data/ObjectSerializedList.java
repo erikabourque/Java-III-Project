@@ -28,6 +28,12 @@ public class ObjectSerializedList implements ListPersistenceObject {
 	FileOutputStream fout;
 	ObjectOutputStream oos;
 	
+	public ObjectSerializedList(String patientFilename, String visitFilename) {
+		this.patientFilename = patientFilename;
+		this.visitFilename = visitFilename;
+		
+	}
+	
 	public void convertSequentialFilesToSerialized(String
 			sequentialPatients, String sequentialVisits)
 			throws IOException {
