@@ -12,13 +12,21 @@ public class ObjectSerializedListTest {
 
 	public static void main(String[] args) {		
 		testTwoParamConstructor();
+		//get patient database
+		// get visit database
+		// save patient database
+		// save visit database
+		
+		// for each testing, you start by doing setup and end with teardown
+		// test for nulls when you can
+		
 	}
 	
 
 	
 	public static void testTwoParamConstructor() {
 		out.println("\nTesting the Two Param Constructor");
-		setupPatient();
+		setup();
 
 		testTwoParamConstructor("Case 1 valid data",
 				"testfiles/testPatients.txt", "testfiles/testVisits.txt",
@@ -28,7 +36,7 @@ public class ObjectSerializedListTest {
 			"testfiles/testPatients.txt", "testfiles/testVisits.txt", null, false);
 		testTwoParamConstructor("Case 4 all null data", null,null, null, false);
 
-		teardownPatient();
+		teardown();
 	}
 
 	private static void testTwoParamConstructor(String testcase, String patientFile,String visitFile,
@@ -39,6 +47,7 @@ public class ObjectSerializedListTest {
 			listObject.convertSequentialFilesToSerialized(patientFile, visitFile);
 			out.println("\tListObject creation success.");
 			
+			@SuppressWarnings("unused")
 			PatientListDB patients = new PatientListDB(listObject, factory);
 			out.println("\tConstructor success.");
 
@@ -61,7 +70,7 @@ public class ObjectSerializedListTest {
 		}
 	}
 
-private static void setupPatient() {
+private static void setup() {
 	String[] patients = new String[8];
 	patients[0] = "LARR80072061*Renato*Laranja*5147341013*" + "DIN*00800430*Vancocin*Staph Infection";
 	patients[1] = "LISH87100101*Shao*Li**" + "DIN*02238645*292 tablets*Pain";
@@ -94,7 +103,7 @@ private static void setupPatient() {
 		System.out.println("Error creating file in setUp()");
 	}
 }
-private static void teardownPatient() {
+private static void teardown() {
 	File theFile = new File("testfiles/testPatients.txt");
 	if (theFile.exists()) {
 		theFile.delete();
