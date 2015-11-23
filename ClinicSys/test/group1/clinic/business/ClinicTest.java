@@ -363,7 +363,6 @@ public class ClinicTest {
 		
 	}
 	
-	//Need Cindy's part to work.
 	public static void nextForExaminationTest(){
 	
 		setup();
