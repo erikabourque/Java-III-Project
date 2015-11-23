@@ -13,8 +13,8 @@ import java.util.Optional;
 
 /**
  * @author Uen Yi Cindy Hung
- * @author Danield Skrinikov 
- * @version 21/09/2015
+ * @author Danield Shrinikov (partial)
+ * @version 22/11/2015
  *
  */
 public final class ClinicPatient implements Patient {
@@ -22,11 +22,11 @@ public final class ClinicPatient implements Patient {
 	// VARIABLES
 	static final long serialVersionUID = 42031768871L;
 	private LocalDate birthday;
-	private Optional<String> existingConditions = Optional.empty();
+	private String existingConditions = null;
 	private Gender gender;
-	private Optional<Medication> medication = Optional.empty();
+	private Medication medication = null;
 	private Name name;
-	private Optional<String> phoneNumber = Optional.empty();
+	private String phoneNumber = null;
 	private Ramq ramq;
 
 	// CONSTRUCTOR
@@ -116,8 +116,8 @@ public final class ClinicPatient implements Patient {
 	 * @return String
 	 */
 	public String getExistingConditions() {
-		if (existingConditions.isPresent())
-			return existingConditions.get();
+		if (existingConditions != null)
+			return existingConditions;
 		return "";
 	}
 
@@ -136,8 +136,9 @@ public final class ClinicPatient implements Patient {
 	 * @return Medication
 	 */
 	public Optional<Medication> getMedication() {
-		if (medication.isPresent())
-			return medication;
+		if (medication != null)
+			return Optional.of(medication);
+
 		return Optional.empty();
 	}
 
@@ -167,8 +168,9 @@ public final class ClinicPatient implements Patient {
 	 * @return String
 	 */
 	public String getTelephoneNumber() {
-		if (phoneNumber.isPresent())
-			return phoneNumber.get();
+		if (phoneNumber != null)
+			return phoneNumber;
+
 		return "";
 	}
 
@@ -195,14 +197,14 @@ public final class ClinicPatient implements Patient {
 	 *            ailment
 	 */
 	public void setExistingConditions(Optional<String> ailment) {
-		if (validateExistence(ailment)) {
-			ailment = Optional.of(ailment.get().trim());
-			existingConditions = ailment;
-		} else if (!(existingConditions.isPresent())) {
-			existingConditions = Optional.empty();
-		} else {
-			if (ailment.get().length() < 1)
-				existingConditions = Optional.empty();
+		if (ailment.orElse(null) != null) {
+			if (validateExistence(ailment)) {
+				ailment = Optional.of(ailment.get().trim());
+				existingConditions = ailment.get();
+			} else {
+				if (ailment.get().length() < 1)
+					existingConditions = null;
+			}
 		}
 	}
 
@@ -214,11 +216,11 @@ public final class ClinicPatient implements Patient {
 	 *            medication
 	 */
 	public void setMedication(Optional<Medication> medication) {
-		if (medication.isPresent())
-			this.medication = medication;
-		else {
-			this.medication = Optional.empty();
-		}
+		if (medication.orElse(null) != null) {
+			if (medication.isPresent())
+				this.medication = medication.get();
+		} else
+			this.medication = null;
 	}
 
 	/**
@@ -229,18 +231,16 @@ public final class ClinicPatient implements Patient {
 	 *            telephoneNumber
 	 */
 	public void setTelephoneNumber(Optional<String> telephoneNumber) {
-		if (validateExistence(telephoneNumber)) {
-			if (!(telephoneNumber.get().matches("[\\d]{10}")))
-				throw new IllegalArgumentException(
-						"Error, the telephone number must contain exactly 10 numeric characters and only numeric characters");
-			phoneNumber = Optional.of(telephoneNumber.get().trim());
-		}
-
-		else if (!(phoneNumber.isPresent())) {
-			phoneNumber = Optional.empty();
-		} else {
-			if (telephoneNumber.get().length() < 1)
-				phoneNumber = Optional.empty();
+		if (telephoneNumber.orElse(null) != null) {
+			if (validateExistence(telephoneNumber)) {
+				if (!(telephoneNumber.get().matches("[\\d]{10}")))
+					throw new IllegalArgumentException(
+							"Error, the telephone number must contain exactly 10 numeric characters and only numeric characters");
+				phoneNumber = telephoneNumber.get().trim();
+			} else {
+				if (telephoneNumber.get().length() < 1)
+					phoneNumber = null;
+			}
 		}
 	}
 
@@ -261,9 +261,8 @@ public final class ClinicPatient implements Patient {
 
 		toReturn += "*";
 
-		if (medication.isPresent())
-			toReturn += medication.get().getScheme() + "*" + medication.get().getNumber() + "*"
-					+ medication.get().getName() + "*";
+		if (medication != null)
+			toReturn += medication.getScheme() + "*" + medication.getNumber() + "*" + medication.getName() + "*";
 		else
 			toReturn += "***";
 
@@ -275,18 +274,12 @@ public final class ClinicPatient implements Patient {
 	/**
 	 * Checks if field values is null, empty or present.
 	 * 
-	 * 21/11/2015 change. added is present.
-	 * 
 	 * @param String
 	 *            fieldValue
 	 * @return boolean
 	 */
 	private final boolean validateExistence(Optional<String> fieldValue) {
-		
-		if(!(fieldValue.isPresent()))
-			return false;
-		
-		if (!(fieldValue.get().equals(null))) {
+		if (fieldValue.orElse(null) != null) {
 			if (fieldValue.isPresent()) {
 				fieldValue.get().trim();
 				if (fieldValue.get().length() > 0) {
@@ -317,12 +310,12 @@ public final class ClinicPatient implements Patient {
 
 		fieldValue = fieldValue.toUpperCase().trim();
 
-		//for (int i = 0; i < fieldValue.length(); i++) {
-			if (!fieldValue.matches("^[a-zA-Z]+[\\-\\' ]*[a-zA-Z]+$"))
-			//if (fieldValue.charAt(i) < 65 || fieldValue.charAt(i) > 90)
-				throw new IllegalArgumentException("Error, " + fieldName
-						+ " may only contains alphabetic character. Invalid Value = " + fieldValue);
-		//}
+		// for (int i = 0; i < fieldValue.length(); i++) {
+		if (!fieldValue.matches("^[a-zA-Z]+[\\-\\' ]*[a-zA-Z]+$"))
+			// if (fieldValue.charAt(i) < 65 || fieldValue.charAt(i) > 90)
+			throw new IllegalArgumentException(
+					"Error, " + fieldName + " may only contains alphabetic character. Invalid Value = " + fieldValue);
+		// }
 
 	}
 }

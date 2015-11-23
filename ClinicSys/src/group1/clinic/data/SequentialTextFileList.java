@@ -18,7 +18,7 @@ import java.util.LinkedList;
  * Provides a Sequential Text File List
  * 
  * @author	Uen Yi Hung (Cindy)
- * @version 28/10/2015
+ * @version 20/11/2015
  */
 public class SequentialTextFileList implements ListPersistenceObject {
 	//variables
@@ -171,6 +171,20 @@ public class SequentialTextFileList implements ListPersistenceObject {
 			// next priority
 			p++;
 			subsetCtr = 0;
+		}
+		
+		/**
+		 * 20/11/2015: I had to add these line of codes in or it would break my code.
+		 * Without these lines, the priorities that are not gone through are not resized,
+		 * causing errors in DawsonClinicPriorityPolicy.
+		 */
+		while (p < Priority.values().length){
+			Visit[] resized = new Visit[subsetCtr];
+			for (int i = 0; i < subsetCtr; i++) {
+				resized[i] = subsets[p][i];
+			}
+			subsets[p] = resized;
+			p++;
 		}
 		return subsets;
 	}
