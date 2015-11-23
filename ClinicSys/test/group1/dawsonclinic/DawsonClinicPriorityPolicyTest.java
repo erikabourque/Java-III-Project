@@ -1,6 +1,7 @@
 package group1.dawsonclinic;
 
 import java.io.FileNotFoundException;
+
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import static java.lang.System.out;
@@ -15,6 +16,14 @@ import group1.clinic.data.VisitQueueDB;
 import group1.dawsonclinic.DawsonClinicPriorityPolicy;
 import group1.util.ListUtilities;
 import dw317.clinic.data.interfaces.VisitDAO;
+
+/**
+ * Testing for DawsonClinicPriorityPolicy
+ * 
+ * @author Uen Yi Cindy Hung
+ * @version 22/11/2015
+ *
+ */
 
 public class DawsonClinicPriorityPolicyTest {
 
