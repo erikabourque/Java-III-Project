@@ -34,8 +34,6 @@ public class ObjectSerializedList implements ListPersistenceObject {
 	 *            the patient file to be used.
 	 * @param VisitFileName
 	 *            the visit file to be used.
-	 * 
-	 * 
 	 */
 	public ObjectSerializedList(String patientFilename, String visitFilename) {
 		this.patientFilename = patientFilename;
@@ -44,7 +42,7 @@ public class ObjectSerializedList implements ListPersistenceObject {
 	}
 
 	/**
-	 * converts a sequential file list to serialized objects.
+	 * Converts a sequential file list to serialized objects.
 	 * 
 	 * @param sequentialPatients
 	 *            the sequential list of patients.
@@ -66,8 +64,6 @@ public class ObjectSerializedList implements ListPersistenceObject {
 	 * Returns the patient database.
 	 * 
 	 * @return the patient database.
-	 * 
-	 * 
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
@@ -89,8 +85,6 @@ public class ObjectSerializedList implements ListPersistenceObject {
 	 * Returns the visit database.
 	 * 
 	 * @return the visit database.
-	 * 
-	 * 
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
@@ -116,8 +110,6 @@ public class ObjectSerializedList implements ListPersistenceObject {
 	 * @param patients
 	 *            the patient list to be serialzed
 	 * @throws IOException
-	 * 
-	 * 
 	 */
 	@Override
 	public void savePatientDatabase(List<Patient> patients) throws IOException {
@@ -130,8 +122,6 @@ public class ObjectSerializedList implements ListPersistenceObject {
 	 * @param visits
 	 *            the visits list to be serialized
 	 * @throws IOException
-	 * 
-	 * 
 	 */
 	@Override
 	public void saveVisitDatabase(List<Queue<Visit>> visits) throws IOException {
