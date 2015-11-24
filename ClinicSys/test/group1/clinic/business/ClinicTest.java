@@ -33,16 +33,12 @@ public class ClinicTest {
 	 */
 	public static void main(String[] args) {
 		
-		//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ERIKA@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-		
-		//When merged with Cindy's part uncomment the nextForExaminationTest.
-		
 		constructorTest();
 		createVisitTest();
 		findPatientTest();
 		findPatientPrescribedTest();
 		getNextForTriageTest();
-		//nextForExaminationTest();
+		nextForExaminationTest();
 		registerNewPatientTest();
 		closeClinicTest();
 
