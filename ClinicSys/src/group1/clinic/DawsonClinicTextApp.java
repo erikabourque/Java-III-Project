@@ -16,6 +16,8 @@ import group1.dawsonclinic.DawsonClinicFactory;
 /**
  * @author Katherine Richer
  *
+ *
+ *
  */
 public class DawsonClinicTextApp {
 

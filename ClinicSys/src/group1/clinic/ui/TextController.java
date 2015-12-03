@@ -8,6 +8,7 @@ import dw317.clinic.business.interfaces.PatientVisitManager;
 /**
  * @author Katherine Richer
  *
+ *
  */
 public class TextController {
 
