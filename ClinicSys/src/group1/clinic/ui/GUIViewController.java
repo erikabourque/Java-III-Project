@@ -13,16 +13,21 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 import group1.clinic.business.Clinic;
 import group1.clinic.business.Priority;
+import dw317.lib.medication.DINMedication;
+import dw317.lib.medication.Medication;
+import dw317.lib.medication.NDCMedication;
 
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JLabel;
 import java.awt.Font;
+
 import javax.swing.SwingConstants;
 import java.awt.SystemColor;
 import javax.swing.JTabbedPane;
@@ -40,12 +45,13 @@ public class GUIViewController extends JFrame implements Observer {
 	// VARIABLES
 	private Clinic model;
 	private String result;
-	
+	private Medication medication;
+
 	// PANELS ANS SUCH
 	private JPanel contentPane;
 	private JPanel dequeuePnl;
 	private JPanel createPnl;
-	private JTabbedPane tabbedPane;	
+	private JTabbedPane tabbedPane;
 
 	// BUTTONS
 	private JButton nextTriageBtn;
@@ -60,10 +66,22 @@ public class GUIViewController extends JFrame implements Observer {
 	private JRadioButton lessUrgentRBtn;
 	private JRadioButton notUrgentRBtn;
 
+	// TEXT FIELDS
+	private JTextField priorityTxt;
+	private JTextField complaintTxt;
+	private JTextField medNumberTxt;
+	private JTextField medSchemeTxt;
+	private JTextField medNameTxt;
+	private JTextField conditionTxt;
+	private JTextField phoneNumberTxt;
+	private JTextField ramqTxt;
+	private JTextField lastNameTxt;
+	private JTextField firstNameTxt;
+
 	// OTHER
 	private JTextArea display;
 	private JLabel lblDawsonMedicalClinic;
-	
+	private JLabel statusLbl;
 
 	/**
 	 * Create the frame.
@@ -74,7 +92,7 @@ public class GUIViewController extends JFrame implements Observer {
 		setTitle("Dawson Clinic");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 450);
-		
+
 		// PANELS
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -84,18 +102,17 @@ public class GUIViewController extends JFrame implements Observer {
 		dequeuePnl = new JPanel();
 		dequeuePnl.setBorder(new EmptyBorder(5, 5, 5, 5));
 		dequeuePnl.setLayout(null);
-		
+
+		// TABS
+		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		tabbedPane.setBounds(0, 0, 450, 377);
+		contentPane.add(tabbedPane);
+
 		createPnl = new JPanel();
 		createPnl.setBorder(new EmptyBorder(5, 5, 5, 5));
 		createPnl.setLayout(null);
-		
-		// TABS
-		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane.setBounds(0, 0, 444, 400);
-		contentPane.add(tabbedPane);
+		tabbedPane.addTab("New Patient", createPnl);
 		tabbedPane.addTab("Dequeue Visits", dequeuePnl);
-		tabbedPane.addTab("New Visits", createPnl);
-		
 
 		// MENU
 		JMenuBar menuBar = new JMenuBar();
@@ -111,6 +128,19 @@ public class GUIViewController extends JFrame implements Observer {
 		JMenu mnCredits = new JMenu("Credits");
 		menuBar.add(mnCredits);
 
+		// LABEL
+		lblDawsonMedicalClinic = new JLabel("Dawson Medical Clinic");
+		lblDawsonMedicalClinic.setFont(new Font("Andalus", Font.PLAIN, 19));
+		lblDawsonMedicalClinic.setHorizontalAlignment(SwingConstants.CENTER);
+		lblDawsonMedicalClinic.setBounds(247, 0, 197, 23);
+		contentPane.add(lblDawsonMedicalClinic);
+
+		statusLbl = new JLabel("Status Bar");
+		statusLbl.setBounds(10, 380, 434, 20);
+		contentPane.add(statusLbl);
+
+		// *****************************************************************************************
+		// FOR DEQUEUE PANEL
 		// BUTTONS
 		nextTriageBtn = new JButton("To Next Triage");
 		nextTriageBtn.setFont(new Font("Bell MT", Font.BOLD, 12));
@@ -177,12 +207,105 @@ public class GUIViewController extends JFrame implements Observer {
 
 		display.setText("Results will be displayed here.");
 
+		// ************************************************************************************
+		// FOR CREATE PANEL
 		// LABEL
-		lblDawsonMedicalClinic = new JLabel("Dawson Medical Clinic");
-		lblDawsonMedicalClinic.setFont(new Font("Andalus", Font.PLAIN, 19));
-		lblDawsonMedicalClinic.setHorizontalAlignment(SwingConstants.CENTER);
-		lblDawsonMedicalClinic.setBounds(247, 0, 197, 23);
-		contentPane.add(lblDawsonMedicalClinic);
+		JLabel firstNameLbl = new JLabel("First Name");
+		firstNameLbl.setBounds(43, 11, 100, 23);
+		firstNameLbl.setFont(new Font("Bell MT", Font.PLAIN, 14));
+		createPnl.add(firstNameLbl);
+
+		JLabel lastNameLbl = new JLabel("Last Name");
+		lastNameLbl.setBounds(43, 41, 100, 23);
+		lastNameLbl.setFont(new Font("Bell MT", Font.PLAIN, 14));
+		createPnl.add(lastNameLbl);
+
+		JLabel ramqLbl = new JLabel("RAMQ ID");
+		ramqLbl.setBounds(43, 71, 100, 23);
+		ramqLbl.setFont(new Font("Bell MT", Font.PLAIN, 13));
+		createPnl.add(ramqLbl);
+
+		JLabel phoneNumberLbl = new JLabel("Phone number");
+		phoneNumberLbl.setBounds(43, 101, 100, 23);
+		phoneNumberLbl.setFont(new Font("Bell MT", Font.PLAIN, 14));
+		createPnl.add(phoneNumberLbl);
+
+		JLabel conditionLbl = new JLabel("Condition");
+		conditionLbl.setBounds(43, 131, 100, 23);
+		conditionLbl.setFont(new Font("Bell MT", Font.PLAIN, 14));
+		createPnl.add(conditionLbl);
+
+		JLabel medicationNameLbl = new JLabel("Medication Name");
+		medicationNameLbl.setBounds(43, 161, 150, 23);
+		medicationNameLbl.setFont(new Font("Bell MT", Font.PLAIN, 14));
+		createPnl.add(medicationNameLbl);
+
+		JLabel medicationSchemeLbl = new JLabel("Medication Scheme");
+		medicationSchemeLbl.setBounds(43, 191, 150, 23);
+		medicationSchemeLbl.setFont(new Font("Bell MT", Font.PLAIN, 14));
+		createPnl.add(medicationSchemeLbl);
+
+		JLabel medicationNumberLbl = new JLabel("Medication ID number");
+		medicationNumberLbl.setBounds(43, 221, 150, 23);
+		medicationNumberLbl.setFont(new Font("Bell MT", Font.PLAIN, 14));
+		createPnl.add(medicationNumberLbl);
+
+		JLabel complaintLbl = new JLabel("Complaint");
+		complaintLbl.setBounds(43, 251, 150, 23);
+		complaintLbl.setFont(new Font("Bell MT", Font.PLAIN, 14));
+		// createPnl.add(complaintLbl);
+
+		JLabel priorityLbl = new JLabel("Priority");
+		priorityLbl.setBounds(43, 281, 150, 23);
+		priorityLbl.setFont(new Font("Bell MT", Font.PLAIN, 14));
+		// createPnl.add(priorityLbl);
+
+		// TEXT BOX
+		firstNameTxt = new JTextField();
+		firstNameTxt.setBounds(223, 11, 150, 23);
+		createPnl.add(firstNameTxt);
+
+		lastNameTxt = new JTextField();
+		lastNameTxt.setBounds(223, 41, 150, 23);
+		createPnl.add(lastNameTxt);
+
+		ramqTxt = new JTextField();
+		ramqTxt.setBounds(223, 71, 150, 23);
+		createPnl.add(ramqTxt);
+
+		phoneNumberTxt = new JTextField();
+		phoneNumberTxt.setBounds(223, 101, 150, 23);
+		createPnl.add(phoneNumberTxt);
+
+		conditionTxt = new JTextField();
+		conditionTxt.setBounds(223, 131, 150, 23);
+		createPnl.add(conditionTxt);
+
+		medNameTxt = new JTextField();
+		medNameTxt.setBounds(223, 161, 150, 23);
+		createPnl.add(medNameTxt);
+
+		medSchemeTxt = new JTextField();
+		medSchemeTxt.setBounds(223, 191, 150, 23);
+		createPnl.add(medSchemeTxt);
+
+		medNumberTxt = new JTextField();
+		medNumberTxt.setBounds(223, 221, 150, 23);
+		createPnl.add(medNumberTxt);
+
+		complaintTxt = new JTextField();
+		complaintTxt.setBounds(223, 251, 150, 23);
+		// createPnl.add(complaintTxt);
+
+		priorityTxt = new JTextField();
+		priorityTxt.setBounds(223, 281, 150, 23);
+		// createPnl.add(priorityTxt);
+
+		// BUTTON
+		JButton createOkBtn = new JButton("OK");
+		createOkBtn.setBounds(182, 315, 50, 23);
+		createPnl.add(createOkBtn);
+		createOkBtn.addActionListener(new createOkBtnListener());
 
 		// OTHER
 		this.model = (Clinic) model;
@@ -192,13 +315,17 @@ public class GUIViewController extends JFrame implements Observer {
 
 	}
 
+	// *******************************************************************************************
 	/**
 	 * Inner class event-handler for the 'priority triage' button.
 	 */
 	private class prioritizeTriageBtnListener implements ActionListener {
 
-		/* (non-Javadoc)
-		 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.
+		 * ActionEvent)
 		 */
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -217,13 +344,20 @@ public class GUIViewController extends JFrame implements Observer {
 	 */
 	private class nextToExamineBtnListener implements ActionListener {
 
-		/* (non-Javadoc)
-		 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.
+		 * ActionEvent)
 		 */
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			result = "Next Visit: \n\n" + model.nextForExamination().get().getPatient().getName().toString();
-			update(model,result);
+			try {
+				result = "Next Visit: \n\n" + model.nextForExamination().get().getPatient().getName().toString();
+				update(model, result);
+			} catch (Exception exception) {
+				statusLbl.setText(exception.getMessage());
+			}
 		}
 	}
 
@@ -232,23 +366,34 @@ public class GUIViewController extends JFrame implements Observer {
 	 */
 	private class nextTriageBtnListener implements ActionListener {
 
-		/* (non-Javadoc)
-		 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.
+		 * ActionEvent)
 		 */
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			result = "Next Visit:\n\n" + model.nextForTriage().get().getPatient().getName().toString();
-			update(model,result);
+			try {
+				result = "Next Visit:\n\n" + model.nextForTriage().get().getPatient().getName().toString();
+				update(model, result);
+			} catch (Exception exception) {
+				statusLbl.setText(exception.getMessage());
+			}
 		}
 	}
 
 	/**
-	 * Inner class event-handler for 'ok' button in the priority selection section.
+	 * Inner class event-handler for 'ok' button in the priority selection
+	 * section.
 	 */
 	private class priorityOkBtnListener implements ActionListener {
 
-		/* (non-Javadoc)
-		 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.
+		 * ActionEvent)
 		 */
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -265,8 +410,8 @@ public class GUIViewController extends JFrame implements Observer {
 				aPriority = Priority.NOTURGENT;
 
 			model.changeTriageVisitPriority(aPriority);
-			result = "Triaged visit priority has been cahnged to: " + aPriority + ".";
-			update(model,result);
+			result = "Triaged visit priority has been changed to: " + aPriority + ".";
+			update(model, result);
 			reanimationRBtn.setVisible(false);
 			veryUrgentRBtn.setVisible(false);
 			urgentRBtn.setVisible(false);
@@ -281,8 +426,11 @@ public class GUIViewController extends JFrame implements Observer {
 	 */
 	private class menuItemExitListener implements ActionListener {
 
-		/* (non-Javadoc)
-		 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.
+		 * ActionEvent)
 		 */
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -295,7 +443,51 @@ public class GUIViewController extends JFrame implements Observer {
 		}
 	}
 
-	/* (non-Javadoc)
+	/**
+	 * Inner class event-handler for 'ok' button in the new patient tab.
+	 */
+	private class createOkBtnListener implements ActionListener {
+
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.
+		 * ActionEvent)
+		 */
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			try {
+
+				if (medSchemeTxt.getText().equalsIgnoreCase("DIN"))
+					medication = new DINMedication(medNumberTxt.getText(), medNameTxt.getText());
+				else if (medSchemeTxt.getText().equalsIgnoreCase("NDC"))
+					medication = new NDCMedication(medNumberTxt.getText(), medNameTxt.getText());
+				else
+					throw new IllegalArgumentException("Invalid medication scheme.");
+
+				model.registerNewPatient(firstNameTxt.getText(), lastNameTxt.getText(), ramqTxt.getText(),
+						phoneNumberTxt.getText(), medication, conditionTxt.getText());
+				// model.createVisit(model.findPatient(ramqTxt.getText()),
+				// complaintTxt.getText());
+			} catch (Exception exception) {
+				statusLbl.setText("Patient not created. " + exception.getMessage());
+			}
+			statusLbl.setText("Patient created.");
+			firstNameTxt.setText("");
+			lastNameTxt.setText("");
+			ramqTxt.setText("");
+			phoneNumberTxt.setText("");
+			conditionTxt.setText("");
+			medNameTxt.setText("");
+			medSchemeTxt.setText("");
+			medNumberTxt.setText("");
+			// complaintTxt.setText("");
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.util.Observer#update(java.util.Observable, java.lang.Object)
 	 */
 	@Override
