@@ -28,12 +28,24 @@ import java.awt.SystemColor;
 import javax.swing.JTabbedPane;
 import java.awt.Color;
 
+/**
+ * GUI controller for Dawson Medical Clininc.
+ * 
+ * @author Uen Yi Cindy Hunf
+ * @version 09/12/2015
+ *
+ */
 public class GUIViewController extends JFrame implements Observer {
 
+	// VARIABLES
+	private Clinic model;
+	private String result;
+	
+	// PANELS ANS SUCH
 	private JPanel contentPane;
 	private JPanel dequeuePnl;
 	private JPanel createPnl;
-	private Clinic model;
+	private JTabbedPane tabbedPane;	
 
 	// BUTTONS
 	private JButton nextTriageBtn;
@@ -48,9 +60,10 @@ public class GUIViewController extends JFrame implements Observer {
 	private JRadioButton lessUrgentRBtn;
 	private JRadioButton notUrgentRBtn;
 
+	// OTHER
 	private JTextArea display;
 	private JLabel lblDawsonMedicalClinic;
-	private JTabbedPane tabbedPane;
+	
 
 	/**
 	 * Create the frame.
@@ -179,8 +192,14 @@ public class GUIViewController extends JFrame implements Observer {
 
 	}
 
+	/**
+	 * Inner class event-handler for the 'priority triage' button.
+	 */
 	private class prioritizeTriageBtnListener implements ActionListener {
 
+		/* (non-Javadoc)
+		 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+		 */
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			reanimationRBtn.setSelected(true);
@@ -193,24 +212,44 @@ public class GUIViewController extends JFrame implements Observer {
 		}
 	}
 
+	/**
+	 * Inner class event-handler for the 'next to examine' button.
+	 */
 	private class nextToExamineBtnListener implements ActionListener {
 
+		/* (non-Javadoc)
+		 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+		 */
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			display.setText("Next Visit: \n\n" + model.nextForExamination().get().getPatient().getName().toString());
+			result = "Next Visit: \n\n" + model.nextForExamination().get().getPatient().getName().toString();
+			update(model,result);
 		}
 	}
 
+	/**
+	 * Inner class event-handler for the 'next triage' button.
+	 */
 	private class nextTriageBtnListener implements ActionListener {
 
+		/* (non-Javadoc)
+		 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+		 */
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			display.setText("Next Visit:\n\n" + model.nextForTriage().get().getPatient().getName().toString());
+			result = "Next Visit:\n\n" + model.nextForTriage().get().getPatient().getName().toString();
+			update(model,result);
 		}
 	}
 
+	/**
+	 * Inner class event-handler for 'ok' button in the priority selection section.
+	 */
 	private class priorityOkBtnListener implements ActionListener {
 
+		/* (non-Javadoc)
+		 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+		 */
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			Priority aPriority;
@@ -226,7 +265,8 @@ public class GUIViewController extends JFrame implements Observer {
 				aPriority = Priority.NOTURGENT;
 
 			model.changeTriageVisitPriority(aPriority);
-			display.setText("Triaged visit priority has been cahnged to: " + aPriority + ".");
+			result = "Triaged visit priority has been cahnged to: " + aPriority + ".";
+			update(model,result);
 			reanimationRBtn.setVisible(false);
 			veryUrgentRBtn.setVisible(false);
 			urgentRBtn.setVisible(false);
@@ -236,8 +276,14 @@ public class GUIViewController extends JFrame implements Observer {
 		}
 	}
 
+	/**
+	 * Inner class event-handler for menu item 'exit'.
+	 */
 	private class menuItemExitListener implements ActionListener {
 
+		/* (non-Javadoc)
+		 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+		 */
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			try {
@@ -249,9 +295,12 @@ public class GUIViewController extends JFrame implements Observer {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see java.util.Observer#update(java.util.Observable, java.lang.Object)
+	 */
 	@Override
 	public void update(Observable model, Object arg) {
-		// TODO Auto-generated method stub
+		display.setText(arg.toString());
 
 	}
 }
