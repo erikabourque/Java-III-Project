@@ -5,6 +5,7 @@ package group1.clinic.business;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Observable;
 import java.util.Optional;
 
 import dw317.clinic.ClinicFactory;
@@ -26,7 +27,7 @@ import group1.dawsonclinic.*;
  * @version 11/20/2015
  *
  */
-public class Clinic implements PatientVisitManager {
+public class Clinic extends Observable implements PatientVisitManager {
 
 	private final PatientDAO patientConnection;
 	private final VisitDAO visitConnection;
@@ -103,6 +104,9 @@ public class Clinic implements PatientVisitManager {
 		aVisit.setComplaint(Optional.ofNullable(complaint));
 
 		visitConnection.add(aVisit);
+		
+		setChanged();
+		notifyObservers(aVisit);
 
 	}
 
@@ -125,8 +129,13 @@ public class Clinic implements PatientVisitManager {
 
 		validateRamq(ramq);
 		Ramq ramqPatient = new Ramq(ramq);
+		
+		Patient aPatient = patientConnection.getPatient(ramqPatient);
+		
+		setChanged();
+		notifyObservers(aPatient);
 
-		return patientConnection.getPatient(ramqPatient);
+		return aPatient;
 
 	}
 
@@ -160,8 +169,13 @@ public class Clinic implements PatientVisitManager {
 
 		if (!isConnected)
 			throw new IllegalArgumentException("Clinic - Connection to the database has been closed.");
+		
+		Optional<Visit> aVisit = visitConnection.getNextVisit(Priority.NOTASSIGNED);
+		
+		setChanged();
+		notifyObservers(aVisit);
 
-		return visitConnection.getNextVisit(Priority.NOTASSIGNED);
+		return aVisit;
 	}
 
 	/**
@@ -178,7 +192,13 @@ public class Clinic implements PatientVisitManager {
 			throw new IllegalArgumentException("Clinic - Connection to the database has been closed.");
 
 		DawsonClinicPriorityPolicy policy = new DawsonClinicPriorityPolicy(visitConnection);
-		return policy.getNextVisit();
+		
+		Optional<Visit> aVisit = policy.getNextVisit();
+		
+		setChanged();
+		notifyObservers(aVisit);
+		
+		return aVisit;
 	}
 
 	/**
@@ -221,6 +241,9 @@ public class Clinic implements PatientVisitManager {
 		patient.setTelephoneNumber(Optional.ofNullable(telephone));
 
 		patientConnection.add(patient);
+		
+		setChanged();
+		notifyObservers(patient);
 
 	}
 
@@ -275,6 +298,9 @@ public class Clinic implements PatientVisitManager {
 				throw new IllegalArgumentException("Clinic.changeTriagePriority() - New priority must be assigned.");
 		
 		visitConnection.update(Priority.NOTASSIGNED, newPriority);
+		
+		setChanged();
+		notifyObservers(newPriority);
 		
 	}
 
