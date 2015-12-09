@@ -13,6 +13,7 @@ import dw317.clinic.business.interfaces.PatientVisitManager;
 import dw317.clinic.business.interfaces.Visit;
 import dw317.clinic.data.DuplicatePatientException;
 import dw317.clinic.data.NonExistingPatientException;
+import dw317.clinic.data.NonExistingVisitException;
 import dw317.clinic.data.interfaces.PatientDAO;
 import dw317.clinic.data.interfaces.VisitDAO;
 import dw317.lib.medication.Medication;
@@ -251,6 +252,30 @@ public class Clinic implements PatientVisitManager {
 			if (!(Character.isDigit(numbers.charAt(i))))
 				throw new IllegalArgumentException(
 						"Clinic.findPatient() - Ramq contains non digits in last 8 characters.");
+	}
+
+	
+	/**
+	*	Updates the	priority of	the	first visit	in	the	triage	queue to
+	*	a new priority.
+	*
+	*	Throws NonExistingPatientException 
+	*				if there is no patients with a priority UNASSIGNED in the database
+	*
+	*	@param newPriority
+	*					The	new	priority after triage	
+	*/
+	@Override
+	public void changeTriageVisitPriority(Priority newPriority) throws NonExistingVisitException {
+		
+		if(newPriority == null)
+			throw new IllegalArgumentException("Clinic.changeTriagePriority() - New priority parameter must not be null.");
+		
+		if(newPriority.equals(Priority.NOTASSIGNED))
+				throw new IllegalArgumentException("Clinic.changeTriagePriority() - New priority must be assigned.");
+		
+		visitConnection.update(Priority.NOTASSIGNED, newPriority);
+		
 	}
 
 }
