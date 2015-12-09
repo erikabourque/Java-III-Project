@@ -87,8 +87,8 @@ public class GUIViewController extends JFrame implements Observer {
 	 * Create the frame.
 	 */
 	public GUIViewController(Observer model) {
-		setBackground(Color.DARK_GRAY);
 		setResizable(false);
+		setBackground(Color.DARK_GRAY);
 		setTitle("Dawson Clinic");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 450);
@@ -126,7 +126,7 @@ public class GUIViewController extends JFrame implements Observer {
 		menuItemExit.addActionListener(new menuItemExitListener());
 
 		JMenu mnCredits = new JMenu("Credits");
-		menuBar.add(mnCredits);
+		//menuBar.add(mnCredits);
 
 		// LABEL
 		lblDawsonMedicalClinic = new JLabel("Dawson Medical Clinic");
