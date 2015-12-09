@@ -99,7 +99,7 @@ public class Clinic implements PatientVisitManager {
 
 		Visit aVisit = new ClinicVisit(patient);
 
-		aVisit.setComplaint(Optional.of(complaint));
+		aVisit.setComplaint(Optional.ofNullable(complaint));
 
 		visitConnection.add(aVisit);
 
