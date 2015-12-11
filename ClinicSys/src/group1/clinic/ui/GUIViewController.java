@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Optional;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -18,6 +19,9 @@ import javax.swing.border.EmptyBorder;
 
 import group1.clinic.business.Clinic;
 import group1.clinic.business.Priority;
+import dw317.clinic.business.interfaces.Patient;
+import dw317.clinic.business.interfaces.PatientVisitManager;
+import dw317.clinic.business.interfaces.Visit;
 import dw317.lib.medication.DINMedication;
 import dw317.lib.medication.Medication;
 import dw317.lib.medication.NDCMedication;
@@ -353,8 +357,9 @@ public class GUIViewController extends JFrame implements Observer {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			try {
-				result = "Next Visit: \n\n" + model.nextForExamination().get().getPatient().getName().toString();
-				update(model, result);
+				model.nextForExamination();
+				//result = "Next Visit: \n\n" + model.nextForExamination().get().getPatient().getName().toString();
+				//update(model, model.nextForExamination());
 			} catch (Exception exception) {
 				statusLbl.setText(exception.getMessage());
 			}
@@ -375,8 +380,9 @@ public class GUIViewController extends JFrame implements Observer {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			try {
-				result = "Next Visit:\n\n" + model.nextForTriage().get().getPatient().getName().toString();
-				update(model, result);
+				model.nextForTriage();
+				//result = "Next Visit:\n\n" + model.nextForTriage().get().getPatient().getName().toString();
+				//update(model, model.nextForTriage());
 			} catch (Exception exception) {
 				statusLbl.setText(exception.getMessage());
 			}
@@ -410,8 +416,8 @@ public class GUIViewController extends JFrame implements Observer {
 				aPriority = Priority.NOTURGENT;
 
 			model.changeTriageVisitPriority(aPriority);
-			result = "Triaged visit priority has been changed to: " + aPriority + ".";
-			update(model, result);
+			//result = "Triaged visit priority has been changed to: " + aPriority + ".";
+			//update(model, model.changeTriageVisitPriority(aPriority));
 			reanimationRBtn.setVisible(false);
 			veryUrgentRBtn.setVisible(false);
 			urgentRBtn.setVisible(false);
@@ -491,8 +497,17 @@ public class GUIViewController extends JFrame implements Observer {
 	 * @see java.util.Observer#update(java.util.Observable, java.lang.Object)
 	 */
 	@Override
-	public void update(Observable model, Object arg) {
-		display.setText(arg.toString());
+	public void update(Observable o, Object arg) {
+		result = "";
+		if ( arg instanceof Optional<?>)
+			result = "Next Visit:\n\n" + ((Visit)arg).getPatient().getName().toString();
+		else if (arg instanceof Patient)
+			result = ((Patient)arg).getName().toString() + "\n" + ((Patient)arg).getRamq().toString();
+		else if (arg instanceof Visit)
+			result = "Visit created \n\n" + ((Visit)arg).getPatient() + "\nRegistered: " + ((Visit)arg).getRegistrationDateAndTime();
+		else if (arg instanceof Priority)
+			result = "Priority changed to " + ((Priority)arg);
+		display.setText(result);
 
 	}
 }
