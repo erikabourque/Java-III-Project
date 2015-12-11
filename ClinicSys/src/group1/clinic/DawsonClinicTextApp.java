@@ -33,7 +33,7 @@ public class DawsonClinicTextApp
 				new ObjectSerializedList("datafiles/database/patients.ser", "datafiles/database/visits.ser"),
 				factory.getPatientVisitFactory());
 		Clinic model = new Clinic(patientDb, visitDb, factory);
-		TextView view = new TextView(model);
+		// TextView view = new TextView(model);
 		TextController controller = new TextController(model);
 		
 		controller.run();
