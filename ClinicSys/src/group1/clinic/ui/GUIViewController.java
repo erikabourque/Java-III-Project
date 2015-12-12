@@ -519,7 +519,7 @@ public class GUIViewController extends JFrame implements Observer {
 	public void update(Observable o, Object arg) {
 		result = "";
 		if ( arg instanceof Optional<?>)
-			result = "Next Visit:\n\n" + ((Optional<Visit>)arg).get().getPatient().getName().toString();
+			result = "Next Visit:\n\n" + ((Optional<Visit>)arg).get().getPatient().getName().getFullName();
 		else if (arg instanceof Patient)
 			result = ((Patient)arg).getName().toString() + "\n" + ((Patient)arg).getRamq().toString();
 		else if (arg instanceof Visit)
