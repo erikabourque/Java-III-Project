@@ -15,6 +15,7 @@ import dw317.clinic.business.interfaces.PatientVisitFactory;
 import dw317.clinic.business.interfaces.PatientVisitManager;
 import dw317.clinic.business.interfaces.Visit;
 import dw317.clinic.data.DuplicatePatientException;
+import dw317.clinic.data.NonExistingVisitException;
 import dw317.clinic.data.interfaces.PatientDAO;
 import dw317.clinic.data.interfaces.VisitDAO;
 import group1.clinic.data.*;
@@ -45,7 +46,89 @@ public class ClinicTest {
 		nextForExaminationTest();
 		registerNewPatientTest();
 		closeClinicTest();
+		changeTriageVisitPriorityTest();
 
+	}
+	
+	public static void changeTriageVisitPriorityTest(){
+		
+		System.out.println("-- Change Triage Visit Priority Test");
+		setup();
+		
+		ListPersistenceObject p = new SequentialTextFileList("testfiles/testPatients.txt","testfiles/testVisits.txt");
+		VisitDAO visit = new VisitQueueDB(p);
+		PatientDAO patient = new PatientListDB(p);
+		ClinicFactory f = DawsonClinicFactory.DAWSON_CLINIC;
+		PatientVisitManager clinic = new Clinic(patient,visit,f);
+		
+			//Test 1 - Testing if the method works as intended.
+			System.out.println("-Test 1 - Working Test - Only one Not assigned should remain");
+			try{
+				clinic.changeTriageVisitPriority(Priority.NOTURGENT);
+				System.out.println("\tTest Passed\n"+visit);
+			}
+			catch(NonExistingVisitException neve){
+				
+				System.out.println("Test Failed");
+				
+			}
+			
+			//Test 2 - Testing to see if test 1 is persistent.
+			System.out.println("-Test 2 - Working Test - No NOTASSIGNED should remain");
+			try{
+				clinic.changeTriageVisitPriority(Priority.URGENT);
+				System.out.println("\tTest Passed\n"+visit);
+			}
+			catch(NonExistingVisitException neve){
+				
+				System.out.println("Test Failed");
+				
+			}
+			
+			//Test 3 - Testing to see if the exception will be raised when there are no more priority 0 visits.
+			System.out.println("\n-Test 3 - Working Test - NonExistingVisitException should be cought");
+			try{
+				clinic.changeTriageVisitPriority(Priority.NOTURGENT);
+				System.out.println("\tTest Failed\n"+clinic.toString());
+			}
+			catch(NonExistingVisitException neve){
+				
+				System.out.println("Test Passed\n\t"+neve);
+				
+			}
+			
+			//Test 4 - Testing if null parameter passing will be handled.
+			System.out.println("\n-Test 4 - Null parameter");
+			try{
+				clinic.changeTriageVisitPriority(null);
+				System.out.println("\tTest Failed");
+			}
+			catch(NonExistingVisitException neve){
+				
+				System.out.println("Test Failed");
+				
+			}
+			catch(IllegalArgumentException iae){
+				System.out.println("Test Passed\n\t"+iae);
+			}
+		
+			//Test 5 - Testing if NOTASSIGNED priority will be handled.
+			System.out.println("\n-Test 5 - Priority NOTASSIGNED");
+			try{
+				clinic.changeTriageVisitPriority(Priority.NOTASSIGNED);
+				System.out.println("\tTest Failed");
+			}
+			catch(NonExistingVisitException neve){
+				
+				System.out.println("Test Failed");
+				
+			}
+			catch(IllegalArgumentException iae){
+				System.out.println("Test Passed\n\t"+iae);
+			}
+		
+		teardown();
+		
 	}
 	
 
