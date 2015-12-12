@@ -42,7 +42,7 @@ public class ClinicTest {
 		findPatientTest();
 		findPatientPrescribedTest();
 		getNextForTriageTest();
-		//nextForExaminationTest();
+		nextForExaminationTest();
 		registerNewPatientTest();
 		closeClinicTest();
 
@@ -363,10 +363,9 @@ public class ClinicTest {
 		
 	}
 	
-	//Need Cindy's part to work.
 	public static void nextForExaminationTest(){
 	
-		
+		setup();
 		System.out.println("--Next for Examination Test");
 		
 		ListPersistenceObject p = new SequentialTextFileList("testfiles/testPatients.txt","testfiles/testVisits.txt");
@@ -377,6 +376,7 @@ public class ClinicTest {
 		
 		System.out.println(clinic.nextForExamination());
 		System.out.println("\n");
+		teardown();
 		
 	}
 	

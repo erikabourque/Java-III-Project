@@ -8,13 +8,16 @@ import java.util.List;
 import java.util.Optional;
 import dw317.clinic.data.DuplicatePatientException;
 import dw317.clinic.data.NonExistingPatientException;
+import dw317.clinic.data.NonExistingVisitException;
 import dw317.lib.medication.Medication;
+import group1.clinic.business.Priority;
 
 /**
  * Interface for a Patient Visit Manager.
  * 
  * @author	Erika Bourque
- * @version	12/11/2015
+ * @author  Danieil Skrinikov
+ * @version	09/12/2015
  */
 public interface PatientVisitManager extends Serializable {
 	/**
@@ -95,4 +98,14 @@ public interface PatientVisitManager extends Serializable {
 	 */
 	void registerNewPatient(String firstName, String lastName, String ramq, String telephone, Medication meds,
 			String conditions) throws DuplicatePatientException;
+	
+	/**
+	*	Updates the	priority of	the	first visit	in	the	triage	queue to
+	*	a new priority.
+	*
+	*	@param newPriority
+	*					The	new	priority after triage	
+	*/
+	void	changeTriageVisitPriority(Priority	newPriority)
+	throws	NonExistingVisitException;
 }
