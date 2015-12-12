@@ -9,6 +9,7 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.Optional;
 
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -22,6 +23,7 @@ import group1.clinic.business.Priority;
 import dw317.clinic.business.interfaces.Patient;
 import dw317.clinic.business.interfaces.PatientVisitManager;
 import dw317.clinic.business.interfaces.Visit;
+import dw317.clinic.data.NonExistingVisitException;
 import dw317.lib.medication.DINMedication;
 import dw317.lib.medication.Medication;
 import dw317.lib.medication.NDCMedication;
@@ -90,7 +92,7 @@ public class GUIViewController extends JFrame implements Observer {
 	/**
 	 * Create the frame.
 	 */
-	public GUIViewController(Observer model) {
+	public GUIViewController(Observable model) {
 		setResizable(false);
 		setBackground(Color.DARK_GRAY);
 		setTitle("Dawson Clinic");
@@ -129,7 +131,7 @@ public class GUIViewController extends JFrame implements Observer {
 		mnDawsonClinic.add(menuItemExit);
 		menuItemExit.addActionListener(new menuItemExitListener());
 
-		JMenu mnCredits = new JMenu("Credits");
+		//JMenu mnCredits = new JMenu("Credits");
 		//menuBar.add(mnCredits);
 
 		// LABEL
@@ -166,7 +168,7 @@ public class GUIViewController extends JFrame implements Observer {
 
 		priorityOkBtn = new JButton("OK");
 		priorityOkBtn.setFont(new Font("Bell MT", Font.BOLD, 12));
-		priorityOkBtn.setBounds(58, 309, 49, 20);
+		priorityOkBtn.setBounds(41, 309, 66, 29);
 		dequeuePnl.add(priorityOkBtn);
 		priorityOkBtn.setVisible(false);
 		priorityOkBtn.addActionListener(new priorityOkBtnListener());
@@ -203,13 +205,15 @@ public class GUIViewController extends JFrame implements Observer {
 		dequeuePnl.add(notUrgentRBtn);
 		notUrgentRBtn.setVisible(false);
 
-		display = new JTextArea();
-		display.setFont(new Font("Times New Roman", Font.PLAIN, 14));
-		display.setBackground(SystemColor.menu);
-		display.setBounds(197, 45, 213, 116);
-		dequeuePnl.add(display);
-
-		display.setText("Results will be displayed here.");
+		
+		ButtonGroup group = new ButtonGroup();
+		group.add(reanimationRBtn);
+		group.add(veryUrgentRBtn);
+		group.add(urgentRBtn);
+		group.add(lessUrgentRBtn);
+		group.add(notUrgentRBtn);
+		
+		
 
 		// ************************************************************************************
 		// FOR CREATE PANEL
@@ -305,9 +309,16 @@ public class GUIViewController extends JFrame implements Observer {
 		priorityTxt.setBounds(223, 281, 150, 23);
 		// createPnl.add(priorityTxt);
 
+		display = new JTextArea();
+		display.setFont(new Font("Times New Roman", Font.PLAIN, 14));
+		display.setBackground(SystemColor.menu);
+		display.setBounds(197, 45, 213, 116);
+		dequeuePnl.add(display);
+
+		display.setText("Results will be displayed here.");
 		// BUTTON
 		JButton createOkBtn = new JButton("OK");
-		createOkBtn.setBounds(182, 315, 50, 23);
+		createOkBtn.setBounds(175, 307, 64, 31);
 		createPnl.add(createOkBtn);
 		createOkBtn.addActionListener(new createOkBtnListener());
 
@@ -403,7 +414,7 @@ public class GUIViewController extends JFrame implements Observer {
 		 */
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			Priority aPriority;
+			Priority aPriority = null;
 			if (reanimationRBtn.isSelected())
 				aPriority = Priority.REANIMATION;
 			else if (veryUrgentRBtn.isSelected())
@@ -415,7 +426,14 @@ public class GUIViewController extends JFrame implements Observer {
 			else if (notUrgentRBtn.isSelected())
 				aPriority = Priority.NOTURGENT;
 
-			model.changeTriageVisitPriority(aPriority);
+			try {
+				model.changeTriageVisitPriority(aPriority);
+			} catch (NonExistingVisitException e1) {
+				statusLbl.setText(e1.getMessage());
+				e1.printStackTrace();
+			}catch (Exception exception){
+				statusLbl.setText(exception.getMessage());
+			}
 			//result = "Triaged visit priority has been changed to: " + aPriority + ".";
 			//update(model, model.changeTriageVisitPriority(aPriority));
 			reanimationRBtn.setVisible(false);
@@ -496,11 +514,12 @@ public class GUIViewController extends JFrame implements Observer {
 	 * 
 	 * @see java.util.Observer#update(java.util.Observable, java.lang.Object)
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public void update(Observable o, Object arg) {
 		result = "";
 		if ( arg instanceof Optional<?>)
-			result = "Next Visit:\n\n" + ((Visit)arg).getPatient().getName().toString();
+			result = "Next Visit:\n\n" + ((Optional<Visit>)arg).get().getPatient().getName().toString();
 		else if (arg instanceof Patient)
 			result = ((Patient)arg).getName().toString() + "\n" + ((Patient)arg).getRamq().toString();
 		else if (arg instanceof Visit)
