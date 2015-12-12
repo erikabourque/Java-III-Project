@@ -14,11 +14,13 @@ import dw317.clinic.business.interfaces.Patient;
 import dw317.clinic.business.interfaces.PatientVisitManager;
 import dw317.clinic.data.DuplicatePatientException;
 import dw317.clinic.data.NonExistingPatientException;
+import dw317.clinic.data.NonExistingVisitException;
+import group1.clinic.business.Priority;
 
 /**
  * Controller for the TextApp for a PatientVisitManager.  Provides a text-based menu that allows a person to
  * view patient information, add new patients, add new visits, get the next triage visit and assign priorities
- * to them, and request the next examination visits.
+ * to it, and request the next examination visits.
  * 
  * @author Katherine Richer
  * @author Erika Bourque
@@ -72,7 +74,32 @@ public class TextController {
 					addPatient();
 				}
 				
-				// Start a newline after any commands
+				if (userCommand == Command.NEW_VISIT)
+				{
+					addVisit();
+				}
+				
+				if (userCommand == Command.NEXT_TO_TRIAGE)
+				{
+					getTriageVisit();
+				}
+				
+				if (userCommand == Command.CHANGE_PRIORITY)
+				{
+					changePriority();
+				}
+				
+				if (userCommand == Command.NEXT_TO_EXAMINE)
+				{
+					getExaminationVisit();
+				}
+				
+				if (userCommand == null)
+				{
+					out.println("That is not a valid choice, please try again.");
+				}
+				
+				// Start a newline after each command completed
 				out.println();
 			}			
 		}
@@ -145,15 +172,20 @@ public class TextController {
 		private void getPatient()
 		{
 			String ramq;
+			
+			// THIS WILL ALSO NO LONGER BE HERE
 			Patient thePatient;
 			
-			// Request and get the RAMQ
-			out.print("Please enter the ramq: ");
 			try
 			{
+				// Request and get the RAMQ
+				out.print("Please enter the ramq: ");
 				ramq = userInput.readLine();
+				
+				// Get the patient from model
 				thePatient = model.findPatient(ramq);
 				
+				// TO PUT IN KAT'S CODE NOT HERE
 				// Print the resulting patient
 				out.println("Patient information");
 				out.println("RAMQ: " + thePatient.getRamq());
@@ -175,7 +207,7 @@ public class TextController {
 		}
 		
 		/**
-		 * Adds a new patient to the database.  Requests Information
+		 * Adds a new patient to the database.  Requests information
 		 * from the user, and then creates the patient.
 		 */
 		private void addPatient()
@@ -205,7 +237,8 @@ public class TextController {
 						+ "press enter if none available: ");
 				existingMedCond = userInput.readLine();
 				
-				// Check if user had any to input, make it null
+				// Check if user did not put any input for existing medical conditions
+				// if no input, make it null
 				if (existingMedCond.isEmpty())
 				{
 					existingMedCond = null;
@@ -228,23 +261,151 @@ public class TextController {
 			}
 		}
 		
+		// Still gotta test it, first get visit
+		/**
+		 * Adds a new visit to the database.  Requests information
+		 * from the user, then creates the visit.
+		 */
 		private void addVisit()
 		{
+			String ramq;
+			String complaint;
+			Patient thePatient;
 			
+			try
+			{
+				// Requests the ramq of the patient associated to the visit
+				out.print("Please enter the ramq: ");
+				ramq = userInput.readLine();
+				
+				out.print("Please enter the primary complaint of patients, or "
+						+ "press enter if unknown: ");
+				complaint = userInput.readLine();
+				
+				// Check if user did not put any input for complaint
+				// if no input, make it null
+				if (complaint.isEmpty())
+				{
+					complaint = null;
+				}
+				
+				// Gets the patient
+				thePatient = model.findPatient(ramq);
+				
+				// Create the visit
+				model.createVisit(thePatient, complaint);				
+			}
+			catch (IOException ioe)
+			{
+				out.println(ioe.getMessage());
+			}
+			catch (IllegalArgumentException iae)
+			{
+				out.println(iae.getMessage());
+			} 
+			catch (NonExistingPatientException npe) 
+			{
+				out.println(npe.getMessage());
+			}
 		}
 		
+		// also gotta test this
+		/**
+		 * Gets the next visit for triage from the model.
+		 */
 		private void getTriageVisit()
 		{
-			
+			try
+			{
+				model.nextForTriage();
+			}
+			catch (IllegalArgumentException iae)
+			{
+				out.println(iae.getMessage());
+			}
 		}
 		
+		// also gotta test this
+		/**
+		 * Changes the priority of the next triage patient to
+		 * the priority specified by the user's input.
+		 */
 		private void changePriority()
-		{
+		{		
+			Priority newPriority;
+			int priority;
 			
+			out.println("Select the new priority from the menu:");
+			out.println("\t1 - REANIMATION");
+			out.println("\t2 - VERYURGENT");
+			out.println("\t3 - URGENT");
+			out.println("\t4 - LESSURGENT");
+			out.println("\t5 - NOTURGENT");
+			out.print("\nEnter your choice: ");
+			
+			try
+			{
+				priority = Integer.parseInt(userInput.readLine());
+				
+				switch(priority)
+				{
+					case 1:
+						newPriority = Priority.REANIMATION;
+						break;
+					case 2:
+						newPriority = Priority.VERYURGENT;
+						break;
+					case 3:
+						newPriority = Priority.URGENT;
+						break;
+					case 4:
+						newPriority = Priority.LESSURGENT;
+						break;
+					case 5:
+						newPriority = Priority.NOTURGENT;
+						break;
+					default:
+						newPriority = null;
+						break;
+				}
+				
+				if (newPriority == null)
+				{
+					out.println("That is not a valid choice, please try again.");
+				}
+				else
+				{
+					model.changeTriageVisitPriority(newPriority);
+				}
+				
+			}
+			catch (IOException ioe)
+			{
+				out.println(ioe.getMessage());
+			}
+			catch (NumberFormatException nfe)
+			{
+				out.println("Please enter one digit only.");
+			}
+			catch (NonExistingVisitException neve)
+			{
+				out.println(neve.getMessage());
+			}
 		}
 		
+		// also gotta test this
+		/**
+		 * Gets the next visit for examination from the model.
+		 */
 		private void getExaminationVisit()
 		{
-			
+			try
+			{
+				model.nextForExamination();
+			}
+			catch (IllegalArgumentException iae)
+			{
+				out.println(iae.getMessage());
+			}
 		}
 }
