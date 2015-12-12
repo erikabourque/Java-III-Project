@@ -20,11 +20,9 @@ import group1.dawsonclinic.DawsonClinicFactory;
  * @author Katherine Richer
  * @author Erika Bourque
  */
-public class DawsonClinicTextApp 
-{
+public class DawsonClinicTextApp {
 
-	public static void main(String[] args) 
-	{
+	public static void main(String[] args) {
 		ClinicFactory factory = DawsonClinicFactory.DAWSON_CLINIC;
 		PatientDAO patientDb = new PatientListDB(
 				new ObjectSerializedList("datafiles/database/patients.ser", "datafiles/database/visits.ser"),
@@ -33,9 +31,10 @@ public class DawsonClinicTextApp
 				new ObjectSerializedList("datafiles/database/patients.ser", "datafiles/database/visits.ser"),
 				factory.getPatientVisitFactory());
 		Clinic model = new Clinic(patientDb, visitDb, factory);
+		
 		// TextView view = new TextView(model);
 		TextController controller = new TextController(model);
-		
+
 		controller.run();
 	}
 
