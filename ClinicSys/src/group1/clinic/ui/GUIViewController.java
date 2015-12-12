@@ -24,6 +24,7 @@ import dw317.clinic.business.interfaces.Patient;
 import dw317.clinic.business.interfaces.PatientVisitManager;
 import dw317.clinic.business.interfaces.Visit;
 import dw317.clinic.data.NonExistingVisitException;
+import dw317.lib.Name;
 import dw317.lib.medication.DINMedication;
 import dw317.lib.medication.Medication;
 import dw317.lib.medication.NDCMedication;
@@ -50,8 +51,8 @@ public class GUIViewController extends JFrame implements Observer {
 
 	// VARIABLES
 	private Clinic model;
-	private String result;
-	private Medication medication;
+	private String result = null;
+	private Medication medication = null;
 
 	// PANELS ANS SUCH
 	private JPanel contentPane;
@@ -73,16 +74,16 @@ public class GUIViewController extends JFrame implements Observer {
 	private JRadioButton notUrgentRBtn;
 
 	// TEXT FIELDS
-	private JTextField priorityTxt;
-	private JTextField complaintTxt;
-	private JTextField medNumberTxt;
-	private JTextField medSchemeTxt;
-	private JTextField medNameTxt;
-	private JTextField conditionTxt;
-	private JTextField phoneNumberTxt;
-	private JTextField ramqTxt;
-	private JTextField lastNameTxt;
-	private JTextField firstNameTxt;
+	private JTextField priorityTxt = null;
+	private JTextField complaintTxt = null;
+	private JTextField medNumberTxt = null;
+	private JTextField medSchemeTxt = null;
+	private JTextField medNameTxt = null;
+	private JTextField conditionTxt = null;
+	private JTextField phoneNumberTxt = null;
+	private JTextField ramqTxt = null;
+	private JTextField lastNameTxt = null;
+	private JTextField firstNameTxt = null;
 
 	// OTHER
 	private JTextArea display;
@@ -131,8 +132,8 @@ public class GUIViewController extends JFrame implements Observer {
 		mnDawsonClinic.add(menuItemExit);
 		menuItemExit.addActionListener(new menuItemExitListener());
 
-		//JMenu mnCredits = new JMenu("Credits");
-		//menuBar.add(mnCredits);
+		// JMenu mnCredits = new JMenu("Credits");
+		// menuBar.add(mnCredits);
 
 		// LABEL
 		lblDawsonMedicalClinic = new JLabel("Dawson Medical Clinic");
@@ -142,7 +143,8 @@ public class GUIViewController extends JFrame implements Observer {
 		contentPane.add(lblDawsonMedicalClinic);
 
 		statusLbl = new JLabel("Status Bar");
-		statusLbl.setBounds(10, 380, 434, 20);
+		statusLbl.setFont(new Font("Tahoma", Font.PLAIN, 9));
+		statusLbl.setBounds(4, 380, 434, 20);
 		contentPane.add(statusLbl);
 
 		// *****************************************************************************************
@@ -205,15 +207,12 @@ public class GUIViewController extends JFrame implements Observer {
 		dequeuePnl.add(notUrgentRBtn);
 		notUrgentRBtn.setVisible(false);
 
-		
 		ButtonGroup group = new ButtonGroup();
 		group.add(reanimationRBtn);
 		group.add(veryUrgentRBtn);
 		group.add(urgentRBtn);
 		group.add(lessUrgentRBtn);
 		group.add(notUrgentRBtn);
-		
-		
 
 		// ************************************************************************************
 		// FOR CREATE PANEL
@@ -369,8 +368,9 @@ public class GUIViewController extends JFrame implements Observer {
 		public void actionPerformed(ActionEvent e) {
 			try {
 				model.nextForExamination();
-				//result = "Next Visit: \n\n" + model.nextForExamination().get().getPatient().getName().toString();
-				//update(model, model.nextForExamination());
+				// result = "Next Visit: \n\n" +
+				// model.nextForExamination().get().getPatient().getName().toString();
+				// update(model, model.nextForExamination());
 			} catch (Exception exception) {
 				statusLbl.setText(exception.getMessage());
 			}
@@ -392,8 +392,9 @@ public class GUIViewController extends JFrame implements Observer {
 		public void actionPerformed(ActionEvent arg0) {
 			try {
 				model.nextForTriage();
-				//result = "Next Visit:\n\n" + model.nextForTriage().get().getPatient().getName().toString();
-				//update(model, model.nextForTriage());
+				// result = "Next Visit:\n\n" +
+				// model.nextForTriage().get().getPatient().getName().toString();
+				// update(model, model.nextForTriage());
 			} catch (Exception exception) {
 				statusLbl.setText(exception.getMessage());
 			}
@@ -431,11 +432,12 @@ public class GUIViewController extends JFrame implements Observer {
 			} catch (NonExistingVisitException e1) {
 				statusLbl.setText(e1.getMessage());
 				e1.printStackTrace();
-			}catch (Exception exception){
+			} catch (Exception exception) {
 				statusLbl.setText(exception.getMessage());
 			}
-			//result = "Triaged visit priority has been changed to: " + aPriority + ".";
-			//update(model, model.changeTriageVisitPriority(aPriority));
+			// result = "Triaged visit priority has been changed to: " +
+			// aPriority + ".";
+			// update(model, model.changeTriageVisitPriority(aPriority));
 			reanimationRBtn.setVisible(false);
 			veryUrgentRBtn.setVisible(false);
 			urgentRBtn.setVisible(false);
@@ -481,22 +483,30 @@ public class GUIViewController extends JFrame implements Observer {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			try {
+				if (firstNameTxt.getText() == null || firstNameTxt.getText().length() == 0)
+					throw new IllegalArgumentException("Invalid first name.");
+				if (lastNameTxt.getText() == null || lastNameTxt.getText().length() == 0)
+					throw new IllegalArgumentException("Invalid last name.");
+				if (ramqTxt.getText() == null || ramqTxt.getText().length() == 0)
+					throw new IllegalArgumentException("Invalid RAMQ ID.");
 
 				if (medSchemeTxt.getText().equalsIgnoreCase("DIN"))
 					medication = new DINMedication(medNumberTxt.getText(), medNameTxt.getText());
 				else if (medSchemeTxt.getText().equalsIgnoreCase("NDC"))
 					medication = new NDCMedication(medNumberTxt.getText(), medNameTxt.getText());
+				else if (medSchemeTxt.getText() == null || medSchemeTxt.getText().length() == 0)
+					medication = null;
 				else
 					throw new IllegalArgumentException("Invalid medication scheme.");
 
 				model.registerNewPatient(firstNameTxt.getText(), lastNameTxt.getText(), ramqTxt.getText(),
 						phoneNumberTxt.getText(), medication, conditionTxt.getText());
+				statusLbl.setText("Patient created.");
 				// model.createVisit(model.findPatient(ramqTxt.getText()),
 				// complaintTxt.getText());
 			} catch (Exception exception) {
 				statusLbl.setText("Patient not created. " + exception.getMessage());
 			}
-			statusLbl.setText("Patient created.");
 			firstNameTxt.setText("");
 			lastNameTxt.setText("");
 			ramqTxt.setText("");
@@ -518,14 +528,15 @@ public class GUIViewController extends JFrame implements Observer {
 	@Override
 	public void update(Observable o, Object arg) {
 		result = "";
-		if ( arg instanceof Optional<?>)
-			result = "Next Visit:\n\n" + ((Optional<Visit>)arg).get().getPatient().getName().getFullName();
+		if (arg instanceof Optional<?>)
+			result = "Next Visit:\n\n" + ((Optional<Visit>) arg).get().getPatient().getName().getFullName();
 		else if (arg instanceof Patient)
-			result = ((Patient)arg).getName().toString() + "\n" + ((Patient)arg).getRamq().toString();
+			result = ((Patient) arg).getName().toString() + "\n" + ((Patient) arg).getRamq().toString();
 		else if (arg instanceof Visit)
-			result = "Visit created \n\n" + ((Visit)arg).getPatient() + "\nRegistered: " + ((Visit)arg).getRegistrationDateAndTime();
+			result = "Visit created \n\n" + ((Visit) arg).getPatient() + "\nRegistered: "
+					+ ((Visit) arg).getRegistrationDateAndTime();
 		else if (arg instanceof Priority)
-			result = "Priority changed to " + ((Priority)arg);
+			result = "Priority changed to " + ((Priority) arg);
 		display.setText(result);
 
 	}
