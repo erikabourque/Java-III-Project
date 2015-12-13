@@ -1,3 +1,6 @@
+/**
+ * Provides a GUI App for Dawson Clinic.
+ */
 package group1.clinic;
 
 import group1.clinic.business.Clinic;
@@ -10,6 +13,12 @@ import dw317.clinic.ClinicFactory;
 import dw317.clinic.data.interfaces.PatientDAO;
 import dw317.clinic.data.interfaces.VisitDAO;
 
+/**
+ * Provides the GUI App for Dawson Clinic.
+ * 
+ * @author Uen Yi (Cindy) Hung
+ * @version 12/12/2015
+ */
 public class DawsonClinicGUIApp {
 
 	public static void main(String[] args) {

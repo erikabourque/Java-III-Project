@@ -1,3 +1,6 @@
+/**
+ * Provides a GUI View Controller for Dawson Medical Clinic.
+ */
 package group1.clinic.ui;
 
 import java.awt.BorderLayout;
@@ -41,11 +44,10 @@ import javax.swing.JTabbedPane;
 import java.awt.Color;
 
 /**
- * GUI controller for Dawson Medical Clininc.
+ * GUI controller for Dawson Medical Clinic.
  * 
- * @author Uen Yi Cindy Hunf
+ * @author Uen Yi (Cindy) Hung
  * @version 09/12/2015
- *
  */
 public class GUIViewController extends JFrame implements Observer {
 
@@ -331,15 +333,12 @@ public class GUIViewController extends JFrame implements Observer {
 
 	// *******************************************************************************************
 	/**
-	 * Inner class event-handler for the 'priority triage' button.
+	 * Inner class event listener for the 'priority triage' button.
 	 */
 	private class prioritizeTriageBtnListener implements ActionListener {
 
-		/*
-		 * (non-Javadoc)
-		 * 
-		 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.
-		 * ActionEvent)
+		/**
+		 * Event Handler for Prioritize Triage Button.
 		 */
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -354,15 +353,12 @@ public class GUIViewController extends JFrame implements Observer {
 	}
 
 	/**
-	 * Inner class event-handler for the 'next to examine' button.
+	 * Inner class event listener for the 'next to examine' button.
 	 */
 	private class nextToExamineBtnListener implements ActionListener {
 
-		/*
-		 * (non-Javadoc)
-		 * 
-		 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.
-		 * ActionEvent)
+		/**
+		 * Event Handler for Next to Examine Button.
 		 */
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -378,15 +374,12 @@ public class GUIViewController extends JFrame implements Observer {
 	}
 
 	/**
-	 * Inner class event-handler for the 'next triage' button.
+	 * Inner class event listener for the 'next triage' button.
 	 */
 	private class nextTriageBtnListener implements ActionListener {
 
-		/*
-		 * (non-Javadoc)
-		 * 
-		 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.
-		 * ActionEvent)
+		/**
+		 * Event Handler for Next to Triage Button.
 		 */
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
@@ -402,16 +395,13 @@ public class GUIViewController extends JFrame implements Observer {
 	}
 
 	/**
-	 * Inner class event-handler for 'ok' button in the priority selection
+	 * Inner class event listener for 'ok' button in the priority selection
 	 * section.
 	 */
 	private class priorityOkBtnListener implements ActionListener {
 
-		/*
-		 * (non-Javadoc)
-		 * 
-		 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.
-		 * ActionEvent)
+		/**
+		 * Event Handler for Priority OK Button
 		 */
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -431,7 +421,6 @@ public class GUIViewController extends JFrame implements Observer {
 				model.changeTriageVisitPriority(aPriority);
 			} catch (NonExistingVisitException e1) {
 				statusLbl.setText(e1.getMessage());
-				e1.printStackTrace();
 			} catch (Exception exception) {
 				statusLbl.setText(exception.getMessage());
 			}
@@ -448,15 +437,12 @@ public class GUIViewController extends JFrame implements Observer {
 	}
 
 	/**
-	 * Inner class event-handler for menu item 'exit'.
+	 * Inner class event lister for menu item 'exit'.
 	 */
 	private class menuItemExitListener implements ActionListener {
 
-		/*
-		 * (non-Javadoc)
-		 * 
-		 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.
-		 * ActionEvent)
+		/**
+		 * Event Handler for Menu Item 'exit'
 		 */
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -474,11 +460,8 @@ public class GUIViewController extends JFrame implements Observer {
 	 */
 	private class createOkBtnListener implements ActionListener {
 
-		/*
-		 * (non-Javadoc)
-		 * 
-		 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.
-		 * ActionEvent)
+		/**
+		 * Event Handler for Create Patient OK Button
 		 */
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -519,10 +502,11 @@ public class GUIViewController extends JFrame implements Observer {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
+	/**
+	 * Observable Update Override.
 	 * 
-	 * @see java.util.Observer#update(java.util.Observable, java.lang.Object)
+	 * Checks for update on optional<Visit>, Patient, Visit or Priority, 
+	 * and displays message accordingly.
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
