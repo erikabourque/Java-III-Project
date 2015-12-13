@@ -15,7 +15,8 @@ import group1.clinic.ui.TextView;
 import group1.dawsonclinic.DawsonClinicFactory;
 
 /**
- * Runs the Text Controller using Clinic as a Model.
+ * Runs the Text Controller using Clinic as a Model. 
+ * test
  * 
  * @author Katherine Richer
  * @author Erika Bourque
