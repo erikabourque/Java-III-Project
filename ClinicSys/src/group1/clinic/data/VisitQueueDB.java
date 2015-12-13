@@ -207,6 +207,8 @@ public class VisitQueueDB implements VisitDAO {
 		try {
 
 			temp = database.get(oldPriority.getCode()).poll();
+			if(temp == null)
+				throw new NonExistingVisitException("VisitQueueDB - No patient found with such priority.");
 			temp.setPriority(newPriority);
 			database.get(newPriority.getCode()).add(temp);
 
