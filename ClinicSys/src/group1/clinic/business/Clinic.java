@@ -29,10 +29,10 @@ import group1.dawsonclinic.*;
  */
 public class Clinic extends Observable implements PatientVisitManager {
 
+	private static final long serialVersionUID = 42031768871L;
 	private final PatientDAO patientConnection;
 	private final VisitDAO visitConnection;
 	private final ClinicFactory factory;
-	private static final long serialVersionUID = 42031768871L;
 
 	private boolean isConnected = true;
 
@@ -62,6 +62,33 @@ public class Clinic extends Observable implements PatientVisitManager {
 			this.factory = DawsonClinicFactory.DAWSON_CLINIC;
 		else
 			this.factory = factory;
+
+	}
+
+	/**
+	 * Updates the priority of the first visit in the triage queue to a new
+	 * priority.
+	 *
+	 * Throws NonExistingPatientException if there is no patients with a
+	 * priority UNASSIGNED in the database
+	 *
+	 * @param newPriority
+	 *            The new priority after triage
+	 */
+	@Override
+	public void changeTriageVisitPriority(Priority newPriority) throws NonExistingVisitException {
+
+		if (newPriority == null)
+			throw new IllegalArgumentException(
+					"Clinic.changeTriagePriority() - New priority parameter must not be null.");
+
+		if (newPriority.equals(Priority.NOTASSIGNED))
+			throw new IllegalArgumentException("Clinic.changeTriagePriority() - New priority must be assigned.");
+
+		visitConnection.update(Priority.NOTASSIGNED, newPriority);
+
+		setChanged();
+		notifyObservers(newPriority);
 
 	}
 
@@ -104,7 +131,7 @@ public class Clinic extends Observable implements PatientVisitManager {
 		aVisit.setComplaint(Optional.ofNullable(complaint));
 
 		visitConnection.add(aVisit);
-		
+
 		setChanged();
 		notifyObservers(aVisit);
 
@@ -129,9 +156,9 @@ public class Clinic extends Observable implements PatientVisitManager {
 
 		validateRamq(ramq);
 		Ramq ramqPatient = new Ramq(ramq);
-		
+
 		Patient aPatient = patientConnection.getPatient(ramqPatient);
-		
+
 		setChanged();
 		notifyObservers(aPatient);
 
@@ -160,25 +187,6 @@ public class Clinic extends Observable implements PatientVisitManager {
 	}
 
 	/**
-	 * Returns the next Visit with a non assigned priority.
-	 *
-	 * @return Optional visit that will be next for triage.
-	 */
-	@Override
-	public Optional<Visit> nextForTriage() {
-
-		if (!isConnected)
-			throw new IllegalArgumentException("Clinic - Connection to the database has been closed.");
-		
-		Optional<Visit> aVisit = visitConnection.getNextVisit(Priority.NOTASSIGNED);
-		
-		setChanged();
-		notifyObservers(aVisit);
-
-		return aVisit;
-	}
-
-	/**
 	 * Instantiates the DawsonClinicPriorityPolicy. Using the object returns
 	 * next patient for examination.
 	 * 
@@ -192,12 +200,31 @@ public class Clinic extends Observable implements PatientVisitManager {
 			throw new IllegalArgumentException("Clinic - Connection to the database has been closed.");
 
 		DawsonClinicPriorityPolicy policy = new DawsonClinicPriorityPolicy(visitConnection);
-		
+
 		Optional<Visit> aVisit = policy.getNextVisit();
-		
+
 		setChanged();
 		notifyObservers(aVisit);
-		
+
+		return aVisit;
+	}
+
+	/**
+	 * Returns the next Visit with a non assigned priority.
+	 *
+	 * @return Optional visit that will be next for triage.
+	 */
+	@Override
+	public Optional<Visit> nextForTriage() {
+
+		if (!isConnected)
+			throw new IllegalArgumentException("Clinic - Connection to the database has been closed.");
+
+		Optional<Visit> aVisit = visitConnection.getNextVisit(Priority.NOTASSIGNED);
+
+		setChanged();
+		notifyObservers(aVisit);
+
 		return aVisit;
 	}
 
@@ -241,7 +268,7 @@ public class Clinic extends Observable implements PatientVisitManager {
 		patient.setTelephoneNumber(Optional.ofNullable(telephone));
 
 		patientConnection.add(patient);
-		
+
 		setChanged();
 		notifyObservers(patient);
 
@@ -275,33 +302,6 @@ public class Clinic extends Observable implements PatientVisitManager {
 			if (!(Character.isDigit(numbers.charAt(i))))
 				throw new IllegalArgumentException(
 						"Clinic.findPatient() - Ramq contains non digits in last 8 characters.");
-	}
-
-	
-	/**
-	*	Updates the	priority of	the	first visit	in	the	triage	queue to
-	*	a new priority.
-	*
-	*	Throws NonExistingPatientException 
-	*				if there is no patients with a priority UNASSIGNED in the database
-	*
-	*	@param newPriority
-	*					The	new	priority after triage	
-	*/
-	@Override
-	public void changeTriageVisitPriority(Priority newPriority) throws NonExistingVisitException {
-		
-		if(newPriority == null)
-			throw new IllegalArgumentException("Clinic.changeTriagePriority() - New priority parameter must not be null.");
-		
-		if(newPriority.equals(Priority.NOTASSIGNED))
-				throw new IllegalArgumentException("Clinic.changeTriagePriority() - New priority must be assigned.");
-		
-		visitConnection.update(Priority.NOTASSIGNED, newPriority);
-		
-		setChanged();
-		notifyObservers(newPriority);
-		
 	}
 
 }
