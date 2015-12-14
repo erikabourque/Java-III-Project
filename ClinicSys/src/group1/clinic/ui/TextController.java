@@ -153,23 +153,13 @@ public class TextController {
 	private void getPatient() {
 		String ramq;
 
-		// THIS WILL ALSO NO LONGER BE HERE
-		Patient thePatient;
-
 		try {
 			// Request and get the RAMQ
 			out.print("Please enter the ramq: ");
 			ramq = userInput.readLine();
 
 			// Get the patient from model
-			thePatient = model.findPatient(ramq);
-
-			// TO PUT IN KAT'S CODE NOT HERE
-			// Print the resulting patient
-			out.println("Patient information");
-			out.println("RAMQ: " + thePatient.getRamq());
-			out.println(thePatient.getName().getLastName() + ", " + thePatient.getName().getFirstName());
-			out.println("Telephone: " + thePatient.getTelephoneNumber());
+			model.findPatient(ramq);
 		} catch (IllegalArgumentException iae) {
 			out.println(iae.getMessage());
 		} catch (IOException ioe) {
@@ -226,7 +216,6 @@ public class TextController {
 		}
 	}
 
-	// Still gotta test it, first get visit
 	/**
 	 * Adds a new visit to the database. Requests information from the user,
 	 * then creates the visit.
@@ -269,10 +258,17 @@ public class TextController {
 	 * Gets the next visit for triage from the model.
 	 */
 	private void getTriageVisit() {
-		try {
+		try 
+		{
 			model.nextForTriage();
-		} catch (IllegalArgumentException iae) {
+		} 
+		catch (IllegalArgumentException iae) 
+		{
 			out.println(iae.getMessage());
+		}
+		catch (Exception e)
+		{
+			out.println(e.getMessage());
 		}
 	}
 
@@ -337,10 +333,17 @@ public class TextController {
 	 * Gets the next visit for examination from the model.
 	 */
 	private void getExaminationVisit() {
-		try {
+		try 
+		{
 			model.nextForExamination();
-		} catch (IllegalArgumentException iae) {
+		} 
+		catch (IllegalArgumentException iae) 
+		{
 			out.println(iae.getMessage());
+		}
+		catch (Exception e)
+		{
+			out.println(e.getMessage());
 		}
 	}
 }

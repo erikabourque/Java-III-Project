@@ -3,6 +3,8 @@
  */
 package group1.clinic;
 
+import java.io.IOException;
+
 import dw317.clinic.ClinicFactory;
 import dw317.clinic.data.interfaces.PatientDAO;
 import dw317.clinic.data.interfaces.VisitDAO;
@@ -33,10 +35,16 @@ public class DawsonClinicTextApp {
 				factory.getPatientVisitFactory());
 		Clinic model = new Clinic(patientDb, visitDb, factory);
 		
-		// TextView view = new TextView(model);
+		TextView view = new TextView(model);
 		TextController controller = new TextController(model);
 
 		controller.run();
+		
+		try {
+			model.closeClinic();
+		} catch (IOException ioe) {
+			System.out.println(ioe.getMessage());
+		}
 	}
 
 }

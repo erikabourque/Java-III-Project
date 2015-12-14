@@ -9,6 +9,9 @@ import group1.clinic.data.PatientListDB;
 import group1.clinic.data.VisitQueueDB;
 import group1.clinic.ui.GUIViewController;
 import group1.dawsonclinic.DawsonClinicFactory;
+
+import java.io.IOException;
+
 import dw317.clinic.ClinicFactory;
 import dw317.clinic.data.interfaces.PatientDAO;
 import dw317.clinic.data.interfaces.VisitDAO;
@@ -35,5 +38,11 @@ public class DawsonClinicGUIApp {
 
 		Clinic model = new Clinic(patientDb, visitDb, factory);
 		GUIViewController app = new GUIViewController(model);
+		
+		try {
+			model.closeClinic();
+		} catch (IOException ioe) {
+			System.out.println(ioe.getMessage());
+		}
 	}
 }
