@@ -5,9 +5,7 @@ package group1.clinic.ui;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.Scanner;
 import static java.lang.System.out;
 
 import dw317.clinic.business.interfaces.Patient;
@@ -29,12 +27,12 @@ import group1.clinic.business.Priority;
  */
 public class TextController {
 
-	private PatientVisitManager model;
-	private BufferedReader userInput = new BufferedReader(new InputStreamReader(System.in));
-
 	private enum Command {
 		PATIENT_INFO, NEW_PATIENT, NEW_VISIT, NEXT_TO_TRIAGE, CHANGE_PRIORITY, NEXT_TO_EXAMINE, STOP
 	}
+	private PatientVisitManager model;
+
+	private BufferedReader userInput = new BufferedReader(new InputStreamReader(System.in));
 
 	/**
 	 * One Param Constructor. Assigns given PatientVisitManager as the model to
@@ -45,128 +43,6 @@ public class TextController {
 	 */
 	public TextController(PatientVisitManager model) {
 		this.model = model;
-	}
-
-	/**
-	 * Method used to start interacting with the text-based interface. Loops
-	 * until user specifies to stop.
-	 */
-	public void run() {
-		Command userCommand = null;
-
-		while (userCommand != Command.STOP) {
-			printMenu();
-
-			// Getting user input
-			userCommand = getCommand();
-
-			// Take action depending on that input
-			if (userCommand == Command.PATIENT_INFO) {
-				getPatient();
-			}
-
-			if (userCommand == Command.NEW_PATIENT) {
-				addPatient();
-			}
-
-			if (userCommand == Command.NEW_VISIT) {
-				addVisit();
-			}
-
-			if (userCommand == Command.NEXT_TO_TRIAGE) {
-				getTriageVisit();
-			}
-
-			if (userCommand == Command.CHANGE_PRIORITY) {
-				changePriority();
-			}
-
-			if (userCommand == Command.NEXT_TO_EXAMINE) {
-				getExaminationVisit();
-			}
-
-			if (userCommand == null) {
-				out.println("That is not a valid choice, please try again.");
-			}
-
-			// Start a newline after each command completed
-			out.println();
-		}
-	}
-
-	/**
-	 * Gets the user's command through their input. Checks to make sure input is
-	 * valid.
-	 * 
-	 * @return The command that was chosen by the user's input
-	 */
-	private Command getCommand() {
-		int commandNum = 0;
-
-		try {
-			commandNum = Integer.parseInt(userInput.readLine());
-		} catch (NumberFormatException nfe) {
-			System.out.println("Please enter one digit only.");
-		} catch (IOException ioe) {
-			System.out.println(ioe.getMessage());
-		}
-
-		switch (commandNum) {
-		case 1:
-			return Command.PATIENT_INFO;
-		case 2:
-			return Command.NEW_PATIENT;
-		case 3:
-			return Command.NEW_VISIT;
-		case 4:
-			return Command.NEXT_TO_TRIAGE;
-		case 5:
-			return Command.CHANGE_PRIORITY;
-		case 6:
-			return Command.NEXT_TO_EXAMINE;
-		case 7:
-			return Command.STOP;
-		default:
-			return null;
-		}
-	}
-
-	/**
-	 * Prints the text-based menu.
-	 */
-	private void printMenu() {
-		out.println("Dawson Clinic Menu");
-		out.println("Select a choice from the menu:");
-		out.println("\t1 - PATIENT_INFO");
-		out.println("\t2 - NEW_PATIENT");
-		out.println("\t3 - NEW_VISIT");
-		out.println("\t4 - NEXT_TO_TRIAGE");
-		out.println("\t5 - CHANGE_PRIORITY");
-		out.println("\t6 - NEXT_TO_EXAMINE");
-		out.println("\t7 - STOP");
-		out.print("\nEnter your choice: ");
-	}
-
-	/**
-	 * Retrieves the patient with the ramq specified by the user's input.
-	 */
-	private void getPatient() {
-		String ramq;
-
-		try {
-			// Request and get the RAMQ
-			out.print("Please enter the ramq: ");
-			ramq = userInput.readLine();
-
-			// Get the patient from model
-			model.findPatient(ramq);
-		} catch (IllegalArgumentException iae) {
-			out.println(iae.getMessage());
-		} catch (IOException ioe) {
-			out.println(ioe.getMessage());
-		} catch (NonExistingPatientException nepe) {
-			out.println(nepe.getMessage());
-		}
 	}
 
 	/**
@@ -253,26 +129,6 @@ public class TextController {
 		}
 	}
 
-	// also gotta test this
-	/**
-	 * Gets the next visit for triage from the model.
-	 */
-	private void getTriageVisit() {
-		try 
-		{
-			model.nextForTriage();
-		} 
-		catch (IllegalArgumentException iae) 
-		{
-			out.println(iae.getMessage());
-		}
-		catch (Exception e)
-		{
-			out.println(e.getMessage());
-		}
-	}
-
-	// also gotta test this
 	/**
 	 * Changes the priority of the next triage patient to the priority specified
 	 * by the user's input.
@@ -328,22 +184,151 @@ public class TextController {
 		}
 	}
 
-	// also gotta test this
+	/**
+	 * Gets the user's command through their input. Checks to make sure input is
+	 * valid.
+	 * 
+	 * @return The command that was chosen by the user's input
+	 */
+	private Command getCommand() {
+		int commandNum = 0;
+
+		try {
+			commandNum = Integer.parseInt(userInput.readLine());
+		} catch (NumberFormatException nfe) {
+			System.out.println("Please enter one digit only.");
+		} catch (IOException ioe) {
+			System.out.println(ioe.getMessage());
+		}
+
+		switch (commandNum) {
+		case 1:
+			return Command.PATIENT_INFO;
+		case 2:
+			return Command.NEW_PATIENT;
+		case 3:
+			return Command.NEW_VISIT;
+		case 4:
+			return Command.NEXT_TO_TRIAGE;
+		case 5:
+			return Command.CHANGE_PRIORITY;
+		case 6:
+			return Command.NEXT_TO_EXAMINE;
+		case 7:
+			return Command.STOP;
+		default:
+			return null;
+		}
+	}
+
 	/**
 	 * Gets the next visit for examination from the model.
 	 */
 	private void getExaminationVisit() {
-		try 
-		{
+		try {
 			model.nextForExamination();
-		} 
-		catch (IllegalArgumentException iae) 
-		{
+		} catch (IllegalArgumentException iae) {
 			out.println(iae.getMessage());
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			out.println(e.getMessage());
+		}
+	}
+
+	/**
+	 * Retrieves the patient with the ramq specified by the user's input.
+	 */
+	private void getPatient() {
+		String ramq;
+
+		try {
+			// Request and get the RAMQ
+			out.print("Please enter the ramq: ");
+			ramq = userInput.readLine();
+
+			// Get the patient from model
+			model.findPatient(ramq);
+		} catch (IllegalArgumentException iae) {
+			out.println(iae.getMessage());
+		} catch (IOException ioe) {
+			out.println(ioe.getMessage());
+		} catch (NonExistingPatientException nepe) {
+			out.println(nepe.getMessage());
+		}
+	}
+
+	/**
+	 * Gets the next visit for triage from the model.
+	 */
+	private void getTriageVisit() {
+		try {
+			model.nextForTriage();
+		} catch (IllegalArgumentException iae) {
+			out.println(iae.getMessage());
+		} catch (Exception e) {
+			out.println(e.getMessage());
+		}
+	}
+
+	/**
+	 * Prints the text-based menu.
+	 */
+	private void printMenu() {
+		out.println("Dawson Clinic Menu");
+		out.println("Select a choice from the menu:");
+		out.println("\t1 - PATIENT_INFO");
+		out.println("\t2 - NEW_PATIENT");
+		out.println("\t3 - NEW_VISIT");
+		out.println("\t4 - NEXT_TO_TRIAGE");
+		out.println("\t5 - CHANGE_PRIORITY");
+		out.println("\t6 - NEXT_TO_EXAMINE");
+		out.println("\t7 - STOP");
+		out.print("\nEnter your choice: ");
+	}
+
+	/**
+	 * Method used to start interacting with the text-based interface. Loops
+	 * until user specifies to stop.
+	 */
+	public void run() {
+		Command userCommand = null;
+
+		while (userCommand != Command.STOP) {
+			printMenu();
+
+			// Getting user input
+			userCommand = getCommand();
+
+			// Take action depending on that input
+			if (userCommand == Command.PATIENT_INFO) {
+				getPatient();
+			}
+
+			if (userCommand == Command.NEW_PATIENT) {
+				addPatient();
+			}
+
+			if (userCommand == Command.NEW_VISIT) {
+				addVisit();
+			}
+
+			if (userCommand == Command.NEXT_TO_TRIAGE) {
+				getTriageVisit();
+			}
+
+			if (userCommand == Command.CHANGE_PRIORITY) {
+				changePriority();
+			}
+
+			if (userCommand == Command.NEXT_TO_EXAMINE) {
+				getExaminationVisit();
+			}
+
+			if (userCommand == null) {
+				out.println("That is not a valid choice, please try again.");
+			}
+
+			// Start a newline after each command completed
+			out.println();
 		}
 	}
 }
