@@ -51,7 +51,7 @@ public class ClinicFileLoader {
 	 * @return Patient[]
 	 */
 	public static Patient[] getPatientListFromSequentialFile(String filename) throws IOException {
-		Patient[] patientInfo = new Patient[30];
+		Patient[] patientInfo = new Patient[150];
 		Scanner inputStream = null;
 		int patientCounter = 0;
 		String ramq;
@@ -202,7 +202,7 @@ public class ClinicFileLoader {
 
 	public static Visit[] getVisitListFromSequentialFile(String filename, Patient[] patientList)
 			throws IOException, IllegalArgumentException, NullPointerException {
-		Visit[] visitInfo = new Visit[30];
+		Visit[] visitInfo = new Visit[150];
 		Scanner inputStream = null;
 		int visitCounter = 0;
 		String ramq;
